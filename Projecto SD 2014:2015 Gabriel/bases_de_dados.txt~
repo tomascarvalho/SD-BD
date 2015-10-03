@@ -1,0 +1,34 @@
+Bases de dados:
+
+1- users
+-id (automatic)
+-username
+-pass
+-bal
+
+2- topics
+-id (automatic)
+-title
+-creator
+-num_ideas
+
+3- ideas
+-id (automatic)
+-id_main
+-title
+-description
+-creator
+-num_shares
+-pos ["0"ideia original;"1"contra;"2"a favor;"3"neutro]
+
+4- relation
+-id_idea
+-id_topic
+
+5- packs
+-id (automatic)
+-id_user
+-id_idea
+-num_av
+-num_un
+-price

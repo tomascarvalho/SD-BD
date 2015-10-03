@@ -1,0 +1,16 @@
+0  - registo			- username:password
+1  - login			- username:password
+2  - carteira
+3  - historico de transaçoes
+4  - criar topico		- nome do topico
+5  - criar ideia		- ids dos topicos:id da ideia:nome da ideia:descriçao:n de acçoes:ppa:acçoes à venda:(contra/a_favor/neutro)
+6  - eliminar ideia		- id da ideia
+7  - consultar topicos
+8  - consultar ideias		- id do topico
+9  - consultar subideias	- id da ideia
+10 - informaçoes da ideia	- id da ideia
+11 - mudar preço		- id do pack:novo preço
+12 - comprar acções		- id do pack: id da ideia :numero de acçoes
+13 - tornar disponiveis		- id do pack, numero de acçoes
+14 - tornar indisponiveis	- id do pack, numero de acçoes
+15 - minhas ideias
