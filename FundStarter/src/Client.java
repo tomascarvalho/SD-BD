@@ -21,9 +21,9 @@ public class Client extends Thread{
             String ipServer1,ipServer2;
             int port1,port2;
             Socket conectionToServer;
-            String message="teste message";
-            ObjectInputStream reciver;
-            ObjectOutputStream sender;
+            String message="Teste";
+            DataInputStream reciver;
+            DataOutputStream sender;
            
             /*
             se o utilizador iniciar o programa e não meter ip's e portas dos
@@ -55,6 +55,8 @@ public class Client extends Thread{
                     cria ligação com o servidor que está com o IP->ipServer1 e
                     Porto->port1
                    */
+                   
+                   System.out.println("Fase 1->Conecção com servidor\n");
                    conectionToServer=new Socket(ipServer1,port1);
                    
                    /*
@@ -62,18 +64,19 @@ public class Client extends Thread{
                     mensagens com o servidor
                    */
                    
-                   reciver=new ObjectInputStream(conectionToServer.getInputStream());
-                   sender=new ObjectOutputStream(conectionToServer.getOutputStream());
+                   reciver=new DataInputStream(conectionToServer.getInputStream());
+                   sender=new DataOutputStream(conectionToServer.getOutputStream());
                    
                    
                    /*
                     vai mandar uma mensagem de teste ao servidor
                    */
                    
+                   System.out.println("Fase 2->Envio de mensagem ao servidro\n");
                    sender.writeUTF(message);
                    
-                   Thread.sleep(5000);
                    
+                   System.out.println("Fase 3->Receber mensagem do servidor\n");
                    System.out.println(reciver.readUTF());
                    
                }catch(Exception e){
