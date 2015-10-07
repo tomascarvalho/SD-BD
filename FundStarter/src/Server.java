@@ -24,7 +24,7 @@ public class Server {
              Cria um socket para ligação com clientes no porto indicado no
              serverPort
              */
-            System.out.println("Args[1]="+args[1]);
+            
             int serverPort = 6000;//Integer.parseInt(args[1]);
             ServerSocket conectionToClient = new ServerSocket(serverPort);
             Socket cliente;
