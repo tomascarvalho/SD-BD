@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class Server {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 
         try {
 
@@ -24,13 +24,15 @@ public class Server {
              Cria um socket para ligação com clientes no porto indicado no
              serverPort
              */
-            int serverPort = 6000;
+            System.out.println("Args[1]="+args[1]);
+            int serverPort = 6000;//Integer.parseInt(args[1]);
             ServerSocket conectionToClient = new ServerSocket(serverPort);
             Socket cliente;
 
-            System.out.println("Servidor à eescuta no porto 6000");
+            System.out.println("[Server] Servidor à escuta no porto " + serverPort);
 
             while (true) {
+                
                 /*
                  Espera que um cliente se ligue
                  */
@@ -40,21 +42,29 @@ public class Server {
                  encarregue de lidar com ele
                  */
                 new NewClient(cliente);
+                
             }
 
+        } catch (IOException e) {
+            /*
+             Quando apanhar um IOException quer dizer que já há um servidor
+             activo e que vai ter de ficar como servidor de backup
+             */
+
+            new BackupServer("localhost"); /*isto só está aqui como teste*/
+
         } catch (Exception e) {
-            System.out.println("Recebi esta mensagem de erro: " + e.getMessage());
+            System.out.println("[Server] Recebi esta mensagem de erro: " + e.getMessage());
         }
     }
 
 }
 
-class NewClient implements Runnable {
+class NewClient extends Thread {
 
     Socket myClient;
     DataInputStream reciver;
     DataOutputStream sender;
-    Thread me;
     String message;
 
     NewClient(Socket cliente) {
@@ -70,14 +80,14 @@ class NewClient implements Runnable {
              */
             reciver = new DataInputStream(myClient.getInputStream());
             sender = new DataOutputStream(myClient.getOutputStream());
-            
-            /*
-                vai iniciar a thread
-            */
-            me.start();
 
-        } catch (Exception e) {
-            System.out.println("Recebi esta mensagem de erro: " + e.getMessage());
+            /*
+             vai iniciar a thread
+             */
+            this.start();
+
+        } catch (IOException e) {
+            System.out.println("[ClientConection] Recebi esta mensagem de erro: " + e.getMessage());
         }
     }
 
@@ -94,7 +104,57 @@ class NewClient implements Runnable {
 
             sender.writeUTF(message);
         } catch (Exception e) {
-            System.out.println("Recebi esta mensagem de erro: " + e.getMessage());
+            System.out.println("[ClientConection] Recebi esta mensagem de erro: " + e.getMessage());
         }
+    }
+}
+
+class BackupServer extends Thread {
+
+    String primaryServer;
+    DatagramSocket udpConection;
+    byte[] pingMessage;
+    int conectionFail = 0;
+    InetAddress hostConection;
+    int serverPort=6060;
+    DatagramPacket sender, reciver;
+
+    BackupServer(String hostIp) { /*vai precisar de argumentos diferentes para iniciar o novo servidor quando o pricipal for abaixo*/
+
+        primaryServer = hostIp;
+        this.start();
+
+    }
+
+    public void run() {
+
+        try {
+
+            udpConection = new DatagramSocket();
+
+            while (true) {
+
+                try {
+                    
+                    pingMessage="ping".getBytes();
+                    hostConection=InetAddress.getByName(primaryServer);
+                    sender=new DatagramPacket(pingMessage,pingMessage.length,hostConection,serverPort);
+                    udpConection.send(sender);
+                    udpConection.setSoTimeout(2000);
+                    pingMessage=new byte[1000];
+                    reciver=new DatagramPacket(pingMessage,pingMessage.length);
+                    udpConection.receive(reciver);
+                    Thread.sleep(5000);
+                    
+                } catch (Exception e) {
+                    System.out.println("[BackupServer] Recebi esta mensagem de erro: " + e.getMessage());
+                }
+
+            }
+
+        } catch (Exception e) {
+
+        }
+
     }
 }

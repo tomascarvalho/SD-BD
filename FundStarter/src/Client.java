@@ -15,7 +15,7 @@ import java.io.*;
  */
 public class Client extends Thread {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 
         String ipServer1, ipServer2;
         int port1, port2;
