@@ -1,3 +1,2 @@
 - Servidor RMI
-- Comunicação UDP com servidor backup
 - Tratar das excepções
