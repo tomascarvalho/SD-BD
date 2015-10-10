@@ -1,2 +1,30 @@
-- Servidor RMI
-- Tratar das excepções
+——>Tratar das excepções
+——>Fazer funções:
+———————> Listar Projectos actuais, com o seu progresso
+———————> Listar Projectos Antigos
+———————> Consultar detalhes de um projecto
+———————> Registar Conta
+———————> Login
+———————> Consultar saldo
+———————> Consultar recompensas
+———————> Doar dinheiro ao projecto
+———————> Enviar mensagens para o projecto
+———————> Criar um projecto
+———————> Adicionar e Renovar recompensas ao projecto
+———————> Cancelar Projecto
+———————> Fim do projecto
+:::::::::::::::::::::::::: Trabalho extra grupo de 3 ::::::::::::::::::::::::::::::::
+
+———> Projectos podem ter vários admins que podem alterar e cancelar o projecto e responder a mensagens de utilizadores
+———> Atribuir recompensas a um segundo utilizador, como oferta, em vez de utilizador que apoiou o projecto
+———> Adicionar e remover níveis de recompensas extra, caso o projecto ultrapasse certos montantes
+
+:::::::::::::::::::::::::: Requisitos Não Funcionais ::::::::::::::::::::::::::::::::
+
+———> Os clientes não devem perceber qualquer problema de rede, só longas falhas
+———> Dados persistentes no cliente e servidor
+———> Não se pode perder mensagens, projectos e recompensas
+———> Quando se tira crédito do cliente, a recompensa deve ficar registada e o voto também
+———> ao enviar dinheiro ao promotor, as rewards deverão ser entregues e a decisão final tomada por base nos votos
+———>
+		
