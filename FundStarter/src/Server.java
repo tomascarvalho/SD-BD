@@ -1,6 +1,7 @@
 
 import java.net.*;
 import java.io.*;
+import java.rmi.Naming;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -11,7 +12,7 @@ import java.io.*;
  *
  * @author gabrieloliveira
  */
-public class Server{
+public class Server {
 
     public static void main(String[] args) {
 
@@ -24,8 +25,16 @@ public class Server{
             int serverPort = 6000;//Integer.parseInt(args[1]);
             ServerSocket conectionToClient = new ServerSocket(serverPort);
             Socket cliente;
+            String rmiLocation = "//localhost:7777/fundStarter";//o localhost tem de mudar para ser o ip da máquina onde está o RMI
 
+            /*
+             COMETÁRIO EM FALTA
+             */
             new UDPServer();
+            /*
+             COMETÁRIO EM FALTA
+             */
+            RMIServerInterface remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
 
             System.out.println("[Server] Servidor à escuta no porto " + serverPort);
 
@@ -35,11 +44,12 @@ public class Server{
                  Espera que um cliente se ligue
                  */
                 cliente = conectionToClient.accept();
+
                 /*
                  Por cada cliente que se liga, vai criar uma thread que fica
                  encarregue de lidar com ele
                  */
-                new NewClient(cliente);
+                new NewClient(cliente, remoteConection);
 
             }
 
@@ -48,8 +58,12 @@ public class Server{
              Quando apanhar um IOException quer dizer que já há um servidor
              activo e que vai ter de ficar como servidor de backup
              */
+            if (e.getMessage().equals("Address already in use")) {
+                new BackupServer("localhost"); /*isto só está aqui como teste*/
 
-            new BackupServer("localhost"); /*isto só está aqui como teste*/
+            } else {
+                System.out.println("[Server] Encotrei esta excepção: " + e.getMessage());
+            }
 
         } catch (Exception e) {
             System.out.println("[Server] Erro no Servidor Principal: " + e.getMessage());
@@ -68,14 +82,17 @@ class NewClient extends Thread {
     DataInputStream reciver;
     DataOutputStream sender;
     String message;
+    RMIServerInterface remoteConection;
 
-    NewClient(Socket cliente) {
+    NewClient(Socket cliente, RMIServerInterface rmiConection) {
 
         try {
             /*
              Guarda o cliente que se ligou anteriormente ao servidor
+             e também a ligação com o servidor RMI
              */
             myClient = cliente;
+            remoteConection = rmiConection;
 
             /*
              cria canais de comunicação com os clientes
@@ -98,13 +115,14 @@ class NewClient extends Thread {
         try {
             message = reciver.readUTF();
 
-            if (message.equals("Teste")) {
-                message = "Mesagem de teste recebida";
-            } else {
-                message = "Error!!";
-            }
+            String teste = remoteConection.testeMessage(message);
 
-            sender.writeUTF(message);
+            /*if (message.equals("Teste")) {
+             message = "Mesagem de teste recebida";
+             } else {
+             message = "Error!!";
+             }*/
+            sender.writeUTF(teste);
         } catch (Exception e) {
             System.out.println("[Server] Erro no Client Conection: " + e.getMessage());
         }
