@@ -26,5 +26,5 @@
 ———> Não se pode perder mensagens, projectos e recompensas
 ———> Quando se tira crédito do cliente, a recompensa deve ficar registada e o voto também
 ———> ao enviar dinheiro ao promotor, as rewards deverão ser entregues e a decisão final tomada por base nos votos
-———>
+———> Separação de ares: Comunicação, Lógica de Negócio e Dados deverão estar separados no código
 		
