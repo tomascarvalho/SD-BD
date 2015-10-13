@@ -12,5 +12,5 @@ import java.rmi.*;
  */
 public interface RMIServerInterface extends Remote{
     
-    public String testeMessage(String cMessage) throws RemoteException;
+    public String verificaLogIn(User person) throws RemoteException;
 }

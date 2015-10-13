@@ -3,6 +3,8 @@ import java.lang.*;
 import java.net.*;
 import java.util.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,14 +17,17 @@ import java.io.*;
  */
 public class Client extends Thread {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         String ipServer1, ipServer2;
         int port1, port2;
         Socket conectionToServer;
-        String message = "Teste";
-        DataInputStream reciver;
-        DataOutputStream sender;
+        User message;
+        ObjectInputStream reciver;
+        ObjectOutputStream sender;
+        Scanner sc = new Scanner(System.in);
+        int conectionError = 0;
+        String teste1, teste2;
 
         /*
          se o utilizador iniciar o programa e não meter ip's e portas dos
@@ -55,25 +60,57 @@ public class Client extends Thread {
                      */
                     System.out.println("Fase 1->Conecção com servidor\n");
                     conectionToServer = new Socket(ipServer1, port1);
+                    
+                    System.out.println("Liguei ao Servidor");
 
                     /*
                      vai iniciar os streams de input e output para partilhar
                      mensagens com o servidor
                      */
-                    reciver = new DataInputStream(conectionToServer.getInputStream());
-                    sender = new DataOutputStream(conectionToServer.getOutputStream());
+                    sender = new ObjectOutputStream(conectionToServer.getOutputStream());
+                    sender.flush();/*perceber porque é que esta linha tem de estar aqui*/
+                    reciver = new ObjectInputStream(conectionToServer.getInputStream());
+                    
+                    
+                    System.out.println("Passou desta linha");
 
                     /*
                      vai mandar uma mensagem de teste ao servidor
                      */
+                    System.out.print("Insira o seu username:");
+                    teste1 = sc.nextLine();
+                    System.out.print("Insira a sua password:");
+                    teste2 = sc.nextLine();
+
+                    message = new User(teste1, teste2);
+
                     System.out.println("Fase 2->Envio de mensagem ao servidro\n");
-                    sender.writeUTF(message);
+                    sender.writeObject(message);
+                    try {
+                        System.out.println("Fase 3->Receber mensagem do servidor\n");
+                        System.out.println((String) reciver.readObject());
+                    } catch (Exception eae) {
 
-                    System.out.println("Fase 3->Receber mensagem do servidor\n");
-                    System.out.println(reciver.readUTF());
+                    }
 
-                } catch (Exception e) {
-                    /*Ainda não sei qual pode ser a excepção que dá aqui*/
+                } catch (IOException e) {
+
+                    if (conectionError == 3) {
+                        System.out.println("[Cliente] Não me consigo ligar ao servidor, vou-me ligar ao secundário");
+                        try {
+                            conectionToServer = new Socket(ipServer2, port2);
+                            conectionError = 0;
+                        } catch (IOException exp) {
+                            System.out.println("[Cliente] Não me consigo ligar ao Servidor de Backup.");
+                        }
+                    } else {
+                        conectionError++;
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 }
 
             }

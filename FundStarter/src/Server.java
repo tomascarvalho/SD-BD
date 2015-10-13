@@ -79,9 +79,9 @@ public class Server {
 class NewClient extends Thread {
 
     Socket myClient;
-    DataInputStream reciver;
-    DataOutputStream sender;
-    String message;
+    ObjectInputStream reciver;
+    ObjectOutputStream sender;
+    Object message;
     RMIServerInterface remoteConection;
 
     NewClient(Socket cliente, RMIServerInterface rmiConection) {
@@ -97,8 +97,9 @@ class NewClient extends Thread {
             /*
              cria canais de comunicação com os clientes
              */
-            reciver = new DataInputStream(myClient.getInputStream());
-            sender = new DataOutputStream(myClient.getOutputStream());
+            reciver = new ObjectInputStream(myClient.getInputStream());
+            sender = new ObjectOutputStream(myClient.getOutputStream());
+            sender.flush();
 
             /*
              vai iniciar a thread
@@ -113,16 +114,14 @@ class NewClient extends Thread {
     public void run() {
 
         try {
-            message = reciver.readUTF();
+            message = reciver.readObject();/*está a dar erro nesta merda por causa de não ser serializable*/
+            
+            System.out.println("[Server] Li a mensagem do cliente na boa.");
+            
+            String teste = remoteConection.verificaLogIn((User)message);
 
-            String teste = remoteConection.testeMessage(message);
-
-            /*if (message.equals("Teste")) {
-             message = "Mesagem de teste recebida";
-             } else {
-             message = "Error!!";
-             }*/
-            sender.writeUTF(teste);
+            
+            sender.writeObject(teste);
         } catch (Exception e) {
             System.out.println("[Server] Erro no Client Conection: " + e.getMessage());
         }
@@ -143,6 +142,11 @@ class BackupServer extends Thread {
 
     BackupServer(String hostIp) { /*vai precisar de argumentos diferentes para iniciar o novo servidor quando o pricipal for abaixo*/
 
+        /*
+            Vai guradar o ip do Servidor principal para se poder ligar como backup
+            e inicializa o contador para o caso de ocorrer um FailOver
+        */
+        
         primaryServer = hostIp;
         failOverCounter = 0;
         this.start();
@@ -152,12 +156,22 @@ class BackupServer extends Thread {
     public void run() {
 
         try {
-
+            
+            /*
+                Vai criar uma socket para as ligações UDP
+            */
             udpConection = new DatagramSocket();
 
             while (true) {
 
                 try {
+                    
+                    /*
+                        vai fazer a ligação com o Servidor principal e mandar a
+                        mensagem 'ping'. 
+                        Caso o servidor principal vai abaixo e espera até à terceira
+                        mensagem de erro para se tornar servdor principal
+                    */
 
                     pingMessage = "ping".getBytes();
                     hostConection = InetAddress.getByName(primaryServer);
@@ -169,7 +183,7 @@ class BackupServer extends Thread {
                     udpConection.receive(reciver);
                     System.out.println("[Backup Server] Recebi esta mensagem do Serviodr Principal: " + new String(reciver.getData(), 0, reciver.getLength()));
 
-                    Thread.sleep(5000);
+                    Thread.sleep(2000);
 
                 } catch (SocketTimeoutException e) {
 

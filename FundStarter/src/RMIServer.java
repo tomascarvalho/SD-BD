@@ -14,18 +14,22 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class RMIServer extends UnicastRemoteObject implements RMIServerInterface {
     
+    
+    /*
+        SÓ PARA TESTES!!!!!!!!!
+    */
+    private User testeUser=new User("Gabriel","teste");
     protected RMIServer() throws RemoteException{
         super();
     }
     
-    public String testeMessage(String cMessage) throws RemoteException{
+    public String verificaLogIn(User person) throws RemoteException{
         
-        System.out.println("[RMI Server]Recebi isto:"+cMessage);
-        if(cMessage.equals("Teste")){
-            return "Mensagem de Teste Recebida";
+        if(person.getName().equals(testeUser.getName()) && person.getPass().equals(testeUser.getPass())){
+            return "Utilizador reconhecido";
         }
         else{
-            return "Erro!";
+            return "Utilizador não reconhecido";
         }
     }
     
