@@ -227,9 +227,17 @@ class UDPServer extends Thread {
     public void run() {
         try {
 
+            /*
+                cria ligação UDP no porto indicado na variável serverPort
+            */
             conection = new DatagramSocket(serverPort);
 
             while (true) {
+                
+                /*
+                    recebe mensagem do Servidor Backup e volta a mandar a mesma
+                    mensagem
+                */
 
                 reciver = new DatagramPacket(buffer, buffer.length);
                 conection.receive(reciver);

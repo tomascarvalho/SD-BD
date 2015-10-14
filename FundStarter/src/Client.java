@@ -17,25 +17,21 @@ import java.util.logging.Logger;
  */
 public class Client extends Thread {
 
-    public static void main(String[] args) throws IOException {
+    static Socket conectionToServer;
+    static ObjectInputStream reciver;
+    static ObjectOutputStream sender;
+    static int conectionError = 0;
+    static String ipServer1, ipServer2;
+    static int port1, port2;
 
-        String ipServer1, ipServer2;
-        int port1, port2;
-        Socket conectionToServer;
-        User message;
-        ObjectInputStream reciver;
-        ObjectOutputStream sender;
-        Scanner sc = new Scanner(System.in);
-        int conectionError = 0;
-        String teste1, teste2;
 
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+        
         /*
          se o utilizador iniciar o programa e não meter ip's e portas dos
          servidores o programa entra neste if, imprime a mensagem de erro
          e termina
-           
-         PS: SE QUISEREM CORRER SÓ UM SERVIDOR PARA TERSTE METAM OS ULTIMOS
-         CAMPOS COM localhost e 0, ASSIM NÃO DÁ ERRO. :D
          */
         if (args.length != 4) {
             System.out.println("java Client <IP1> <P1> <IP2> <P2>");
@@ -60,8 +56,7 @@ public class Client extends Thread {
                      */
                     System.out.println("Fase 1->Conecção com servidor\n");
                     conectionToServer = new Socket(ipServer1, port1);
-                    
-                    System.out.println("Liguei ao Servidor");
+
 
                     /*
                      vai iniciar os streams de input e output para partilhar
@@ -69,29 +64,10 @@ public class Client extends Thread {
                      */
                     sender = new ObjectOutputStream(conectionToServer.getOutputStream());
                     sender.flush();/*perceber porque é que esta linha tem de estar aqui*/
+
                     reciver = new ObjectInputStream(conectionToServer.getInputStream());
-                    
-                    
-                    System.out.println("Passou desta linha");
 
-                    /*
-                     vai mandar uma mensagem de teste ao servidor
-                     */
-                    System.out.print("Insira o seu username:");
-                    teste1 = sc.nextLine();
-                    System.out.print("Insira a sua password:");
-                    teste2 = sc.nextLine();
-
-                    message = new User(teste1, teste2);
-
-                    System.out.println("Fase 2->Envio de mensagem ao servidro\n");
-                    sender.writeObject(message);
-                    try {
-                        System.out.println("Fase 3->Receber mensagem do servidor\n");
-                        System.out.println((String) reciver.readObject());
-                    } catch (Exception eae) {
-
-                    }
+                    MainMenu();
 
                 } catch (IOException e) {
 
@@ -116,6 +92,66 @@ public class Client extends Thread {
             }
 
         }
+
+    }
+
+    public static void LogIn() {
+
+        Scanner sc = new Scanner(System.in);
+        String name;
+        String pass;
+        User person;
+        
+        conectionError=0;
+
+        System.out.println("\t\t\tFundStater\n\t\tLog In\n");
+        System.out.print("\t\t\tUsername:");
+        name = sc.nextLine();
+        System.out.print("Password:");
+        pass = sc.nextLine();
+
+        person = new User(name, pass);
+
+        try {
+            sender.writeObject(person);
+
+            System.out.println("[Cliente] Mensagem do Server: " + (String) reciver.readObject());
+        } catch (IOException ex) {
+            
+            if(ex.getMessage().equals("Broken pipe")){
+                System.out.println("[Cliente]O servidor foi abaixo");
+                if (conectionError == 3) {
+                        System.out.println("[Cliente] Não me consigo ligar ao servidor, vou-me ligar ao secundário");
+                        try {
+                            conectionToServer = new Socket(ipServer2, port2);
+                            conectionError = 0;
+                        } catch (IOException e) {
+                            System.out.println("[Cliente] Não me consigo ligar ao Servidor de Backup.");
+                        }
+                    } else {
+                        conectionError++;
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void MainMenu() {/*se isto for int posso mandar 0 ou 1 para tratar das falhas????*/
+
+
+        Scanner sc = new Scanner(System.in);
+
+        LogIn();
+        
+        System.out.println("\t\t\tFundStarter\n\t\tMenu Inicial");
+        
+        
 
     }
 }
