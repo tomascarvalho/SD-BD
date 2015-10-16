@@ -24,10 +24,8 @@ public class Client extends Thread {
     static String ipServer1, ipServer2;
     static int port1, port2;
 
+    public static void main(String[] args) throws ClassNotFoundException {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-
-        
         /*
          se o utilizador iniciar o programa e não meter ip's e portas dos
          servidores o programa entra neste if, imprime a mensagem de erro
@@ -95,63 +93,57 @@ public class Client extends Thread {
 
     }
 
-    public static void LogIn() {
+    public static boolean LogIn(boolean flag) throws IOException, ClassNotFoundException {/* Ainda não tem o failover a funcionar aqui*/
 
         Scanner sc = new Scanner(System.in);
         String name;
         String pass;
+        String serverMessage;
         User person;
-        
-        conectionError=0;
 
-        System.out.println("\t\t\tFundStater\n\t\tLog In\n");
-        System.out.print("\t\t\tUsername:");
+        /*
+         Vai pedir credências ao cliente para fazer o login
+         se os dados não estiverem a base de dados, vai voltar a chamar esta função
+         caso contrário vai avançar para o menu inicial
+         */
+        if (!flag) {
+            System.out.println("Utilizador não reconhecido!!!");
+            /*meter uma opção para voltar ao menu inicial e/ou fazer inscrição*/
+        }
+
+        System.out.println("\n\t\tLogIn");
+        System.out.print("\tUsername:");
         name = sc.nextLine();
-        System.out.print("Password:");
+        System.out.print("\tPassword:");
         pass = sc.nextLine();
 
         person = new User(name, pass);
 
-        try {
-            sender.writeObject(person);
+        /*vai mandar o user ao server para ver se ele está na base de dados*/
+        sender.writeObject(person);
 
-            System.out.println("[Cliente] Mensagem do Server: " + (String) reciver.readObject());
-        } catch (IOException ex) {
-            
-            if(ex.getMessage().equals("Broken pipe")){
-                System.out.println("[Cliente]O servidor foi abaixo");
-                if (conectionError == 3) {
-                        System.out.println("[Cliente] Não me consigo ligar ao servidor, vou-me ligar ao secundário");
-                        try {
-                            conectionToServer = new Socket(ipServer2, port2);
-                            conectionError = 0;
-                        } catch (IOException e) {
-                            System.out.println("[Cliente] Não me consigo ligar ao Servidor de Backup.");
-                        }
-                    } else {
-                        conectionError++;
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        serverMessage = (String) reciver.readObject();
+
+        return !serverMessage.equals("Utilizador não reconhecido");
     }
 
-    public static void MainMenu() {/*se isto for int posso mandar 0 ou 1 para tratar das falhas????*/
+    public static void MainMenu() throws IOException, ClassNotFoundException {/*se isto for int posso mandar 0 ou 1 para tratar das falhas????*/
 
 
         Scanner sc = new Scanner(System.in);
+        boolean logResult = true;
 
-        LogIn();
-        
-        System.out.println("\t\t\tFundStarter\n\t\tMenu Inicial");
-        
-        
+        conectionError = 0;
+
+        /*
+         vai chamar a função para fazer o login se ela returnar null
+         muda o argumento e volta a chamar a função
+         */
+        if (!LogIn(logResult)) {
+            logResult = false;
+        }
+
+        System.out.println("Menu Inicial");
 
     }
 }

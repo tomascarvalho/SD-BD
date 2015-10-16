@@ -4,7 +4,7 @@
 ———————> Listar Projectos Antigos
 ———————> Consultar detalhes de um projecto
 ———————> Registar Conta
-———————> Login
+———————> Login(falta testar com a base de dados)
 ———————> Consultar saldo
 ———————> Consultar recompensas
 ———————> Doar dinheiro ao projecto

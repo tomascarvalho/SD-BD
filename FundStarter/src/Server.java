@@ -194,7 +194,7 @@ class BackupServer extends Thread {
 
                     } else {
 
-                        System.out.println("[Backup Server] O Servidor principal está em baixo, vouassumir o controlo.");
+                        System.out.println("[Backup Server] O Servidorgab principal está em baixo, vouassumir o controlo.");
                         udpConection.close();
                         Server.main(args);
 
