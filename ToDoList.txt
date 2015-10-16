@@ -3,7 +3,7 @@
 ———————> Listar Projectos actuais, com o seu progresso
 ———————> Listar Projectos Antigos
 ———————> Consultar detalhes de um projecto
-———————> Registar Conta
+———————> Registar Conta(falta testar com a BD)
 ———————> Login(falta testar com a base de dados)
 ———————> Consultar saldo
 ———————> Consultar recompensas
