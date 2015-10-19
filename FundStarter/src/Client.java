@@ -139,14 +139,18 @@ public class Client extends Thread {
     public static boolean criaConta() throws IOException, ClassNotFoundException {
 
         Scanner sc = new Scanner(System.in);
-        String[] newUserData = new String[2];
+        String[] newUserData = new String[4];
         Object[] resposta;
 
         System.out.println("\t\t\tNovo Utilizador\n\n");
+        System.out.print("\t\tPrimeiro Nome:");
+        newUserData[0]=sc.nextLine();
+        System.out.print("\t\tApelido:");
+        newUserData[1]=sc.nextLine();
         System.out.print("\t\tUsername:");
-        newUserData[0] = sc.nextLine();
-        System.out.print("Password:");
-        newUserData[1] = sc.nextLine();
+        newUserData[2] = sc.nextLine();
+        System.out.print("\t\tPassword:");
+        newUserData[3] = sc.nextLine();
 
         postCard[0] = "new";
         postCard[1] = newUserData;

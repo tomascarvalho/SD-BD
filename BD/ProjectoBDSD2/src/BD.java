@@ -46,31 +46,11 @@ public class BD {
 		
 		System.out.println("Password:");
 		password = sc.next();
-		User novoUser = new User (nome, apelido, username, password);
-		register(novoUser);
+		User info = new User (nome, apelido, username, password);
+
+		
 	}
 	
-	//Fazer o registo de um Utilizador 
-	public void register(User info){
-
-		try{
-            query = "INSERT INTO utilizador (nome, apelido, username, pass) VALUES (?,?,?,?)";
-            preparedstatement = connection.prepareStatement(query);
-            preparedstatement.setString(1,info.getNome());
-            preparedstatement.setString(2,info.getApelido());
-            preparedstatement.setString(3,info.getUsername());
-            preparedstatement.setString(4, info.getPassword());
-            preparedstatement.executeUpdate();
-//            info = Login(info);
-            
-		}
-        catch(SQLException e)
-        {
-            System.err.println("SQLException:"+e);
-        }
-
-		System.out.println("Registo feito!\n");
-	}
 
 	public void novoProjecto(){
 		System.out.println("Criar um novo projecto:\n");

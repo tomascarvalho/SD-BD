@@ -117,38 +117,37 @@ class NewClient extends Thread {
 
         try {
             while (true) {
-                postCard=null;
+                postCard = null;
                 postCard = (Object[]) reciver.readObject();/*está a dar erro nesta merda por causa de não ser serializable*/
-                
 
                 System.out.println("[Server] Li a mensagem do cliente na boa.");
                 //mudar depois para um switch
                 if (((String) postCard[0]).equals("log")) {
-                    
+
                     String[] userInfo = (String[]) postCard[1];
                     User person = new User(userInfo[0], userInfo[1]);
                     myMail = remoteConection.verificaLogIn(person);
-                    
-                    if(myMail[0].equals("userrec")){
-                        myUserID=(int) myMail[1];
+
+                    if (myMail[0].equals("userrec")) {
+                        myUserID = (int) myMail[1];
                     }
 
                 } else if (((String) postCard[0]).equals("new")) {
 
                     String[] newPerson = (String[]) postCard[1];
                     myMail = remoteConection.novoUtilizador(newPerson);
-                    
-                    if(myMail[0].equals("infosave")){
-                        myUserID=(int) myMail[1];
+              
+                    if (myMail[0].equals("infosave")) {
+                        System.out.println("myUserID:"+(int)myMail[1]);
+                        myUserID = (int) myMail[1];
                     }
 
+                } else if (postCard[0].equals("seesal")) {
+
+                    myMail = remoteConection.getUserSaldo(myUserID);
+
                 }
-                else if(postCard[0].equals("seesal")){
-                    
-                    myMail=remoteConection.getUserSaldo(myUserID);
-                    
-                }
-                
+
                 sender.writeUnshared(myMail);
 
             }

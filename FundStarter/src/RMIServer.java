@@ -2,6 +2,10 @@
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.*;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,57 +18,121 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class RMIServer extends UnicastRemoteObject implements RMIServerInterface {
 
-    /**
-     * SÓ PARA TESTES!!!!!!!!!
-     *
-     * fazer depois uma arraylist com os users todos
-     *
-     */
-    private User testeUser = new User("Gabriel", "teste");
-    public Object[] resposta= new Object[2];
+    public Object[] resposta = new Object[2];
+
+    Scanner sc = new Scanner(System.in);
+    Connection connection;
+    PreparedStatement preparedstatement = null;
+    Statement request = null;
+    ResultSet rs = null;
+    String query;
+    ResultSet returnBD = null;
 
     protected RMIServer() throws RemoteException {
         super();
     }
 
     public Object[] verificaLogIn(User person) throws RemoteException {
+
         
-        System.out.println("[RMI Server] Função <varificaLogIn> chamada!");
-        if (person.getName().equals(testeUser.getName()) && person.getPass().equals(testeUser.getPass())) {
-            resposta[0]="userrec";
-            resposta[1]=1;/*só para teste, tem de ir bucar sempre id do user*/
-        } else {
-            resposta[0]="usernotrec";
-            resposta[1]=-1;
-        }
-        System.out.println("Acabei");
         return resposta;
     }
 
-    public Object[] novoUtilizador(String[] userInfo) throws RemoteException {
-        
+    public Object[] novoUtilizador(String[] userInfo) throws RemoteException {/*Falta verifica se não deu erro a inserir na base de dados*/
+
         System.out.println("[RMI Server] Função <novoUtilizador> chamada!");
-        testeUser = new User(userInfo[0], userInfo[1]);
 
-        resposta[0]="infosave";
-        resposta[1]=1;/*só para teste, tem de ir bucar sempre id do user*/
+        try {
+            query = "INSERT INTO utilizador (nome, apelido, username, pass, saldo) VALUES (?,?,?,?,?)";
+            preparedstatement = connection.prepareStatement(query);
+            preparedstatement.setString(1, userInfo[0]);
+            preparedstatement.setString(2, userInfo[1]);
+            preparedstatement.setString(3, userInfo[2]);
+            preparedstatement.setString(4, userInfo[3]);
+            preparedstatement.setInt(5, 100);
+            preparedstatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("SQLException:" + e);
+        }
+
+        try {
+            query = "SELECT id FROM utilizador WHERE username='"+userInfo[0]+"'";
+            request=connection.createStatement();
+            rs=request.executeQuery(query);
+            
+            rs.next();
+            resposta[0] = "infosave";
+            resposta[1] = rs.getInt(1);
+            
+
+        } catch (SQLException ex) {
+            System.err.println("Erro:"+ex);
+        } finally {
+            if (request != null) {
+                try {
+                    request.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(RMIServer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+        return resposta;
+    }
+
+    public Object[] getUserSaldo(int userID) throws RemoteException {
+
         
         return resposta;
     }
-    
-    public Object[] getUserSaldo(int userID) throws RemoteException{
-        
-        /* depois terá de pedir a bd para ir buscar o saldo*/
-        resposta[0]="seesal";
-        resposta[1]=testeUser.getSaldo();
-        
-        return resposta;
+
+    public void DB() throws RemoteException {
+        System.out.println("-------- PostgreSQL "
+                + "JDBC Connection Testing ------------");
+
+        try {
+
+            Class.forName("org.postgresql.Driver");
+
+        } catch (ClassNotFoundException e) {
+
+            System.out.println("Where is your PostgreSQL JDBC Driver? "
+                    + "Include in your library path!");
+            e.printStackTrace();
+            return;
+
+        }
+
+        System.out.println("PostgreSQL JDBC Driver Registered!");
+
+        try {
+
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://localhost:5432/postgres", "postgres",
+                    "oracle");
+
+        } catch (SQLException e) {
+
+            System.out.println("Connection Failed! Check output console");
+            e.printStackTrace();
+            return;
+
+        }
+
+        if (connection != null) {
+            System.out.println("You made it, take control your database now!");
+        } else {
+            System.out.println("Failed to make connection!");
+        }
+
     }
 
     public static void main(String[] args) throws RemoteException {
 
         RMIServerInterface remoteServer = new RMIServer();
         LocateRegistry.createRegistry(7777).rebind("fundStarter", remoteServer);
+        remoteServer.DB();
         System.out.println("[RMI Server] Pronto e à escuta.");
 
     }

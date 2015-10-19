@@ -17,4 +17,6 @@ public interface RMIServerInterface extends Remote {
     public Object[] novoUtilizador(String[] userInfo) throws RemoteException;
     
     public Object[] getUserSaldo(int userID) throws RemoteException;
+    
+    public void DB() throws RemoteException;
 }
