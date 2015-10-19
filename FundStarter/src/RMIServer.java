@@ -83,6 +83,27 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
     public Object[] getUserSaldo(int userID) throws RemoteException {
 
+        System.out.println("[RMI Server] Função <getUserSaldo> chamada!");
+        try {
+            query = "SELECT saldo FROM utilizador WHERE id='"+userID+"'";
+            request=connection.createStatement();
+            rs=request.executeQuery(query);
+            
+            rs.next();
+            resposta[0] = rs.getInt("saldo");
+            
+
+        } catch (SQLException ex) {
+            System.err.println("Erro:"+ex);
+        } finally {
+            if (request != null) {
+                try {
+                    request.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(RMIServer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
         
         return resposta;
     }
