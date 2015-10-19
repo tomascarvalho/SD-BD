@@ -5,7 +5,7 @@
 ———————> Consultar detalhes de um projecto
 ———————> Registar Conta(falta testar com a BD)
 ———————> Login(falta testar com a base de dados)
-———————> Consultar saldo
+———————> Consultar saldo (falta testar com a bade de dados)
 ———————> Consultar recompensas
 ———————> Doar dinheiro ao projecto
 ———————> Enviar mensagens para o projecto

@@ -16,32 +16,49 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
     /**
      * SÓ PARA TESTES!!!!!!!!!
-     * 
+     *
      * fazer depois uma arraylist com os users todos
-     * 
+     *
      */
     private User testeUser = new User("Gabriel", "teste");
+    public Object[] resposta= new Object[2];
 
     protected RMIServer() throws RemoteException {
         super();
     }
 
-    
-    public String verificaLogIn(User person) throws RemoteException {
-
+    public Object[] verificaLogIn(User person) throws RemoteException {
+        
+        System.out.println("[RMI Server] Função <varificaLogIn> chamada!");
         if (person.getName().equals(testeUser.getName()) && person.getPass().equals(testeUser.getPass())) {
-            return "Utilizador reconhecido";
+            resposta[0]="userrec";
+            resposta[1]=1;/*só para teste, tem de ir bucar sempre id do user*/
         } else {
-            return "Utilizador não reconhecido";
+            resposta[0]="usernotrec";
+            resposta[1]=-1;
         }
+        System.out.println("Acabei");
+        return resposta;
+    }
+
+    public Object[] novoUtilizador(String[] userInfo) throws RemoteException {
+        
+        System.out.println("[RMI Server] Função <novoUtilizador> chamada!");
+        testeUser = new User(userInfo[0], userInfo[1]);
+
+        resposta[0]="infosave";
+        resposta[1]=1;/*só para teste, tem de ir bucar sempre id do user*/
+        
+        return resposta;
     }
     
-   
-    public String novoUtilizador(String[] userInfo) throws RemoteException{
+    public Object[] getUserSaldo(int userID) throws RemoteException{
         
-        testeUser=new User(userInfo[0],userInfo[1]);
+        /* depois terá de pedir a bd para ir buscar o saldo*/
+        resposta[0]="seesal";
+        resposta[1]=testeUser.getSaldo();
         
-        return "Info Guardada";
+        return resposta;
     }
 
     public static void main(String[] args) throws RemoteException {

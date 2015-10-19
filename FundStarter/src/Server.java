@@ -82,8 +82,9 @@ class NewClient extends Thread {
     ObjectInputStream reciver;
     ObjectOutputStream sender;
     Object[] postCard;
-    String myMail;//podera ter de ser Object[] dependendo do que for preciso enviar ao cliente
+    Object[] myMail;//podera ter de ser Object[] dependendo do que for preciso enviar ao cliente
     RMIServerInterface remoteConection;
+    int myUserID;
 
     NewClient(Socket cliente, RMIServerInterface rmiConection) {
 
@@ -115,24 +116,42 @@ class NewClient extends Thread {
     public void run() {
 
         try {
-            postCard = (Object[]) reciver.readObject();/*está a dar erro nesta merda por causa de não ser serializable*/
+            while (true) {
+                postCard=null;
+                postCard = (Object[]) reciver.readObject();/*está a dar erro nesta merda por causa de não ser serializable*/
+                
 
-            System.out.println("[Server] Li a mensagem do cliente na boa.");
-            //mudar depois para um switch
-            if (((String) postCard[0]).equals("log")) {
+                System.out.println("[Server] Li a mensagem do cliente na boa.");
+                //mudar depois para um switch
+                if (((String) postCard[0]).equals("log")) {
+                    
+                    String[] userInfo = (String[]) postCard[1];
+                    User person = new User(userInfo[0], userInfo[1]);
+                    myMail = remoteConection.verificaLogIn(person);
+                    
+                    if(myMail[0].equals("userrec")){
+                        myUserID=(int) myMail[1];
+                    }
 
-                String[] userInfo = (String[]) postCard[1];
-                User person = new User(userInfo[0], userInfo[1]);
-                myMail = remoteConection.verificaLogIn(person);
+                } else if (((String) postCard[0]).equals("new")) {
 
-            } else if (((String) postCard[0]).equals("new")) {
+                    String[] newPerson = (String[]) postCard[1];
+                    myMail = remoteConection.novoUtilizador(newPerson);
+                    
+                    if(myMail[0].equals("infosave")){
+                        myUserID=(int) myMail[1];
+                    }
 
-                String[] newPerson = (String[]) postCard[1];
-                myMail = remoteConection.novoUtilizador(newPerson);
+                }
+                else if(postCard[0].equals("seesal")){
+                    
+                    myMail=remoteConection.getUserSaldo(myUserID);
+                    
+                }
+                
+                sender.writeUnshared(myMail);
 
             }
-
-            sender.writeObject(myMail);
         } catch (Exception e) {
             System.out.println("[Server] Erro no Client Conection: " + e.getMessage());
         }

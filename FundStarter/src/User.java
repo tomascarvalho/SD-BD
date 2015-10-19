@@ -1,5 +1,6 @@
 
 import java.io.*;
+import java.util.*;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,11 +16,14 @@ public class User implements Serializable{
     
     private String name;
     private String pass;
+    private int saldo;
+    private ArrayList<String> recompensas=new ArrayList<String>();
     
     public User(String name, String pass){
         
         this.name=name;
         this.pass=pass;
+        this.saldo=100;
     }
     
     public String getName(){
@@ -28,5 +32,9 @@ public class User implements Serializable{
     
     public String getPass(){
         return this.pass;
+    }
+    
+    public int getSaldo(){
+        return this.saldo;
     }
 }

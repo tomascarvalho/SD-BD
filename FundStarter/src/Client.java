@@ -85,6 +85,16 @@ public class Client extends Thread {
                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
+                }finally{
+                   /* if(conectionToServer!=null){//ver isto
+                        try {
+                            conectionToServer.close();
+                            System.out.println("Desliguei!");
+                        } catch (IOException ex) {
+                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                    }*/
                 }
 
             }
@@ -96,7 +106,7 @@ public class Client extends Thread {
     public static boolean LogIn(boolean flag) throws IOException, ClassNotFoundException {/* Ainda não tem o failover a funcionar aqui*/
 
         Scanner sc = new Scanner(System.in);
-        String serverMessage;
+        Object[] serverMessage;
         String[] person=new String[2];
 
         /**
@@ -119,18 +129,18 @@ public class Client extends Thread {
         postCard[1] = person;
 
         /*vai mandar o user ao server para ver se ele está na base de dados*/
-        sender.writeObject(postCard);
+        sender.writeUnshared(postCard);
+        
+        serverMessage = (Object[]) reciver.readObject();
 
-        serverMessage = (String) reciver.readObject();
-
-        return !serverMessage.equals("Utilizador não reconhecido");
+        return !serverMessage[0].equals("usernotrec");
     }
 
     public static boolean criaConta() throws IOException, ClassNotFoundException {
 
         Scanner sc = new Scanner(System.in);
         String[] newUserData = new String[2];
-        String resposta;
+        Object[] resposta;
 
         System.out.println("\t\t\tNovo Utilizador\n\n");
         System.out.print("\t\tUsername:");
@@ -141,15 +151,32 @@ public class Client extends Thread {
         postCard[0] = "new";
         postCard[1] = newUserData;
 
-        sender.writeObject(postCard);
+        
+        sender.writeUnshared(postCard);
+        
+        resposta = (Object[]) reciver.readObject();
 
-        resposta = (String) reciver.readObject();
-
-        System.out.println(resposta);
+        System.out.println(resposta[0]);
         return true;
 
     }
-
+    
+    public static boolean consultaSaldo() throws IOException, ClassNotFoundException{
+        
+        Object[] resposta;
+        
+        postCard[0]="seesal";
+        postCard[1]=null;
+        
+        sender.writeUnshared(postCard);
+        
+        resposta=(Object[]) reciver.readObject();
+        
+        System.out.println("\t\tO seu saldo é de "+resposta[1]+" euros.");
+    
+        return true;
+    }
+    
     public static void MainMenu() throws IOException, ClassNotFoundException {/*se isto for int posso mandar 0 ou 1 para tratar das falhas????*/
 
 
@@ -173,6 +200,14 @@ public class Client extends Thread {
             while (!LogIn(logResult)) {
                 logResult = false;
             }
+        }
+        
+        System.out.println("\t\t\tMenu Inicial\n\n");
+        System.out.print("\t\t1 - Consultar Saldo\n\n\n\t\t>>");
+        userPick=sc.nextLine();
+        
+        if(userPick.equals("1")){
+            consultaSaldo();
         }
     }
 }
