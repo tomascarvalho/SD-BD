@@ -99,6 +99,7 @@ public class Client extends Thread {
         Object[] serverMessage = null;
         String[] person = new String[2];
 
+<<<<<<< HEAD
         try {
 
             /**
@@ -110,6 +111,17 @@ public class Client extends Thread {
                 System.out.println("Utilizador não reconhecido!!!");
                 /*meter uma opção para voltar ao menu inicial e/ou fazer inscrição*/
             }
+=======
+        /**
+         * Vai pedir credenciais ao cliente para fazer o login. Se os dados não
+         * estiverem na base de dados vai voltar a chamar esta função. Caso
+         * contrário vai avançar para o menu inicial
+         */
+        if (!flag) {
+            System.out.println("Utilizador não reconhecido!!!");
+            /*meter uma opção para voltar ao menu inicial e/ou fazer inscrição*/
+        }
+>>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
 
             System.out.println("\n\t\tLogIn");
             System.out.print("\tUsername:");
@@ -173,9 +185,15 @@ public class Client extends Thread {
         return true;
 
     }
+<<<<<<< HEAD
 
     public static boolean consultaSaldo() throws IOException, ClassNotFoundException {
 
+=======
+   
+    public static boolean consultaSaldo() throws IOException, ClassNotFoundException{
+        
+>>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
         Object[] resposta;
 
         postCard[0] = "seesal";
@@ -189,7 +207,16 @@ public class Client extends Thread {
 
         return true;
     }
+<<<<<<< HEAD
 
+=======
+    
+    public static boolean criaProjecto() throws IOException, ClassNotFoundException{
+        
+    }
+    
+    
+>>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
     public static void MainMenu() throws IOException, ClassNotFoundException {/*se isto for int posso mandar 0 ou 1 para tratar das falhas????*/
 
 
@@ -202,7 +229,13 @@ public class Client extends Thread {
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\n\n\t\t>>");
         userPick = sc.nextLine();
-
+        //Verificar Escolhas
+        while ((userPick.equals("1") == false) && (userPick.equals("2") == false))
+        {
+            System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
+            System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\n\n\t\t>>");
+            userPick = sc.nextLine();
+        }
         if (userPick.equals("1")) {
             criaConta();//falta apanhar o que ela retorna
         } else if (userPick.equals("2")) {
@@ -213,14 +246,43 @@ public class Client extends Thread {
             while (!LogIn(logResult)) {
                 logResult = false;
             }
+            
         }
+<<<<<<< HEAD
 
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Consultar Saldo\n\n\n\t\t>>");
         userPick = sc.nextLine();
 
         if (userPick.equals("1")) {
+=======
+        
+        
+    }
+   
+    public static void menuConta() throws IOException, ClassNotFoundException {
+        Scanner sc = new Scanner(System.in);
+        String userPick;
+        System.out.println("\t\t\tMenu Inicial\n\n");
+        System.out.print("\t\t1 - Consultar Saldo\n\n\n\t\t2 - Criar Projecto\n\n\n\t\t");
+        userPick=sc.nextLine();
+        
+        //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
+        while((userPick.equals("1")==false) && (userPick.equals("2")==false)) 
+        {
+            System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
+            System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\n\n\t\t>>");
+            userPick = sc.nextLine();
+            
+        }
+        if(userPick.equals("1")){
+>>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
             consultaSaldo();
         }
+        else if(userPick.equals("2"))
+        {
+            criaProjecto(); //Caso de sucesso/falha?
+        }
+        
     }
 }
