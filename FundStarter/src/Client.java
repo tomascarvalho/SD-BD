@@ -181,11 +181,7 @@ public class Client extends Thread {
         return true;
     }
     
-    public static boolean criaProjecto() throws IOException, ClassNotFoundException{
-        
-    }
-    
-    
+
     public static void MainMenu() throws IOException, ClassNotFoundException {/*se isto for int posso mandar 0 ou 1 para tratar das falhas????*/
 
 
