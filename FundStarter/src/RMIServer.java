@@ -88,11 +88,12 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         System.out.println("[RMI Server] Função <novoProjecto> chamada!");
 
         try {
-            query = "INSERT INTO projecto (titulo, descricao, valorpretendido) VALUES (?,?,?)";
+            query = "INSERT INTO projecto (titulo, descricao, valorpretendido, valoractual) VALUES (?,?,?,?)";
             preparedstatement = connection.prepareStatement(query);
             preparedstatement.setString(1, projectInfo[0]);
             preparedstatement.setString(2, projectInfo[1]);
-            preparedstatement.setString(3, projectInfo[2]);
+            preparedstatement.setInt(3, Integer.parseInt(projectInfo[2]));
+            preparedstatement.setInt(4, 0);
             preparedstatement.executeUpdate();
 
         } catch (SQLException e) {

@@ -224,7 +224,7 @@ public class Client {
             System.out.println("\n\tValor Pretendido: ");
             newProjectData[2] = sc.nextLine(); //Valor Pretendido para o Projecto
 
-            postCard[0] = "new";
+            postCard[0] = "new_project";
             postCard[1] = newProjectData;
 
             sender.writeUnshared(postCard);
