@@ -176,7 +176,7 @@ public class Client extends Thread {
         
         resposta=(Object[]) reciver.readObject();
         
-        System.out.println("\t\tO seu saldo é de "+resposta[1]+" euros.");
+        System.out.println("\t\tO seu saldo é de "+resposta[0]+" euros.");
     
         return true;
     }

@@ -33,7 +33,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     }
 
     public Object[] verificaLogIn(User person) throws RemoteException {
-
+        
+        resposta[0]="userrec";
+        resposta[1]=11;
         
         return resposta;
     }

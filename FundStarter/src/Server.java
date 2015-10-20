@@ -2,6 +2,7 @@
 import java.net.*;
 import java.io.*;
 import java.rmi.Naming;
+import java.util.*;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,6 +14,8 @@ import java.rmi.Naming;
  * @author gabrieloliveira
  */
 public class Server {
+    
+    public ArrayList<Socket> myClients=new ArrayList<Socket>();
 
     public static void main(String[] args) {
 
@@ -30,7 +33,9 @@ public class Server {
             /**
              * COMETÁRIO EM FALTA
              */
-            new UDPServer();
+            UDPServer conectServer=new UDPServer();
+            Thread t=new Thread(conectServer);
+            t.start();
             /**
              * COMETÁRIO EM FALTA
              */
@@ -238,7 +243,7 @@ class BackupServer extends Thread {
     }
 }
 
-class UDPServer extends Thread {
+class UDPServer implements Runnable {
 
     DatagramSocket conection;
     byte[] buffer = new byte[1000];
@@ -246,11 +251,11 @@ class UDPServer extends Thread {
     int serverPort = 6060;
     String pingMessage;
 
-    UDPServer() {
+    /*UDPServer() {
 
         this.start();
 
-    }
+    }*/
 
     public void run() {
         try {
@@ -259,6 +264,8 @@ class UDPServer extends Thread {
              * cria ligação UDP no porto indicado na variável serverPort
              */
             conection = new DatagramSocket(serverPort);
+            
+            
 
             while (true) {
 
