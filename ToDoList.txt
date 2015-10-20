@@ -1,15 +1,15 @@
-﻿——>Tratar das excepções
+——>Tratar das excepções
 ——>Fazer funções:
 ———————> Listar Projectos actuais, com o seu progresso
 ———————> Listar Projectos Antigos
 ———————> Consultar detalhes de um projecto
 ———————> Registar Conta(FEITO)
-———————> Login(DIANA)
-———————> Consultar saldo (FEITO)
+———————> Login(falta testar com a base de dados)
+———————> Consultar saldo (falta testar com a bade de dados)
 ———————> Consultar recompensas
 ———————> Doar dinheiro ao projecto
 ———————> Enviar mensagens para o projecto
-———————> Criar um projecto(Zé)
+———————> Criar um projecto
 ———————> Adicionar e Renovar recompensas ao projecto
 ———————> Cancelar Projecto
 ———————> Fim do projecto
