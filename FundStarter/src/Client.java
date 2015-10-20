@@ -99,19 +99,9 @@ public class Client extends Thread {
         Object[] serverMessage = null;
         String[] person = new String[2];
 
-<<<<<<< HEAD
         try {
 
-            /**
-             * Vai pedir credências ao cliente para fazer o login se os dados
-             * não estiverem a base de dados, vai voltar a chamar esta função
-             * caso contrário vai avançar para o menu inicial
-             */
-            if (!flag) {
-                System.out.println("Utilizador não reconhecido!!!");
-                /*meter uma opção para voltar ao menu inicial e/ou fazer inscrição*/
-            }
-=======
+            
         /**
          * Vai pedir credenciais ao cliente para fazer o login. Se os dados não
          * estiverem na base de dados vai voltar a chamar esta função. Caso
@@ -121,7 +111,6 @@ public class Client extends Thread {
             System.out.println("Utilizador não reconhecido!!!");
             /*meter uma opção para voltar ao menu inicial e/ou fazer inscrição*/
         }
->>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
 
             System.out.println("\n\t\tLogIn");
             System.out.print("\tUsername:");
@@ -185,21 +174,10 @@ public class Client extends Thread {
         return true;
 
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-    public static boolean consultaSaldo() throws IOException, ClassNotFoundException {
-
-=======
-=======
->>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
-=======
->>>>>>> 233e54e0f1e4d9202b0974a7ec125bee34db5282
    
     public static boolean consultaSaldo() throws IOException, ClassNotFoundException{
         
->>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
         Object[] resposta;
 
         postCard[0] = "seesal";
@@ -213,28 +191,15 @@ public class Client extends Thread {
 
         return true;
     }
-<<<<<<< HEAD
 
-=======
-    
+  
     public static boolean criaProjecto() throws IOException, ClassNotFoundException{
         
+        return true;
     }
     
-    
-<<<<<<< HEAD
->>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
-=======
-    public static boolean criaProjecto() throws IOException, ClassNotFoundException{
-        
-    }
-    
-<<<<<<< HEAD
-    
->>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
-=======
 
->>>>>>> 233e54e0f1e4d9202b0974a7ec125bee34db5282
+
     public static void MainMenu() throws IOException, ClassNotFoundException {/*se isto for int posso mandar 0 ou 1 para tratar das falhas????*/
 
 
@@ -256,6 +221,7 @@ public class Client extends Thread {
         }
         if (userPick.equals("1")) {
             criaConta();//falta apanhar o que ela retorna
+            
         } else if (userPick.equals("2")) {
             /**
              * vai chamar a função para fazer o login se ela returnar null muda
@@ -265,45 +231,19 @@ public class Client extends Thread {
                 logResult = false;
             }
             
+            
         }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-        System.out.println("\t\t\tMenu Inicial\n\n");
-        System.out.print("\t\t1 - Consultar Saldo\n\n\n\t\t>>");
-        userPick = sc.nextLine();
+          
+        menuConta();
+        
+    }
 
-        if (userPick.equals("1")) {
-=======
-        
-        
-    }
    
     public static void menuConta() throws IOException, ClassNotFoundException {
         Scanner sc = new Scanner(System.in);
         String userPick;
         System.out.println("\t\t\tMenu Inicial\n\n");
-=======
-        
-        
-    }
-   
-    public static void menuConta() throws IOException, ClassNotFoundException {
-        Scanner sc = new Scanner(System.in);
-        String userPick;
-        System.out.println("\t\t\tMenu Inicial\n\n");
->>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
-=======
-        
-        
-    }
-   
-    public static void menuConta() throws IOException, ClassNotFoundException {
-        Scanner sc = new Scanner(System.in);
-        String userPick;
-        System.out.println("\t\t\tMenu Inicial\n\n");
->>>>>>> 233e54e0f1e4d9202b0974a7ec125bee34db5282
         System.out.print("\t\t1 - Consultar Saldo\n\n\n\t\t2 - Criar Projecto\n\n\n\t\t");
         userPick=sc.nextLine();
         
@@ -316,7 +256,6 @@ public class Client extends Thread {
             
         }
         if(userPick.equals("1")){
->>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
             consultaSaldo();
         }
         else if(userPick.equals("2"))
