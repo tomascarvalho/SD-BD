@@ -1,4 +1,4 @@
-——>Tratar das excepções
+﻿——>Tratar das excepções
 ——>Fazer funções:
 ———————> Listar Projectos actuais, com o seu progresso
 ———————> Listar Projectos Antigos
@@ -9,10 +9,10 @@
 ———————> Consultar recompensas
 ———————> Doar dinheiro ao projecto
 ———————> Enviar mensagens para o projecto
-———————> Criar um projecto
+———————> Criar um projecto (FEITO, falta acrescentar as recompensas)
 ———————> Adicionar e Renovar recompensas ao projecto
 ———————> Cancelar Projecto
-———————> Fim do projecto
+———————> Fim do projecto 
 :::::::::::::::::::::::::: Trabalho extra grupo de 3 ::::::::::::::::::::::::::::::::
 
 ———> Projectos podem ter vários admins que podem alterar e cancelar o projecto e responder a mensagens de utilizadores
