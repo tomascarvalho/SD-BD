@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*GABIRU
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -85,16 +85,6 @@ public class Client extends Thread {
                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                }finally{
-                   /* if(conectionToServer!=null){//ver isto
-                        try {
-                            conectionToServer.close();
-                            System.out.println("Desliguei!");
-                        } catch (IOException ex) {
-                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        
-                    }*/
                 }
 
             }
@@ -103,35 +93,55 @@ public class Client extends Thread {
 
     }
 
-    public static boolean LogIn(boolean flag) throws IOException, ClassNotFoundException {/* Ainda não tem o failover a funcionar aqui*/
+    public static boolean LogIn(boolean flag) throws ClassNotFoundException {/* Ainda não tem o failover a funcionar aqui*/
 
         Scanner sc = new Scanner(System.in);
-        Object[] serverMessage;
-        String[] person=new String[2];
+        Object[] serverMessage = null;
+        String[] person = new String[2];
 
-        /**
-         * Vai pedir credências ao cliente para fazer o login se os dados não
-         * estiverem a base de dados, vai voltar a chamar esta função caso
-         * contrário vai avançar para o menu inicial
-         */
-        if (!flag) {
-            System.out.println("Utilizador não reconhecido!!!");
-            /*meter uma opção para voltar ao menu inicial e/ou fazer inscrição*/
+        try {
+
+            /**
+             * Vai pedir credências ao cliente para fazer o login se os dados
+             * não estiverem a base de dados, vai voltar a chamar esta função
+             * caso contrário vai avançar para o menu inicial
+             */
+            if (!flag) {
+                System.out.println("Utilizador não reconhecido!!!");
+                /*meter uma opção para voltar ao menu inicial e/ou fazer inscrição*/
+            }
+
+            System.out.println("\n\t\tLogIn");
+            System.out.print("\tUsername:");
+            person[0] = sc.nextLine();
+            System.out.print("\tPassword:");
+            person[1] = sc.nextLine();
+
+            postCard[0] = "log";
+            postCard[1] = person;
+
+            /*vai mandar o user ao server para ver se ele está na base de dados*/
+            sender.writeUnshared(postCard);
+
+            serverMessage = (Object[]) reciver.readObject();
+        } catch (IOException e) {
+            if (conectionError == 3) {
+                System.out.println("[Cliente] Não me consigo ligar ao servidor, vou-me ligar ao secundário");
+                try {
+                    conectionToServer = new Socket(ipServer2, port2);
+                    conectionError = 0;
+                } catch (IOException exp) {
+                    System.out.println("[Cliente] Não me consigo ligar ao Servidor de Backup.");
+                }
+            } else {
+                conectionError++;
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
-
-        System.out.println("\n\t\tLogIn");
-        System.out.print("\tUsername:");
-        person[0] = sc.nextLine();
-        System.out.print("\tPassword:");
-        person[1] = sc.nextLine();
-
-        postCard[0] = "log";
-        postCard[1] = person;
-
-        /*vai mandar o user ao server para ver se ele está na base de dados*/
-        sender.writeUnshared(postCard);
-        
-        serverMessage = (Object[]) reciver.readObject();
 
         return !serverMessage[0].equals("usernotrec");
     }
@@ -144,9 +154,9 @@ public class Client extends Thread {
 
         System.out.println("\t\t\tNovo Utilizador\n\n");
         System.out.print("\t\tPrimeiro Nome:");
-        newUserData[0]=sc.nextLine();
+        newUserData[0] = sc.nextLine();
         System.out.print("\t\tApelido:");
-        newUserData[1]=sc.nextLine();
+        newUserData[1] = sc.nextLine();
         System.out.print("\t\tUsername:");
         newUserData[2] = sc.nextLine();
         System.out.print("\t\tPassword:");
@@ -155,32 +165,31 @@ public class Client extends Thread {
         postCard[0] = "new";
         postCard[1] = newUserData;
 
-        
         sender.writeUnshared(postCard);
-        
+
         resposta = (Object[]) reciver.readObject();
 
         System.out.println(resposta[0]);
         return true;
 
     }
-    
-    public static boolean consultaSaldo() throws IOException, ClassNotFoundException{
-        
+
+    public static boolean consultaSaldo() throws IOException, ClassNotFoundException {
+
         Object[] resposta;
-        
-        postCard[0]="seesal";
-        postCard[1]=null;
-        
+
+        postCard[0] = "seesal";
+        postCard[1] = null;
+
         sender.writeUnshared(postCard);
-        
-        resposta=(Object[]) reciver.readObject();
-        
-        System.out.println("\t\tO seu saldo é de "+resposta[0]+" euros.");
-    
+
+        resposta = (Object[]) reciver.readObject();
+
+        System.out.println("\t\tO seu saldo é de " + resposta[0] + " euros.");
+
         return true;
     }
-    
+
     public static void MainMenu() throws IOException, ClassNotFoundException {/*se isto for int posso mandar 0 ou 1 para tratar das falhas????*/
 
 
@@ -205,12 +214,12 @@ public class Client extends Thread {
                 logResult = false;
             }
         }
-        
+
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Consultar Saldo\n\n\n\t\t>>");
-        userPick=sc.nextLine();
-        
-        if(userPick.equals("1")){
+        userPick = sc.nextLine();
+
+        if (userPick.equals("1")) {
             consultaSaldo();
         }
     }
