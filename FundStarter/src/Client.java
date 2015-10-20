@@ -110,8 +110,8 @@ public class Client extends Thread {
         String[] person=new String[2];
 
         /**
-         * Vai pedir credências ao cliente para fazer o login se os dados não
-         * estiverem a base de dados, vai voltar a chamar esta função caso
+         * Vai pedir credenciais ao cliente para fazer o login. Se os dados não
+         * estiverem na base de dados vai voltar a chamar esta função. Caso
          * contrário vai avançar para o menu inicial
          */
         if (!flag) {
@@ -164,7 +164,7 @@ public class Client extends Thread {
         return true;
 
     }
-    
+   
     public static boolean consultaSaldo() throws IOException, ClassNotFoundException{
         
         Object[] resposta;
@@ -181,6 +181,11 @@ public class Client extends Thread {
         return true;
     }
     
+    public static boolean criaProjecto() throws IOException, ClassNotFoundException{
+        
+    }
+    
+    
     public static void MainMenu() throws IOException, ClassNotFoundException {/*se isto for int posso mandar 0 ou 1 para tratar das falhas????*/
 
 
@@ -193,7 +198,13 @@ public class Client extends Thread {
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\n\n\t\t>>");
         userPick = sc.nextLine();
-
+        //Verificar Escolhas
+        while ((userPick.equals("1") == false) && (userPick.equals("2") == false))
+        {
+            System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
+            System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\n\n\t\t>>");
+            userPick = sc.nextLine();
+        }
         if (userPick.equals("1")) {
             criaConta();//falta apanhar o que ela retorna
         } else if (userPick.equals("2")) {
@@ -204,14 +215,34 @@ public class Client extends Thread {
             while (!LogIn(logResult)) {
                 logResult = false;
             }
+            
         }
         
+        
+    }
+   
+    public static void menuConta() throws IOException, ClassNotFoundException {
+        Scanner sc = new Scanner(System.in);
+        String userPick;
         System.out.println("\t\t\tMenu Inicial\n\n");
-        System.out.print("\t\t1 - Consultar Saldo\n\n\n\t\t>>");
+        System.out.print("\t\t1 - Consultar Saldo\n\n\n\t\t2 - Criar Projecto\n\n\n\t\t");
         userPick=sc.nextLine();
         
+        //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
+        while((userPick.equals("1")==false) && (userPick.equals("2")==false)) 
+        {
+            System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
+            System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\n\n\t\t>>");
+            userPick = sc.nextLine();
+            
+        }
         if(userPick.equals("1")){
             consultaSaldo();
         }
+        else if(userPick.equals("2"))
+        {
+            criaProjecto(); //Caso de sucesso/falha?
+        }
+        
     }
 }
