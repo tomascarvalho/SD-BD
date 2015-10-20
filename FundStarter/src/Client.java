@@ -187,12 +187,15 @@ public class Client extends Thread {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     public static boolean consultaSaldo() throws IOException, ClassNotFoundException {
 
 =======
 =======
 >>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
+=======
+>>>>>>> 233e54e0f1e4d9202b0974a7ec125bee34db5282
    
     public static boolean consultaSaldo() throws IOException, ClassNotFoundException{
         
@@ -226,8 +229,12 @@ public class Client extends Thread {
         
     }
     
+<<<<<<< HEAD
     
 >>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
+=======
+
+>>>>>>> 233e54e0f1e4d9202b0974a7ec125bee34db5282
     public static void MainMenu() throws IOException, ClassNotFoundException {/*se isto for int posso mandar 0 ou 1 para tratar das falhas????*/
 
 
@@ -261,6 +268,7 @@ public class Client extends Thread {
         }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Consultar Saldo\n\n\n\t\t>>");
@@ -286,6 +294,16 @@ public class Client extends Thread {
         String userPick;
         System.out.println("\t\t\tMenu Inicial\n\n");
 >>>>>>> 4a74bf9746ee643a126e13509556e2d0233447c5
+=======
+        
+        
+    }
+   
+    public static void menuConta() throws IOException, ClassNotFoundException {
+        Scanner sc = new Scanner(System.in);
+        String userPick;
+        System.out.println("\t\t\tMenu Inicial\n\n");
+>>>>>>> 233e54e0f1e4d9202b0974a7ec125bee34db5282
         System.out.print("\t\t1 - Consultar Saldo\n\n\n\t\t2 - Criar Projecto\n\n\n\t\t");
         userPick=sc.nextLine();
         
