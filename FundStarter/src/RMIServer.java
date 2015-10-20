@@ -82,6 +82,48 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
         return resposta;
     }
+    
+    public Object[] novoProjecto(String[] projectInfo) throws RemoteException { //Verificar Erro?
+        
+        System.out.println("[RMI Server] Função <novoProjecto> chamada!");
+
+        try {
+            query = "INSERT INTO projecto (titulo, descricao, valorpretendido) VALUES (?,?,?)";
+            preparedstatement = connection.prepareStatement(query);
+            preparedstatement.setString(1, projectInfo[0]);
+            preparedstatement.setString(2, projectInfo[1]);
+            preparedstatement.setString(3, projectInfo[2]);
+            preparedstatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("SQLException:" + e);
+        }
+
+        try {
+            query = "SELECT id FROM projecto WHERE titulo='"+projectInfo[0]+"'";
+            request=connection.createStatement();
+            rs=request.executeQuery(query);
+            
+            rs.next();
+            resposta[0] = "infosave";
+            resposta[1] = rs.getInt(1);
+            
+
+        } catch (SQLException ex) {
+            System.err.println("Erro:"+ex);
+        } finally {
+            if (request != null) {
+                try {
+                    request.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(RMIServer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+        
+        return resposta;
+    }
 
     public Object[] getUserSaldo(int userID) throws RemoteException {
 

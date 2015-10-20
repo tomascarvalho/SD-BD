@@ -90,6 +90,7 @@ class NewClient extends Thread {
     Object[] myMail;//podera ter de ser Object[] dependendo do que for preciso enviar ao cliente
     RMIServerInterface remoteConection;
     int myUserID;
+    int myProjectID;
 
     NewClient(Socket cliente, RMIServerInterface rmiConection) {
 
@@ -147,7 +148,17 @@ class NewClient extends Thread {
                         myUserID = (int) myMail[1];
                     }
 
-                } else if (postCard[0].equals("seesal")) {
+                } else if (((String) postCard[0]).equals("new_project")) {
+                    
+                    String[] newProject = (String[]) postCard[1];
+                    myMail = remoteConection.novoProjecto(newProject);
+                    
+                    if (myMail[0].equals("infosave")) {
+                        System.out.println("myProjectID:"+(int)myMail[1]);
+                        myProjectID = (int) myMail[1];
+                    }
+                
+                }else if (postCard[0].equals("seesal")) {
 
                     myMail = remoteConection.getUserSaldo(myUserID);
 

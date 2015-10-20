@@ -167,7 +167,7 @@ public class Client {
             System.out.print("\t\tPassword:");
             newUserData[3] = sc.nextLine();
 
-            postCard[0] = "new";
+            postCard[0] = "new_project";
             postCard[1] = newUserData;
 
             sender.writeUnshared(postCard);
@@ -208,7 +208,40 @@ public class Client {
     }
 
     public boolean criaProjecto() throws IOException, ClassNotFoundException {
+        
+        Object[] resposta;
+        Scanner sc = new Scanner(System.in);
+        String[] newProjectData = new String[3];
+        
+        try{
+            
+            
+            System.out.println("\n\t\tNovo Projecto");
+            System.out.println("\n\tNome do Projecto: ");
+            newProjectData[0] = sc.nextLine(); //Titulo do Projecto
+            System.out.println("\n\tDescrição do Projecto: ");
+            newProjectData[1] = sc.nextLine(); //Descrição do Projecto
+            System.out.println("\n\tValor Pretendido: ");
+            newProjectData[2] = sc.nextLine(); //Valor Pretendido para o Projecto
 
+            postCard[0] = "new";
+            postCard[1] = newProjectData;
+
+            sender.writeUnshared(postCard);
+
+            resposta = (Object[]) reciver.readObject();
+
+            if (resposta[0].equals("infosave")) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (IOException e) {
+            connectionFunction();
+        }
+
+        
         return true;
     }
 
