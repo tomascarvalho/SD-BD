@@ -15,7 +15,6 @@ import java.util.*;
  */
 public class Server {
     
-    public ArrayList<Socket> myClients=new ArrayList<Socket>();
 
     public static void main(String[] args) {
 
