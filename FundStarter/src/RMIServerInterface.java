@@ -12,9 +12,9 @@ import java.rmi.*;
  */
 public interface RMIServerInterface extends Remote {
 
-    public Object[] verificaLogIn(User person) throws RemoteException;
+    public ClientRequest verificaLogIn(ClientRequest person) throws RemoteException;
 
-    public Object[] novoUtilizador(String[] userInfo) throws RemoteException;
+    public ClientRequest novoUtilizador(ClientRequest userInfo) throws RemoteException;
     
     public Object[] getUserSaldo(int userID) throws RemoteException;
     

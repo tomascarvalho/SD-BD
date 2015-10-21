@@ -32,18 +32,22 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         super();
     }
 
-    public Object[] verificaLogIn(User person) throws RemoteException {
+    public ClientRequest verificaLogIn(ClientRequest person) throws RemoteException {
         
         resposta[0]="userrec";
         resposta[1]=11;
         
-        return resposta;
+        return person;
     }
 
-    public Object[] novoUtilizador(String[] userInfo) throws RemoteException {/*Falta verifica se não deu erro a inserir na base de dados*/
+    public ClientRequest novoUtilizador(ClientRequest clrqst) throws RemoteException {/*Falta verifica se não deu erro a inserir na base de dados*/
 
-        System.out.println("[RMI Server] Função <novoUtilizador> chamada!");
-
+        String[] userInfo=(String[]) clrqst.getRequest()[1];
+        
+        clrqst.setStage(2);
+        
+        
+        
         try {
             query = "INSERT INTO utilizador (nome, apelido, username, pass, saldo) VALUES (?,?,?,?,?)";
             preparedstatement = connection.prepareStatement(query);
@@ -67,7 +71,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             resposta[0] = "infosave";
             resposta[1] = rs.getInt(1);
             
-
+            clrqst.setResponse(resposta);
+            clrqst.setStage(3);
+            
         } catch (SQLException ex) {
             System.err.println("Erro:"+ex);
         } finally {
@@ -80,7 +86,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             }
         }
 
-        return resposta;
+        return clrqst;
     }
     
     public Object[] novoProjecto(String[] projectInfo) throws RemoteException { //Verificar Erro?

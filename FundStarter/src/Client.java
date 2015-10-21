@@ -24,6 +24,8 @@ public class Client {
     private String ipServer1, ipServer2;
     private int port1, port2;
     private Object[] postCard = new Object[2];
+    public ArrayList<ClientRequest> myRequest=new ArrayList<ClientRequest>();
+    public ClientRequest newRequest;
 
     public Client(String[] args) throws ClassNotFoundException {
         /**
@@ -102,7 +104,7 @@ public class Client {
          * termina
          */
         if (args.length != 4) {
-            System.out.println("java Client <IP1> <P1> <IP2> <P2>");
+            System.out.println("java Client <IP1> <P1> <IP2> <P2>");//isto tem de ser passado para um ficheiro de configurações
             System.exit(0);
         } else {
             new Client(args);
@@ -114,6 +116,7 @@ public class Client {
         Scanner sc = new Scanner(System.in);
         Object[] serverMessage = null;
         String[] person = new String[2];
+        String requestId;
 
         try {
 
@@ -135,9 +138,20 @@ public class Client {
 
             postCard[0] = "log";
             postCard[1] = person;
+            
+            if(myRequest.size()==0){
+                requestId="1";
+            }
+            else{
+                requestId=""+myRequest.size();
+            }
+            
+            newRequest=new ClientRequest(requestId,postCard);
+            newRequest.setStage(0);
+            myRequest.add(newRequest);
 
             /*vai mandar o user ao server para ver se ele está na base de dados*/
-            sender.writeUnshared(postCard);
+            sender.writeUnshared(newRequest);
 
             serverMessage = (Object[]) reciver.readObject();
 
@@ -154,6 +168,7 @@ public class Client {
         Scanner sc = new Scanner(System.in);
         String[] newUserData = new String[4];
         Object[] resposta;
+        String requestId;
 
         try {
 
@@ -170,6 +185,16 @@ public class Client {
             postCard[0] = "new_project";
             postCard[1] = newUserData;
 
+            if(myRequest.size()==0){
+                requestId=""+0;
+            }
+            else{
+                requestId=""+myRequest.size();
+            }
+            newRequest=new ClientRequest(requestId,postCard);
+            newRequest.setStage(0);
+            
+            
             sender.writeUnshared(postCard);
 
             resposta = (Object[]) reciver.readObject();

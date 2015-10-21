@@ -26,6 +26,8 @@ public class ClientRequest {
     private Object[] request;
     private Object[] response; 
     private String[] stgType={"clrqst","inprog","rmiin","rmiout","bckcl"};
+    
+    
     public ClientRequest(String id,Object[] pedido){
         
         this.requestID=id;

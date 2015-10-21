@@ -2,7 +2,10 @@
 import java.net.*;
 import java.io.*;
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,7 +17,6 @@ import java.util.*;
  * @author gabrieloliveira
  */
 public class Server {
-    
 
     public static void main(String[] args) {
 
@@ -32,8 +34,8 @@ public class Server {
             /**
              * COMETÁRIO EM FALTA
              */
-            UDPServer conectServer=new UDPServer();
-            Thread t=new Thread(conectServer);
+            UDPServer conectServer = new UDPServer();
+            Thread t = new Thread(conectServer);
             t.start();
             /**
              * COMETÁRIO EM FALTA
@@ -85,11 +87,12 @@ class NewClient extends Thread {
     Socket myClient;
     ObjectInputStream reciver;
     ObjectOutputStream sender;
-    Object[] postCard;
-    Object[] myMail;//podera ter de ser Object[] dependendo do que for preciso enviar ao cliente
+    ClientRequest postCard;
+    ClientRequest myMail;//podera ter de ser Object[] dependendo do que for preciso enviar ao cliente
     RMIServerInterface remoteConection;
     int myUserID;
     int myProjectID;
+    String alterRequest;
 
     NewClient(Socket cliente, RMIServerInterface rmiConection) {
 
@@ -123,53 +126,57 @@ class NewClient extends Thread {
         try {
             while (true) {
                 postCard = null;
-                postCard = (Object[]) reciver.readObject();/*está a dar erro nesta merda por causa de não ser serializable*/
+                postCard = (ClientRequest) reciver.readObject();/*está a dar erro nesta merda por causa de não ser serializable*/
+
+                alterRequest = postCard.getRequestID() + ("_" + myUserID);
+                postCard.setRequestID(alterRequest);
 
                 System.out.println("[Server] Li a mensagem do cliente na boa.");
                 //mudar depois para um switch
-                if (((String) postCard[0]).equals("log")) {
+                if (postCard.getRequest()[0].equals("log")) {
 
-                    String[] userInfo = (String[]) postCard[1];
-                    User person = new User(userInfo[0], userInfo[1]);
-                    myMail = remoteConection.verificaLogIn(person);
+                    postCard.setStage(1);
+                    myMail = remoteConection.verificaLogIn(postCard);
 
-                    if (myMail[0].equals("userrec")) {
-                        myUserID = (int) myMail[1];
+                    if (myMail.getResponse()[0].equals("userrec")) {
+                        myUserID = (int) myMail.getResponse()[1];
                     }
-
+                    
+                    myMail.setStage(4);
+                /*
                 } else if (((String) postCard[0]).equals("new")) {
 
                     String[] newPerson = (String[]) postCard[1];
                     myMail = remoteConection.novoUtilizador(newPerson);
-              
+
                     if (myMail[0].equals("infosave")) {
-                        System.out.println("myUserID:"+(int)myMail[1]);
+                        System.out.println("myUserID:" + (int) myMail[1]);
                         myUserID = (int) myMail[1];
                     }
 
                 } else if (((String) postCard[0]).equals("new_project")) {
-                    
+
                     String[] newProject = (String[]) postCard[1];
                     myMail = remoteConection.novoProjecto(newProject);
-                    
+
                     if (myMail[0].equals("infosave")) {
-                        System.out.println("myProjectID:"+(int)myMail[1]);
+                        System.out.println("myProjectID:" + (int) myMail[1]);
                         myProjectID = (int) myMail[1];
                     }
-                
-                }else if (postCard[0].equals("seesal")) {
+
+                } else if (postCard[0].equals("seesal")) {
 
                     myMail = remoteConection.getUserSaldo(myUserID);
-
+                */
                 }
-
+                
                 sender.writeUnshared(myMail);
 
             }
         } catch (Exception e) {
             System.out.println("[Server] Erro no Client Conection: " + e.getMessage());
         }
-    }
+        }
 }
 
 class BackupServer extends Thread {
@@ -263,10 +270,9 @@ class UDPServer implements Runnable {
 
     /*UDPServer() {
 
-        this.start();
+     this.start();
 
-    }*/
-
+     }*/
     public void run() {
         try {
 
@@ -274,8 +280,6 @@ class UDPServer implements Runnable {
              * cria ligação UDP no porto indicado na variável serverPort
              */
             conection = new DatagramSocket(serverPort);
-            
-            
 
             while (true) {
 
