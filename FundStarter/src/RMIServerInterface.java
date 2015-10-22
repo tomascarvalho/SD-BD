@@ -16,9 +16,10 @@ public interface RMIServerInterface extends Remote {
 
     public ClientRequest novoUtilizador(ClientRequest userInfo) throws RemoteException;
     
-    public Object[] getUserSaldo(int userID) throws RemoteException;
+    public ClientRequest getUserSaldo(ClientRequest clrqst) throws RemoteException;
     
     public void DB() throws RemoteException;
 
-    public Object[] novoProjecto(String[] projectInfo) throws RemoteException;
+    public ClientRequest novoProjecto(ClientRequest clrqst) throws RemoteException;
+    
 }

@@ -26,6 +26,7 @@ public class Client {
     private Object[] postCard = new Object[2];
     public ArrayList<ClientRequest> myRequest=new ArrayList<ClientRequest>();
     public ClientRequest newRequest;
+    public ClientRequest newResponse;
 
     public Client(String[] args) throws ClassNotFoundException {
         /**
@@ -110,11 +111,18 @@ public class Client {
             new Client(args);
         }
     }
+    
+    private void updateRequest(ClientRequest oldrqst,ClientRequest newrqst){
+        
+        int requestIndex=myRequest.indexOf(oldrqst);
+        
+        myRequest.set(requestIndex,newrqst);
+        
+    }
 
     public boolean LogIn(boolean flag) throws ClassNotFoundException {/* Ainda não tem o failover a funcionar aqui*/
 
         Scanner sc = new Scanner(System.in);
-        Object[] serverMessage = null;
         String[] person = new String[2];
         String requestId;
 
@@ -153,9 +161,10 @@ public class Client {
             /*vai mandar o user ao server para ver se ele está na base de dados*/
             sender.writeUnshared(newRequest);
 
-            serverMessage = (Object[]) reciver.readObject();
-
-            return !serverMessage[0].equals("usernotrec");
+            newResponse = (ClientRequest) reciver.readObject();
+            updateRequest(newRequest,newResponse);
+            
+            return !newResponse.getResponse()[0].equals("usernotrec");
         } catch (IOException e) {
             connectionFunction();
         }
@@ -166,9 +175,8 @@ public class Client {
     public boolean criaConta() throws ClassNotFoundException {
 
         Scanner sc = new Scanner(System.in);
-        String[] newUserData = new String[4];
-        Object[] resposta;
         String requestId;
+        String[] newUserData=new String[4];
 
         try {
 
@@ -182,24 +190,27 @@ public class Client {
             System.out.print("\t\tPassword:");
             newUserData[3] = sc.nextLine();
 
-            postCard[0] = "new_project";
+            postCard[0] = "new";
             postCard[1] = newUserData;
 
             if(myRequest.size()==0){
-                requestId=""+0;
+                requestId=""+1;
             }
             else{
                 requestId=""+myRequest.size();
             }
             newRequest=new ClientRequest(requestId,postCard);
             newRequest.setStage(0);
+            myRequest.add(newRequest);
             
             
-            sender.writeUnshared(postCard);
+            sender.writeUnshared(newRequest);
 
-            resposta = (Object[]) reciver.readObject();
+            newResponse = (ClientRequest) reciver.readObject();
+            
+            updateRequest(newRequest,newResponse);
 
-            if (resposta[0].equals("infosave")) {
+            if (newResponse.getResponse()[0].equals("infosave")) {
                 return true;
             } else {
                 return false;
@@ -214,17 +225,31 @@ public class Client {
 
     public boolean consultaSaldo() throws IOException, ClassNotFoundException {
 
-        Object[] resposta;
-
+        String requestId;
+        
         try {
             postCard[0] = "seesal";
             postCard[1] = null;
+            
+            if(myRequest.size()==0){
+                requestId="1";
+            }
+            else{
+                requestId=""+myRequest.size();
+            }
+            
+            newRequest=new ClientRequest(requestId,postCard);
+            newRequest.setStage(0);
+            myRequest.add(newRequest);
+            
+            sender.writeUnshared(newRequest);
 
-            sender.writeUnshared(postCard);
+            newResponse = (ClientRequest) reciver.readObject();
+            updateRequest(newRequest,newResponse);
 
-            resposta = (Object[]) reciver.readObject();
-
-            System.out.println("\t\tO seu saldo é de " + resposta[0] + " euros.");
+            System.out.println("\t\tO seu saldo é de " + newResponse.getResponse()[1] + " euros.");
+            
+            
         } catch (IOException e) {
             connectionFunction();
         }
@@ -234,9 +259,9 @@ public class Client {
 
     public boolean criaProjecto() throws IOException, ClassNotFoundException {
         
-        Object[] resposta;
         Scanner sc = new Scanner(System.in);
         String[] newProjectData = new String[3];
+        String requestId;
         
         try{
             
@@ -251,12 +276,24 @@ public class Client {
 
             postCard[0] = "new_project";
             postCard[1] = newProjectData;
+            
+            if(myRequest.size()==0){
+                requestId="0";
+            }
+            else{
+                requestId=""+myRequest.size();
+            }
+            
+            newRequest=new ClientRequest(requestId,postCard);
+            newRequest.setStage(0);
+            myRequest.add(newRequest);
 
-            sender.writeUnshared(postCard);
+            sender.writeUnshared(newRequest);
 
-            resposta = (Object[]) reciver.readObject();
+            newResponse = (ClientRequest) reciver.readObject();
+            updateRequest(newRequest,newResponse);
 
-            if (resposta[0].equals("infosave")) {
+            if (newResponse.getResponse()[0].equals("infosave")) {
                 return true;
             } else {
                 return false;

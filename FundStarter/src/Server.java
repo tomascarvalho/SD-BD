@@ -143,31 +143,41 @@ class NewClient extends Thread {
                     }
                     
                     myMail.setStage(4);
-                /*
-                } else if (((String) postCard[0]).equals("new")) {
-
-                    String[] newPerson = (String[]) postCard[1];
-                    myMail = remoteConection.novoUtilizador(newPerson);
-
-                    if (myMail[0].equals("infosave")) {
-                        System.out.println("myUserID:" + (int) myMail[1]);
-                        myUserID = (int) myMail[1];
+                
+                } else if (postCard.getRequest()[0].equals("new")) {
+                    
+                    postCard.setStage(1);
+                    
+                    myMail = remoteConection.novoUtilizador(postCard);
+                    
+                    if (myMail.getResponse()[0].equals("infosave")) {
+                        System.out.println("myUserID:" + (int) myMail.getResponse()[1]);
+                        myUserID = (int) myMail.getResponse()[1];
                     }
+                    
+                    myMail.setStage(4);
 
-                } else if (((String) postCard[0]).equals("new_project")) {
+                } else if (postCard.getRequest()[0].equals("new_project")) {
 
-                    String[] newProject = (String[]) postCard[1];
-                    myMail = remoteConection.novoProjecto(newProject);
+                    postCard.setStage(1);
+                    
+                    myMail = remoteConection.novoProjecto(postCard);
 
-                    if (myMail[0].equals("infosave")) {
-                        System.out.println("myProjectID:" + (int) myMail[1]);
-                        myProjectID = (int) myMail[1];
+                    if (myMail.getResponse()[0].equals("infosave")) {
+                        System.out.println("myProjectID:" + (int) myMail.getResponse()[1]);
+                        myProjectID = (int) myMail.getResponse()[1];
                     }
+                    
+                    myMail.setStage(4);
 
-                } else if (postCard[0].equals("seesal")) {
+                } else if (postCard.getRequest()[0].equals("seesal")) {
 
-                    myMail = remoteConection.getUserSaldo(myUserID);
-                */
+                    postCard.getRequest()[1]=myUserID;
+                    postCard.setStage(1);
+                    
+                    myMail = remoteConection.getUserSaldo(postCard);
+                
+                    myMail.setStage(4);
                 }
                 
                 sender.writeUnshared(myMail);
