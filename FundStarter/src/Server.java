@@ -1,11 +1,7 @@
 
 import java.net.*;
 import java.io.*;
-import java.rmi.Naming;
-import java.rmi.RemoteException;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.rmi.*;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,13 +19,12 @@ public class Server {
         try {
 
             /**
-             * Cria um socket para ligação com clientes no porto indicado no
-             * serverPort
+             * Cria um socket para ligação com clientes no porto indicado no serverPort
              */
-            int serverPort = 6000;//Integer.parseInt(args[1]);
+            int serverPort = 6000;
             ServerSocket conectionToClient = new ServerSocket(serverPort);
             Socket cliente;
-            String rmiLocation = "//localhost:7777/fundStarter";//o localhost tem de mudar para ser o ip da máquina onde está o RMI
+            String rmiLocation = "//localhost:7777/fundStarter";
 
             /**
              * COMETÁRIO EM FALTA
@@ -52,8 +47,7 @@ public class Server {
                 cliente = conectionToClient.accept();
 
                 /**
-                 * Por cada cliente que se liga, vai criar uma thread que fica
-                 * encarregue de lidar com ele
+                 * Por cada cliente que se liga, vai criar uma thread que fica encarregue de lidar com ele
                  */
                 new NewClient(cliente, remoteConection);
 
@@ -61,8 +55,7 @@ public class Server {
 
         } catch (IOException e) {
             /**
-             * Quando apanhar um IOException quer dizer que já há um servidor
-             * activo e que vai ter de ficar como servidor de backup
+             * Quando apanhar um IOException quer dizer que já há um servidor activo e que vai ter de ficar como servidor de backup
              */
             if (e.getMessage().equals("Address already in use")) {
                 new BackupServer("localhost"); /*isto só está aqui como teste*/
@@ -88,7 +81,7 @@ class NewClient extends Thread {
     ObjectInputStream reciver;
     ObjectOutputStream sender;
     ClientRequest postCard;
-    ClientRequest myMail;//podera ter de ser Object[] dependendo do que for preciso enviar ao cliente
+    ClientRequest myMail;
     RMIServerInterface remoteConection;
     int myUserID;
     int myProjectID;
@@ -98,8 +91,7 @@ class NewClient extends Thread {
 
         try {
             /**
-             * Guarda o cliente que se ligou anteriormente ao servidor e também
-             * a ligação com o servidor RMI
+             * Guarda o cliente que se ligou anteriormente ao servidor e também a ligação com o servidor RMI
              */
             myClient = cliente;
             remoteConection = rmiConection;
@@ -126,7 +118,7 @@ class NewClient extends Thread {
         try {
             while (true) {
                 postCard = null;
-                postCard = (ClientRequest) reciver.readObject();/*está a dar erro nesta merda por causa de não ser serializable*/
+                postCard = (ClientRequest) reciver.readObject();
 
                 alterRequest = postCard.getRequestID() + ("_" + myUserID);
                 postCard.setRequestID(alterRequest);
@@ -141,52 +133,52 @@ class NewClient extends Thread {
                     if (myMail.getResponse()[0].equals("userrec")) {
                         myUserID = (int) myMail.getResponse()[1];
                     }
-                    
+
                     myMail.setStage(4);
-                
+
                 } else if (postCard.getRequest()[0].equals("new")) {
-                    
+
                     postCard.setStage(1);
-                    
+
                     myMail = remoteConection.novoUtilizador(postCard);
-                    
+
                     if (myMail.getResponse()[0].equals("infosave")) {
                         System.out.println("myUserID:" + (int) myMail.getResponse()[1]);
                         myUserID = (int) myMail.getResponse()[1];
                     }
-                    
+
                     myMail.setStage(4);
 
                 } else if (postCard.getRequest()[0].equals("new_project")) {
 
                     postCard.setStage(1);
-                    
+
                     myMail = remoteConection.novoProjecto(postCard);
 
                     if (myMail.getResponse()[0].equals("infosave")) {
                         System.out.println("myProjectID:" + (int) myMail.getResponse()[1]);
                         myProjectID = (int) myMail.getResponse()[1];
                     }
-                    
+
                     myMail.setStage(4);
 
                 } else if (postCard.getRequest()[0].equals("seesal")) {
 
-                    postCard.getRequest()[1]=myUserID;
+                    postCard.getRequest()[1] = myUserID;
                     postCard.setStage(1);
-                    
+
                     myMail = remoteConection.getUserSaldo(postCard);
-                
+
                     myMail.setStage(4);
                 }
-                
+
                 sender.writeUnshared(myMail);
 
             }
         } catch (Exception e) {
             System.out.println("[Server] Erro no Client Conection: " + e.getMessage());
         }
-        }
+    }
 }
 
 class BackupServer extends Thread {
@@ -201,13 +193,11 @@ class BackupServer extends Thread {
     int failOverCounter;
     String[] args = null;
 
-    BackupServer(String hostIp) { /*vai precisar de argumentos diferentes para iniciar o novo servidor quando o pricipal for abaixo*/
+    BackupServer(String hostIp) {
 
         /**
-         * Vai guradar o ip do Servidor principal para se poder ligar como
-         * backup e inicializa o contador para o caso de ocorrer um FailOver
+         * Vai guradar o ip do Servidor principal para se poder ligar como backup e inicializa o contador para o caso de ocorrer um FailOver
          */
-
         primaryServer = hostIp;
         failOverCounter = 0;
         this.start();
@@ -228,10 +218,7 @@ class BackupServer extends Thread {
                 try {
 
                     /**
-                     * vai fazer a ligação com o Servidor principal e mandar a
-                     * mensagem 'ping'. Caso o servidor principal vai abaixo e
-                     * espera até à terceira mensagem de erro para se tornar
-                     * servdor principal
+                     * vai fazer a ligação com o Servidor principal e mandar a mensagem 'ping'. Caso o servidor principal vai abaixo e espera até à terceira mensagem de erro para se tornar servdor principal
                      */
                     pingMessage = "ping".getBytes();
                     hostConection = InetAddress.getByName(primaryServer);
@@ -294,8 +281,7 @@ class UDPServer implements Runnable {
             while (true) {
 
                 /**
-                 * recebe mensagem do Servidor Backup e volta a mandar a mesma
-                 * mensagem
+                 * recebe mensagem do Servidor Backup e volta a mandar a mesma mensagem
                  */
                 reciver = new DatagramPacket(buffer, buffer.length);
                 conection.receive(reciver);

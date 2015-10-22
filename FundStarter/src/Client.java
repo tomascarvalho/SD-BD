@@ -24,14 +24,13 @@ public class Client {
     private String ipServer1, ipServer2;
     private int port1, port2;
     private Object[] postCard = new Object[2];
-    public ArrayList<ClientRequest> myRequest=new ArrayList<ClientRequest>();
+    public ArrayList<ClientRequest> myRequest = new ArrayList<ClientRequest>();
     public ClientRequest newRequest;
     public ClientRequest newResponse;
 
     public Client(String[] args) throws ClassNotFoundException {
         /**
-         * Passa o argumentos para as variáveis para podermos fazer as ligações
-         * mais à frente
+         * Passa o argumentos para as variáveis para podermos fazer as ligações mais à frente
          */
 
         ipServer1 = args[0];
@@ -54,19 +53,20 @@ public class Client {
      */
     public void connectionFunction() {
 
+        int portTemp;
+        String ipTemp;
+
         while (true) {
             try {
 
                 /**
-                 * cria ligação com o servidor que está com o IP->ipServer1 e
-                 * Porto->port1
+                 * cria ligação com o servidor que está com o IP->ipServer1 e Porto->port1
                  */
                 System.out.println("Fase 1->Conecção com servidor\n");
                 conectionToServer = new Socket(ipServer1, port1);
 
                 /**
-                 * vai iniciar os streams de input e output para partilhar
-                 * mensagens com o servidor
+                 * vai iniciar os streams de input e output para partilhar mensagens com o servidor
                  */
                 sender = new ObjectOutputStream(conectionToServer.getOutputStream());
                 sender.flush();/*perceber porque é que esta linha tem de estar aqui*/
@@ -80,6 +80,12 @@ public class Client {
                     System.out.println("[Cliente] Não me consigo ligar ao servidor, vou-me ligar ao secundário");
                     try {
                         conectionToServer = new Socket(ipServer2, port2);
+                        ipTemp = ipServer2;
+                        portTemp = port2;
+                        ipServer2 = ipServer1;
+                        port1 = port2;
+                        ipServer1 = ipTemp;
+                        port1 = portTemp;
                         conectionError = 0;
                     } catch (IOException exp) {
                         System.out.println("[Cliente] Não me consigo ligar ao Servidor de Backup.");
@@ -100,27 +106,25 @@ public class Client {
     public static void main(String[] args) throws ClassNotFoundException {
 
         /**
-         * se o utilizador iniciar o programa e não meter ip's e portas dos
-         * servidores o programa entra neste if, imprime a mensagem de erro e
-         * termina
+         * se o utilizador iniciar o programa e não meter ip's e portas dos servidores o programa entra neste if, imprime a mensagem de erro e termina
          */
         if (args.length != 4) {
-            System.out.println("java Client <IP1> <P1> <IP2> <P2>");//isto tem de ser passado para um ficheiro de configurações
+            System.out.println("java Client <IP1> <P1> <IP2> <P2>");
             System.exit(0);
         } else {
             new Client(args);
         }
     }
-    
-    private void updateRequest(ClientRequest oldrqst,ClientRequest newrqst){
-        
-        int requestIndex=myRequest.indexOf(oldrqst);
-        
-        myRequest.set(requestIndex,newrqst);
-        
+
+    private void updateRequest(ClientRequest oldrqst, ClientRequest newrqst) {
+
+        int requestIndex = myRequest.indexOf(oldrqst);
+
+        myRequest.set(requestIndex, newrqst);
+
     }
 
-    public boolean LogIn(boolean flag) throws ClassNotFoundException {/* Ainda não tem o failover a funcionar aqui*/
+    public boolean LogIn(boolean flag) throws ClassNotFoundException {
 
         Scanner sc = new Scanner(System.in);
         String[] person = new String[2];
@@ -129,9 +133,7 @@ public class Client {
         try {
 
             /**
-             * Vai pedir credenciais ao cliente para fazer o login. Se os dados
-             * não estiverem na base de dados vai voltar a chamar esta função.
-             * Caso contrário vai avançar para o menu inicial
+             * Vai pedir credenciais ao cliente para fazer o login. Se os dados não estiverem na base de dados vai voltar a chamar esta função. Caso contrário vai avançar para o menu inicial
              */
             if (!flag) {
                 System.out.println("Utilizador não reconhecido!!!");
@@ -146,24 +148,22 @@ public class Client {
 
             postCard[0] = "log";
             postCard[1] = person;
-            
-            if(myRequest.size()==0){
-                requestId="1";
+
+            if (myRequest.size() == 0) {
+                requestId = "1";
+            } else {
+                requestId = "" + myRequest.size();
             }
-            else{
-                requestId=""+myRequest.size();
-            }
-            
-            newRequest=new ClientRequest(requestId,postCard);
+
+            newRequest = new ClientRequest(requestId, postCard);
             newRequest.setStage(0);
             myRequest.add(newRequest);
 
-            /*vai mandar o user ao server para ver se ele está na base de dados*/
             sender.writeUnshared(newRequest);
 
             newResponse = (ClientRequest) reciver.readObject();
-            updateRequest(newRequest,newResponse);
-            
+            updateRequest(newRequest, newResponse);
+
             return !newResponse.getResponse()[0].equals("usernotrec");
         } catch (IOException e) {
             connectionFunction();
@@ -176,7 +176,7 @@ public class Client {
 
         Scanner sc = new Scanner(System.in);
         String requestId;
-        String[] newUserData=new String[4];
+        String[] newUserData = new String[4];
 
         try {
 
@@ -193,22 +193,20 @@ public class Client {
             postCard[0] = "new";
             postCard[1] = newUserData;
 
-            if(myRequest.size()==0){
-                requestId=""+1;
+            if (myRequest.size() == 0) {
+                requestId = "" + 1;
+            } else {
+                requestId = "" + myRequest.size();
             }
-            else{
-                requestId=""+myRequest.size();
-            }
-            newRequest=new ClientRequest(requestId,postCard);
+            newRequest = new ClientRequest(requestId, postCard);
             newRequest.setStage(0);
             myRequest.add(newRequest);
-            
-            
+
             sender.writeUnshared(newRequest);
 
             newResponse = (ClientRequest) reciver.readObject();
-            
-            updateRequest(newRequest,newResponse);
+
+            updateRequest(newRequest, newResponse);
 
             if (newResponse.getResponse()[0].equals("infosave")) {
                 return true;
@@ -226,30 +224,28 @@ public class Client {
     public boolean consultaSaldo() throws IOException, ClassNotFoundException {
 
         String requestId;
-        
+
         try {
             postCard[0] = "seesal";
             postCard[1] = null;
-            
-            if(myRequest.size()==0){
-                requestId="1";
+
+            if (myRequest.size() == 0) {
+                requestId = "1";
+            } else {
+                requestId = "" + myRequest.size();
             }
-            else{
-                requestId=""+myRequest.size();
-            }
-            
-            newRequest=new ClientRequest(requestId,postCard);
+
+            newRequest = new ClientRequest(requestId, postCard);
             newRequest.setStage(0);
             myRequest.add(newRequest);
-            
+
             sender.writeUnshared(newRequest);
 
             newResponse = (ClientRequest) reciver.readObject();
-            updateRequest(newRequest,newResponse);
+            updateRequest(newRequest, newResponse);
 
             System.out.println("\t\tO seu saldo é de " + newResponse.getResponse()[1] + " euros.");
-            
-            
+
         } catch (IOException e) {
             connectionFunction();
         }
@@ -258,14 +254,13 @@ public class Client {
     }
 
     public boolean criaProjecto() throws IOException, ClassNotFoundException {
-        
+
         Scanner sc = new Scanner(System.in);
         String[] newProjectData = new String[3];
         String requestId;
-        
-        try{
-            
-            
+
+        try {
+
             System.out.println("\n\t\tNovo Projecto");
             System.out.println("\n\tNome do Projecto: ");
             newProjectData[0] = sc.nextLine(); //Titulo do Projecto
@@ -276,22 +271,21 @@ public class Client {
 
             postCard[0] = "new_project";
             postCard[1] = newProjectData;
-            
-            if(myRequest.size()==0){
-                requestId="0";
+
+            if (myRequest.size() == 0) {
+                requestId = "0";
+            } else {
+                requestId = "" + myRequest.size();
             }
-            else{
-                requestId=""+myRequest.size();
-            }
-            
-            newRequest=new ClientRequest(requestId,postCard);
+
+            newRequest = new ClientRequest(requestId, postCard);
             newRequest.setStage(0);
             myRequest.add(newRequest);
 
             sender.writeUnshared(newRequest);
 
             newResponse = (ClientRequest) reciver.readObject();
-            updateRequest(newRequest,newResponse);
+            updateRequest(newRequest, newResponse);
 
             if (newResponse.getResponse()[0].equals("infosave")) {
                 return true;
@@ -303,12 +297,10 @@ public class Client {
             connectionFunction();
         }
 
-        
         return true;
     }
 
-    public void mainMenu() throws IOException, ClassNotFoundException {/*se isto for int posso mandar 0 ou 1 para tratar das falhas????*/
-
+    public void mainMenu() throws IOException, ClassNotFoundException {
 
         Scanner sc = new Scanner(System.in);
         boolean logResult = true;
@@ -330,8 +322,7 @@ public class Client {
 
         } else if (userPick.equals("2")) {
             /**
-             * vai chamar a função para fazer o login se ela returnar null muda
-             * o argumento e volta a chamar a função
+             * vai chamar a função para fazer o login se ela returnar null muda o argumento e volta a chamar a função
              */
             while (!LogIn(logResult)) {
                 logResult = false;

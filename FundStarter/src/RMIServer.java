@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class RMIServer extends UnicastRemoteObject implements RMIServerInterface {
 
     public Object[] resposta = new Object[2];
-    private ArrayList<ClientRequest> myRequests=new ArrayList<ClientRequest>();
+    private ArrayList<ClientRequest> myRequests = new ArrayList<ClientRequest>();
 
     Scanner sc = new Scanner(System.in);
     Connection connection;
@@ -34,20 +34,20 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     }
 
     public ClientRequest verificaLogIn(ClientRequest person) throws RemoteException {
-        
-        resposta[0]="userrec";
-        resposta[1]=11;
-        
+
+        resposta[0] = "userrec";
+        resposta[1] = 11;
+
         return person;
     }
 
-    public ClientRequest novoUtilizador(ClientRequest clrqst) throws RemoteException {/*Falta verifica se não deu erro a inserir na base de dados*/
+    public ClientRequest novoUtilizador(ClientRequest clrqst) throws RemoteException {
 
-        String[] userInfo=(String[]) clrqst.getRequest()[1];
-        
+        String[] userInfo = (String[]) clrqst.getRequest()[1];
+
         clrqst.setStage(2);
         myRequests.add(clrqst);
-        
+
         try {
             query = "INSERT INTO utilizador (nome, apelido, username, pass, saldo) VALUES (?,?,?,?,?)";
             preparedstatement = connection.prepareStatement(query);
@@ -63,21 +63,21 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         }
 
         try {
-            query = "SELECT id FROM utilizador WHERE username='"+userInfo[0]+"'";
-            request=connection.createStatement();
-            rs=request.executeQuery(query);
-            
+            query = "SELECT id FROM utilizador WHERE username='" + userInfo[0] + "'";
+            request = connection.createStatement();
+            rs = request.executeQuery(query);
+
             rs.next();
             resposta[0] = "infosave";
             resposta[1] = rs.getInt(1);
-            
+
             clrqst.setResponse(resposta);
             clrqst.setStage(3);
-            
+
             updateRequest(clrqst);
-            
+
         } catch (SQLException ex) {
-            System.err.println("Erro:"+ex);
+            System.err.println("Erro:" + ex);
         } finally {
             if (request != null) {
                 try {
@@ -90,15 +90,16 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
         return clrqst;
     }
-    
+
     public ClientRequest novoProjecto(ClientRequest clrqst) throws RemoteException { //Verificar Erro?
-        
+
         System.out.println("[RMI Server] Função <novoProjecto> chamada!");
 
-        String[] projectInfo=(String[]) clrqst.getRequest()[1];
-        
+        String[] projectInfo = (String[]) clrqst.getRequest()[1];
+
         clrqst.setStage(2);
-        
+        myRequests.add(clrqst);
+
         try {
             query = "INSERT INTO projecto (titulo, descricao, valorpretendido, valoractual) VALUES (?,?,?,?)";
             preparedstatement = connection.prepareStatement(query);
@@ -113,21 +114,21 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         }
 
         try {
-            query = "SELECT id FROM projecto WHERE titulo='"+projectInfo[0]+"'";
-            request=connection.createStatement();
-            rs=request.executeQuery(query);
-            
+            query = "SELECT id FROM projecto WHERE titulo='" + projectInfo[0] + "'";
+            request = connection.createStatement();
+            rs = request.executeQuery(query);
+
             rs.next();
             resposta[0] = "infosave";
             resposta[1] = rs.getInt(1);
-            
+
             clrqst.setResponse(resposta);
             clrqst.setStage(3);
-            
+
             updateRequest(clrqst);
 
         } catch (SQLException ex) {
-            System.err.println("Erro:"+ex);
+            System.err.println("Erro:" + ex);
         } finally {
             if (request != null) {
                 try {
@@ -138,34 +139,33 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             }
         }
 
-        
         return clrqst;
     }
 
     public ClientRequest getUserSaldo(ClientRequest clrqst) throws RemoteException {
 
         System.out.println("[RMI Server] Função <getUserSaldo> chamada!");
-        
-        int userID=(int) clrqst.getRequest()[1];
-        
+
+        int userID = (int) clrqst.getRequest()[1];
+
         clrqst.setStage(2);
-        
-        
+        myRequests.add(clrqst);
+
         try {
-            query = "SELECT saldo FROM utilizador WHERE id='"+userID+"'";
-            request=connection.createStatement();
-            rs=request.executeQuery(query);
-            
+            query = "SELECT saldo FROM utilizador WHERE id='" + userID + "'";
+            request = connection.createStatement();
+            rs = request.executeQuery(query);
+
             rs.next();
             resposta[0] = rs.getInt("saldo");
-            
+
             clrqst.setResponse(resposta);
             clrqst.setStage(3);
-            
+
             updateRequest(clrqst);
 
         } catch (SQLException ex) {
-            System.err.println("Erro:"+ex);
+            System.err.println("Erro:" + ex);
         } finally {
             if (request != null) {
                 try {
@@ -175,7 +175,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                 }
             }
         }
-        
+
         return clrqst;
     }
 
@@ -219,11 +219,11 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         }
 
     }
-    
-    private void updateRequest(ClientRequest clrqst){
-        
-        int requestIndex=myRequests.indexOf(clrqst);
-        
+
+    private void updateRequest(ClientRequest clrqst) {
+
+        int requestIndex = myRequests.indexOf(clrqst);
+
         myRequests.get(requestIndex).setStage(4);
     }
 
