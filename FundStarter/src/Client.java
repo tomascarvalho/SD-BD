@@ -24,19 +24,21 @@ public class Client {
     private String ipServer1, ipServer2;
     private int port1, port2;
     private Object[] postCard = new Object[2];
-    public ArrayList<ClientRequest> myRequest = new ArrayList<ClientRequest>();
+    private ArrayList<ClientRequest> myRequest = new ArrayList<ClientRequest>();
+    private PropertiesReaderClient properties;
     public ClientRequest newRequest;
     public ClientRequest newResponse;
 
-    public Client(String[] args) throws ClassNotFoundException {
+    public Client() throws ClassNotFoundException {
         /**
          * Passa o argumentos para as variáveis para podermos fazer as ligações mais à frente
          */
 
-        ipServer1 = args[0];
-        port1 = Integer.parseInt(args[1]);
-        ipServer2 = args[2];
-        port2 = Integer.parseInt(args[3]);
+        properties = new PropertiesReaderClient();
+        ipServer1 = properties.getPrimaryIP();
+        ipServer2 = properties.getSecundaryIP();
+        port1 = properties.getPrimaryPort();
+        port2 = properties.getSecundaryPort();
 
         connectionFunction();
         try {
@@ -105,15 +107,8 @@ public class Client {
 
     public static void main(String[] args) throws ClassNotFoundException {
 
-        /**
-         * se o utilizador iniciar o programa e não meter ip's e portas dos servidores o programa entra neste if, imprime a mensagem de erro e termina
-         */
-        if (args.length != 4) {
-            System.out.println("java Client <IP1> <P1> <IP2> <P2>");
-            System.exit(0);
-        } else {
-            new Client(args);
-        }
+        new Client();
+
     }
 
     private void updateRequest(ClientRequest oldrqst, ClientRequest newrqst) {

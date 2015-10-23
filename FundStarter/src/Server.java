@@ -14,24 +14,35 @@ import java.rmi.*;
  */
 public class Server {
 
-    public static void main(String[] args) {
+    private String serverIP;
+    private int serverPort;
+    private int UDPPort;
+    private int backupPort;
+    private String backupIP;
+    private String rmiLocation;
 
+    public Server() {
         try {
+
+            PropertiesReaderServer properties = new PropertiesReaderServer();
 
             /**
              * Cria um socket para ligação com clientes no porto indicado no serverPort
              */
-            int serverPort = 6000;
+            serverIP = properties.getPrimaryIp();
+            serverPort = properties.getPrimaryPort();
+            UDPPort = properties.getUDPPort();
+            backupPort = properties.getBackupPort();
+            backupIP = properties.getBackupIP();
+            rmiLocation = properties.getRmiLocation();
             ServerSocket conectionToClient = new ServerSocket(serverPort);
             Socket cliente;
-            String rmiLocation = "//localhost:7777/fundStarter";
 
             /**
              * COMETÁRIO EM FALTA
              */
-            UDPServer conectServer = new UDPServer();
-            Thread t = new Thread(conectServer);
-            t.start();
+            UDPServer conectServer = new UDPServer(UDPPort);
+
             /**
              * COMETÁRIO EM FALTA
              */
@@ -58,21 +69,24 @@ public class Server {
              * Quando apanhar um IOException quer dizer que já há um servidor activo e que vai ter de ficar como servidor de backup
              */
             if (e.getMessage().equals("Address already in use")) {
-                new BackupServer("localhost"); /*isto só está aqui como teste*/
+                new BackupServer(serverIP,UDPPort);
 
             } else {
                 System.out.println("[Server] Encotrei esta excepção: " + e.getMessage());
             }
 
         } catch (Exception e) {
-            System.out.println("[Server] Erro no Servidor Principal: " + e.getMessage());
+            System.out.print("[Server] Erro no Servidor Principal: ");
+            e.printStackTrace();
         }
-    }
-
-    public void run() {
 
     }
 
+    public static void main(String[] args) {
+
+        new Server();
+
+    }
 }
 
 class NewClient extends Thread {
@@ -188,17 +202,18 @@ class BackupServer extends Thread {
     byte[] pingMessage;
     int conectionFail = 0;
     InetAddress hostConection;
-    int serverPort = 6060;
+    int serverPort;
     DatagramPacket sender, reciver;
     int failOverCounter;
     String[] args = null;
 
-    BackupServer(String hostIp) {
+    BackupServer(String hostIp, int udpPort) {
 
         /**
          * Vai guradar o ip do Servidor principal para se poder ligar como backup e inicializa o contador para o caso de ocorrer um FailOver
          */
         primaryServer = hostIp;
+        serverPort=udpPort;
         failOverCounter = 0;
         this.start();
 
@@ -243,8 +258,10 @@ class BackupServer extends Thread {
 
                         System.out.println("[Backup Server] O Servidor principal está em baixo, vouassumir o controlo.");
                         udpConection.close();
-                        Server.main(args);
-
+                        
+                        PropertiesReaderServer prop=new PropertiesReaderServer();
+                        prop.switchIPS();
+                        new Server();
                     }
                 }
 
@@ -257,19 +274,21 @@ class BackupServer extends Thread {
     }
 }
 
-class UDPServer implements Runnable {
+class UDPServer extends Thread {
 
     DatagramSocket conection;
     byte[] buffer = new byte[1000];
     DatagramPacket sender, reciver;
-    int serverPort = 6060;
+    int serverPort;
     String pingMessage;
 
-    /*UDPServer() {
+    UDPServer(int port) {
 
-     this.start();
+        this.serverPort = port;
+        this.start();
 
-     }*/
+    }
+
     public void run() {
         try {
 
