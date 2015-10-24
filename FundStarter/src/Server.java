@@ -166,6 +166,9 @@ class NewClient extends Thread {
                         System.out.println("myUserID:" + (int) myMail.getResponse()[1]);
                         myUserID = (int) myMail.getResponse()[1];
                     }
+                    else if(myMail.getResponse()[0].equals("user_already_exists")){
+                        System.out.println("User: "+ (String)myMail.getResponse()[1]+" already exists!");
+                    }
 
                     myMail.setStage(4);
 

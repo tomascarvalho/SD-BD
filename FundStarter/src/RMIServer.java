@@ -47,20 +47,43 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
         clrqst.setStage(2);
         myRequests.add(clrqst);
+        
+        try
+        {
+            query = "SELECT FROM utilizador WHERE username= '"+userInfo[2]+"'";
+            request = connection.createStatement();
+            rs = request.executeQuery(query);
+            if (rs != null)
+            {
+                try {
+                    query = "INSERT INTO utilizador (nome, apelido, username, pass, saldo) VALUES (?,?,?,?,?)";
+                    preparedstatement = connection.prepareStatement(query);
+                    preparedstatement.setString(1, userInfo[0]);
+                    preparedstatement.setString(2, userInfo[1]);
+                    preparedstatement.setString(3, userInfo[2]);
+                    preparedstatement.setString(4, userInfo[3]);
+                    preparedstatement.setInt(5, 100);
+                    preparedstatement.executeUpdate();
 
-        try {
-            query = "INSERT INTO utilizador (nome, apelido, username, pass, saldo) VALUES (?,?,?,?,?)";
-            preparedstatement = connection.prepareStatement(query);
-            preparedstatement.setString(1, userInfo[0]);
-            preparedstatement.setString(2, userInfo[1]);
-            preparedstatement.setString(3, userInfo[2]);
-            preparedstatement.setString(4, userInfo[3]);
-            preparedstatement.setInt(5, 100);
-            preparedstatement.executeUpdate();
-
-        } catch (SQLException e) {
+                } catch (SQLException e) {
+                    System.err.println("SQLException:" + e);
+                }
+            }
+            
+            else{
+                resposta[0] = "user_already_exists";
+                resposta[1] = userInfo[2];
+                clrqst.setResponse(resposta);
+                clrqst.setStage(3);
+            }
+            
+        }  catch (SQLException e) {
             System.err.println("SQLException:" + e);
         }
+        
+        
+
+        
 
         try {
             query = "SELECT id FROM utilizador WHERE username='" + userInfo[0] + "'";
