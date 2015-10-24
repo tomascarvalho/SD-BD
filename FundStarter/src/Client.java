@@ -1,10 +1,7 @@
 
-import java.lang.*;
 import java.net.*;
 import java.util.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -180,8 +177,7 @@ public class Client {
         } catch (IOException e) {
             connectionFunction();
         }
-
-        return flag;
+        return false;
     }
 
     public boolean criaConta() throws ClassNotFoundException {

@@ -221,8 +221,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     }
 
     /**
-     * Função responsável para actualizar os pedidos do cliente,
-     * a medida que eles vão sendo tratados.
+     * Função responsável para actualizar os pedidos do cliente, a medida que eles vão sendo tratados.
      */
     private void updateRequest(ClientRequest clrqst) {
 
@@ -233,9 +232,23 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
     public static void main(String[] args) throws RemoteException {
 
+        int rmiPort;
+        String rmiName;
+        String bdPort;
+        String bdName;
+
+        PropertiesReaderRMI properties = new PropertiesReaderRMI();
+        
+        rmiPort = properties.getPort();
+        rmiName=properties.getName();
+        bdPort=properties.getBDPort();
+        bdName=properties.getBDIP();
+        
         RMIServerInterface remoteServer = new RMIServer();
-        LocateRegistry.createRegistry(7777).rebind("fundStarter", remoteServer);
+
+        LocateRegistry.createRegistry(rmiPort).rebind(rmiName, remoteServer);
         remoteServer.DB();
+
         System.out.println("[RMI Server] Pronto e à escuta.");
 
     }

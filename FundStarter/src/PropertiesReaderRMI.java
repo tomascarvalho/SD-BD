@@ -18,7 +18,7 @@ public class PropertiesReaderRMI {
     int port;
     String name;
     String BDIP;
-    int BDPort;
+    String BDPort;
     
     /**
      * Vai ler os dados do ficheiro configRMI.properties para fazer as ligaões do RMI.
@@ -41,7 +41,7 @@ public class PropertiesReaderRMI {
             this.port=Integer.parseInt(prop.getProperty("port"));
             this.name=prop.getProperty("name");
             this.BDIP=prop.getProperty("DBIP");
-            this.BDPort=Integer.parseInt("DBPort");
+            this.BDPort=prop.getProperty("DBPort");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,7 +68,7 @@ public class PropertiesReaderRMI {
         return BDIP;
     }
 
-    public int getBDPort() {
+    public String getBDPort() {
         return BDPort;
     }
     

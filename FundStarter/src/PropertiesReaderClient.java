@@ -36,11 +36,14 @@ public class PropertiesReaderClient {
             
             prop.load(input);
             
-            this.primaryIP=prop.getProperty("PrimaryServerIp");
+            this.primaryIP=prop.getProperty("PrimaryServerIP");
             this.primaryPort=Integer.parseInt(prop.getProperty("PrimaryServerPort"));
             this.secundaryIP=prop.getProperty("SecundaryServerIP");
             this.secundaryPort=Integer.parseInt(prop.getProperty("SecundaryServerPort"));
             
+            
+            System.out.println("[Reader]Li estes dados:");
+            System.out.println("->"+primaryIP+"\n->"+primaryPort+"\n->"+secundaryIP+"\n->"+secundaryPort);
         }catch(IOException e){
             e.printStackTrace();
         }finally{
@@ -71,7 +74,7 @@ public class PropertiesReaderClient {
                 System.out.println("[Client] Não encontrei o ficheiro de configurações!");
                 return;
             }
-            
+            System.out.println(primaryIP);
             prop.setProperty("PrimaryServerIP", secundaryIP);
             temp=""+secundaryPort;
             prop.setProperty("PrimaryServerPort", temp);
