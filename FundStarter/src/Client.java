@@ -31,7 +31,8 @@ public class Client {
 
     public Client() throws ClassNotFoundException {
         /**
-         * Passa o argumentos para as variáveis para podermos fazer as ligações mais à frente
+         * Cria uma nova intancia do PropertiesReader para aceder aos dados
+         * que estão no ficheiro configClient.properties
          */
 
         properties = new PropertiesReaderClient();
@@ -45,7 +46,7 @@ public class Client {
 
             mainMenu();
         } catch (IOException e) {
-            System.out.println("Error!");
+            e.printStackTrace();
         }
 
     }
@@ -62,16 +63,17 @@ public class Client {
             try {
 
                 /**
-                 * cria ligação com o servidor que está com o IP->ipServer1 e Porto->port1
+                 * cria ligação com o servidor que está com o os dados 
+                 * retirados do ficheiro de propriedades
                  */
-                System.out.println("Fase 1->Conecção com servidor\n");
+                System.out.println("[Cliente] Conectando ao Servidor");
                 conectionToServer = new Socket(ipServer1, port1);
 
                 /**
                  * vai iniciar os streams de input e output para partilhar mensagens com o servidor
                  */
                 sender = new ObjectOutputStream(conectionToServer.getOutputStream());
-                sender.flush();/*perceber porque é que esta linha tem de estar aqui*/
+                sender.flush();
 
                 reciver = new ObjectInputStream(conectionToServer.getInputStream());
                 return;
@@ -81,6 +83,10 @@ public class Client {
                 if (conectionError == 3) {
                     System.out.println("[Cliente] Não me consigo ligar ao servidor, vou-me ligar ao secundário");
                     try {
+                        /**
+                         * Ao fim de 3 tentativas de ligação ao servidor principal
+                         * o cliente tenta ligar ao servidor de backup
+                         */
                         conectionToServer = new Socket(ipServer2, port2);
                         ipTemp = ipServer2;
                         portTemp = port2;
@@ -88,7 +94,12 @@ public class Client {
                         port1 = port2;
                         ipServer1 = ipTemp;
                         port1 = portTemp;
+                        /**
+                         * Vai alterar os ips dos servidores no ficheiro de propriedades
+                         */
+                        properties.writeOnFile();
                         conectionError = 0;
+                        return;
                     } catch (IOException exp) {
                         System.out.println("[Cliente] Não me consigo ligar ao Servidor de Backup.");
                     }
@@ -97,7 +108,7 @@ public class Client {
                     try {
                         Thread.sleep(3000);
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                        ex.printStackTrace();
                     }
                 }
             }
@@ -110,7 +121,11 @@ public class Client {
         new Client();
 
     }
-
+    
+    /**
+     * Função responsável por actualizar os pedidos depois de eles
+     * serem tratdos pelo servidor RMI
+     */
     private void updateRequest(ClientRequest oldrqst, ClientRequest newrqst) {
 
         int requestIndex = myRequest.indexOf(oldrqst);
@@ -128,7 +143,9 @@ public class Client {
         try {
 
             /**
-             * Vai pedir credenciais ao cliente para fazer o login. Se os dados não estiverem na base de dados vai voltar a chamar esta função. Caso contrário vai avançar para o menu inicial
+             * Vai pedir credenciais ao cliente para fazer o login.
+             * Se os dados não estiverem na base de dados vai voltar a chamar esta função.
+             * Caso contrário vai avançar para o menu inicial
              */
             if (!flag) {
                 System.out.println("Utilizador não reconhecido!!!");

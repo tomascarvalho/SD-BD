@@ -25,6 +25,10 @@ public class PropertiesReaderServer {
     int UDPPort;
     String rmiLocation;
 
+    /**
+     * Vai ler os dados do ficheiro configServer.properties para que o servidor
+     * possa cria sockets com os ip's indicados e no ficheiro e para ligar ao RMI.
+     */
     public PropertiesReaderServer() {
         FileInputStream input = null;
         Properties prop = new java.util.Properties();
@@ -59,8 +63,11 @@ public class PropertiesReaderServer {
         }
     }
 
+    /**
+     * Sempre que um servidor vai abaixo troca os ip's e portos do ficheiro de propriedades.
+     */
     public void switchIPS() {
-        /*isto deu bode*/
+        
         Properties prop = new java.util.Properties();
         String temp;
         try {

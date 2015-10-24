@@ -220,6 +220,10 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
     }
 
+    /**
+     * Função responsável para actualizar os pedidos do cliente,
+     * a medida que eles vão sendo tratados.
+     */
     private void updateRequest(ClientRequest clrqst) {
 
         int requestIndex = myRequests.indexOf(clrqst);

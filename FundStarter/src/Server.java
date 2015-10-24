@@ -27,7 +27,9 @@ public class Server {
             PropertiesReaderServer properties = new PropertiesReaderServer();
 
             /**
-             * Cria um socket para ligação com clientes no porto indicado no serverPort
+             * Cria uma nova intancia do PropertiesReader para aceder aos dados 
+             * que estão no ficheiro configServer.properties.
+             * Depois vai criar um socket para fazer a ligação com os clientes.
              */
             serverIP = properties.getPrimaryIp();
             serverPort = properties.getPrimaryPort();
@@ -39,12 +41,14 @@ public class Server {
             Socket cliente;
 
             /**
-             * COMETÁRIO EM FALTA
+             * Cria uma intância da classe UDPServer para receber 
+             * ping's do servidor backup e responder para mostrar ao
+             * backup que ainda está vivo.
              */
             UDPServer conectServer = new UDPServer(UDPPort);
 
             /**
-             * COMETÁRIO EM FALTA
+             * Cria ligação com o servidor RMI.
              */
             RMIServerInterface remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
 
@@ -53,12 +57,12 @@ public class Server {
             while (true) {
 
                 /**
-                 * Espera que um cliente se ligue
+                 * Espera que um cliente se ligue.
                  */
                 cliente = conectionToClient.accept();
 
                 /**
-                 * Por cada cliente que se liga, vai criar uma thread que fica encarregue de lidar com ele
+                 * Por cada cliente que se liga, vai criar uma thread que fica encarregue de lidar com ele.
                  */
                 new NewClient(cliente, remoteConection);
 
@@ -66,17 +70,18 @@ public class Server {
 
         } catch (IOException e) {
             /**
-             * Quando apanhar um IOException quer dizer que já há um servidor activo e que vai ter de ficar como servidor de backup
+             * Esta excepção é apanhada quando já existe um servidor activo.
+             * Neste caso o servidor vai agir como servidor backup.
              */
             if (e.getMessage().equals("Address already in use")) {
                 new BackupServer(serverIP,UDPPort);
 
             } else {
-                System.out.println("[Server] Encotrei esta excepção: " + e.getMessage());
+                e.printStackTrace();
             }
 
         } catch (Exception e) {
-            System.out.print("[Server] Erro no Servidor Principal: ");
+            System.out.print("[Server]");
             e.printStackTrace();
         }
 
@@ -105,25 +110,26 @@ class NewClient extends Thread {
 
         try {
             /**
-             * Guarda o cliente que se ligou anteriormente ao servidor e também a ligação com o servidor RMI
+             * Guarda o cliente que se ligou anteriormente ao servidor e também a ligação com o servidor RMI.
              */
             myClient = cliente;
             remoteConection = rmiConection;
 
             /**
-             * cria canais de comunicação com os clientes
+             * cria canais de comunicação com os clientes.
              */
             reciver = new ObjectInputStream(myClient.getInputStream());
             sender = new ObjectOutputStream(myClient.getOutputStream());
             sender.flush();
 
             /**
-             * vai iniciar a thread
+             * vai iniciar a thread.
              */
             this.start();
 
         } catch (IOException e) {
-            System.out.println("[Server] Erro no Client Conection: " + e.getMessage());
+            System.out.print("[Server]");
+            e.printStackTrace();
         }
     }
 
@@ -190,7 +196,8 @@ class NewClient extends Thread {
 
             }
         } catch (Exception e) {
-            System.out.println("[Server] Erro no Client Conection: " + e.getMessage());
+            System.out.print("[Server]");
+            e.printStackTrace();
         }
     }
 }
@@ -210,7 +217,8 @@ class BackupServer extends Thread {
     BackupServer(String hostIp, int udpPort) {
 
         /**
-         * Vai guradar o ip do Servidor principal para se poder ligar como backup e inicializa o contador para o caso de ocorrer um FailOver
+         * Vai guradar o ip do Servidor principal para se poder ligar como backup
+         * e inicializa o contador para o caso de ocorrer um FailOver.
          */
         primaryServer = hostIp;
         serverPort=udpPort;
@@ -224,7 +232,7 @@ class BackupServer extends Thread {
         try {
 
             /*+
-             Vai criar uma socket para as ligações UDP
+             Vai criar uma socket para as ligações UDP.
              */
             udpConection = new DatagramSocket();
 
@@ -233,7 +241,8 @@ class BackupServer extends Thread {
                 try {
 
                     /**
-                     * vai fazer a ligação com o Servidor principal e mandar a mensagem 'ping'. Caso o servidor principal vai abaixo e espera até à terceira mensagem de erro para se tornar servdor principal
+                     * vai fazer a ligação com o Servidor principal e mandar a mensagem 'ping'. 
+                     * Caso o servidor principal vai abaixo e espera até à terceira mensagem de erro para se tornar servdor principal.
                      */
                     pingMessage = "ping".getBytes();
                     hostConection = InetAddress.getByName(primaryServer);
@@ -268,7 +277,8 @@ class BackupServer extends Thread {
             }
 
         } catch (Exception e) {
-
+            System.out.print("[BackupServer]");
+            e.printStackTrace();
         }
 
     }
@@ -293,14 +303,14 @@ class UDPServer extends Thread {
         try {
 
             /**
-             * cria ligação UDP no porto indicado na variável serverPort
+             * cria ligação UDP no porto indicado na variável serverPort.
              */
             conection = new DatagramSocket(serverPort);
 
             while (true) {
 
                 /**
-                 * recebe mensagem do Servidor Backup e volta a mandar a mesma mensagem
+                 * recebe mensagem do Servidor Backup e volta a mandar a mesma mensagem.
                  */
                 reciver = new DatagramPacket(buffer, buffer.length);
                 conection.receive(reciver);
@@ -312,7 +322,8 @@ class UDPServer extends Thread {
             }
 
         } catch (Exception e) {
-            System.out.println("[Server] Recebi esta mensagem de erro: " + e.getMessage());
+            System.out.print("[UDPServer]");
+            e.printStackTrace();
         }
     }
 
