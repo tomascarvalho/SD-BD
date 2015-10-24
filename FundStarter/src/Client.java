@@ -326,8 +326,10 @@ public class Client {
             userPick = sc.nextLine();
         }
         if (userPick.equals("1")) {
-            criaConta();//falta apanhar o que ela retorna
-
+            while (criaConta() != true)
+            {
+                System.out.println("Erro ao criar novo user!");
+            }
         } else if (userPick.equals("2")) {
             /**
              * vai chamar a função para fazer o login se ela returnar null muda o argumento e volta a chamar a função
