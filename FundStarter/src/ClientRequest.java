@@ -21,6 +21,7 @@ public class ClientRequest implements Serializable{
      * * * * rmiin  -> RMI começou a tratar do pedido
      * * * * rmiout -> RMI terminou processo e devolveu ao servidor
      * * * * bckcl  -> Servidor mando resposta do RMI para o Cliente
+     * * * * done   -> Cliente já leu o pedido
      *
      */
     
@@ -28,7 +29,7 @@ public class ClientRequest implements Serializable{
     private String stage;
     private Object[] request;
     private Object[] response; 
-    private String[] stgType={"clrqst","inprog","rmiin","rmiout","bckcl"};
+    private String[] stgType={"clrqst","inprog","rmiin","rmiout","bckcl","done"};
     
     
     public ClientRequest(String id,Object[] pedido){
