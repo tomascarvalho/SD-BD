@@ -50,7 +50,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         
         try
         {
-            query = "SELECT FROM utilizador WHERE username= '"+userInfo[2]+"'";
+            query = "SELECT * FROM utilizador WHERE username= '"+userInfo[2]+"'";
             request = connection.createStatement();
             rs = request.executeQuery(query);
             if (rs == null)
@@ -68,6 +68,32 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                 } catch (SQLException e) {
                     System.err.println("SQLException:" + e);
                 }
+                
+                try {
+                    query = "SELECT id FROM utilizador WHERE username='" + userInfo[0] + "'";
+                    request = connection.createStatement();
+                    rs = request.executeQuery(query);
+
+                    rs.next();
+                    resposta[0] = "infosave";
+                    resposta[1] = rs.getInt(1);
+
+                    clrqst.setResponse(resposta);
+                    clrqst.setStage(3);
+
+                    updateRequest(clrqst);
+
+                } catch (SQLException ex) {
+                    System.err.println("Erro:" + ex);
+                } finally {
+                    if (request != null) {
+                        try {
+                            request.close();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(RMIServer.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
             }
             
             else{
@@ -80,36 +106,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         }  catch (SQLException e) {
             System.err.println("SQLException:" + e);
         }
-        
-        
 
-        
-
-        try {
-            query = "SELECT id FROM utilizador WHERE username='" + userInfo[0] + "'";
-            request = connection.createStatement();
-            rs = request.executeQuery(query);
-
-            rs.next();
-            resposta[0] = "infosave";
-            resposta[1] = rs.getInt(1);
-
-            clrqst.setResponse(resposta);
-            clrqst.setStage(3);
-
-            updateRequest(clrqst);
-
-        } catch (SQLException ex) {
-            System.err.println("Erro:" + ex);
-        } finally {
-            if (request != null) {
-                try {
-                    request.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(RMIServer.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
 
         return clrqst;
     }
