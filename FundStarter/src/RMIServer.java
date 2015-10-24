@@ -53,7 +53,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             query = "SELECT FROM utilizador WHERE username= '"+userInfo[2]+"'";
             request = connection.createStatement();
             rs = request.executeQuery(query);
-            if (rs != null)
+            if (rs == null)
             {
                 try {
                     query = "INSERT INTO utilizador (nome, apelido, username, pass, saldo) VALUES (?,?,?,?,?)";
