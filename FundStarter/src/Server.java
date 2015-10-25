@@ -68,7 +68,9 @@ public class Server {
                      */
                     new NewClient(cliente, remoteConection);
                     
-                    properties.writeProperties();
+                    /*properties.setPrimary("false");
+                    properties.writeProperties();*/
+                    
                 } else {
                     new BackupServer(serverIP, UDPPort);
                 }
