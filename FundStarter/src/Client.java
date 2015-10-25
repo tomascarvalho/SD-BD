@@ -4,10 +4,14 @@ import java.util.*;
 import java.io.*;
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * FundStart
+ *  Projecto para a cadeira de Sistemas Distribuidos
+ *  Ano Lectivo 2015/1016
+ *  Carlos Pinto 2011143469
+ *  Diana Umbelino 2012******
+ *  Tomás Carvalho 2012******
  */
+
 /**
  *
  * @author gabrieloliveira
@@ -23,13 +27,11 @@ public class Client {
     private Object[] postCard = new Object[2];
     private ArrayList<ClientRequest> myRequest = new ArrayList<ClientRequest>();
     private PropertiesReaderClient properties;
-    public ClientRequest newRequest;
-    public ClientRequest newResponse;
+    private Scanner sc = new Scanner(System.in);
 
     public Client() throws ClassNotFoundException {
         /**
-         * Cria uma nova intancia do PropertiesReader para aceder aos dados
-         * que estão no ficheiro configClient.properties
+         * Cria uma nova intancia do PropertiesReader para aceder aos dados que estão no ficheiro configClient.properties
          */
 
         properties = new PropertiesReaderClient();
@@ -39,6 +41,7 @@ public class Client {
         port2 = properties.getSecundaryPort();
 
         connectionFunction();
+
         try {
 
             mainMenu();
@@ -60,8 +63,7 @@ public class Client {
             try {
 
                 /**
-                 * cria ligação com o servidor que está com o os dados 
-                 * retirados do ficheiro de propriedades
+                 * cria ligação com o servidor que está com o os dados retirados do ficheiro de propriedades
                  */
                 System.out.println("[Cliente] Conectando ao Servidor");
                 conectionToServer = new Socket(ipServer1, port1);
@@ -81,8 +83,7 @@ public class Client {
                     System.out.println("[Cliente] Não me consigo ligar ao servidor, vou-me ligar ao secundário");
                     try {
                         /**
-                         * Ao fim de 3 tentativas de ligação ao servidor principal
-                         * o cliente tenta ligar ao servidor de backup
+                         * Ao fim de 3 tentativas de ligação ao servidor principal o cliente tenta ligar ao servidor de backup
                          */
                         conectionToServer = new Socket(ipServer2, port2);
                         ipTemp = ipServer2;
@@ -113,15 +114,53 @@ public class Client {
         }
     }
 
+    /**
+     * Funçao responsável para eviar os request para o servidor
+     */
+    public Object[] postOffice(Object[] mail) {
+
+        ClientRequest newRequest;
+        ClientRequest newResponse;
+        String requestID;
+
+        try {
+            if (myRequest.size() == 0) {
+                requestID = "1";
+            } else {
+                requestID = "" + myRequest.size();
+            }
+
+            newRequest = new ClientRequest(requestID, postCard);
+            myRequest.add(newRequest);
+            newRequest.setStage(0);
+
+            sender.reset();
+            sender.writeUnshared(newRequest);
+
+            newResponse = (ClientRequest) reciver.readObject();
+
+            newResponse.setStage(5);
+            updateRequest(newRequest, newResponse);
+
+            return newResponse.getResponse();
+
+        } catch (IOException ex) {
+            connectionFunction();
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Classe não encontrada!");
+        }
+
+        return null;
+    }
+
     public static void main(String[] args) throws ClassNotFoundException {
 
         new Client();
 
     }
-    
+
     /**
-     * Função responsável por actualizar os pedidos depois de eles
-     * serem tratdos pelo servidor RMI
+     * Função responsável por actualizar os pedidos depois de eles serem tratdos pelo servidor RMI
      */
     private void updateRequest(ClientRequest oldrqst, ClientRequest newrqst) {
 
@@ -131,197 +170,104 @@ public class Client {
 
     }
 
-    public boolean LogIn(boolean flag) throws ClassNotFoundException {
+    public boolean LogIn(boolean flag) {
 
-        Scanner sc = new Scanner(System.in);
         String[] person = new String[2];
-        String requestId;
 
-        try {
-
-            /**
-             * Vai pedir credenciais ao cliente para fazer o login.
-             * Se os dados não estiverem na base de dados vai voltar a chamar esta função.
-             * Caso contrário vai avançar para o menu inicial
-             */
-            if (!flag) {
-                System.out.println("Utilizador não reconhecido!!!");
-                /*meter uma opção para voltar ao menu inicial e/ou fazer inscrição*/
-            }
-
-            System.out.println("\n\t\tLogIn");
-            System.out.print("\tUsername:");
-            person[0] = sc.nextLine();
-            System.out.print("\tPassword:");
-            person[1] = sc.nextLine();
-
-            postCard[0] = "log";
-            postCard[1] = person;
-
-            if (myRequest.size() == 0) {
-                requestId = "1";
-            } else {
-                requestId = "" + myRequest.size();
-            }
-
-            newRequest = new ClientRequest(requestId, postCard);
-            myRequest.add(newRequest);
-            newRequest.setStage(0);
-
-            sender.writeUnshared(newRequest);
-
-            newResponse = (ClientRequest) reciver.readObject();
-            if(newResponse.getResponse()[0].equals("userrec")){
-                flag=true;
-            }
-            else{
-                flag=false;
-            }
-            newResponse.setStage(5);
-            updateRequest(newRequest, newResponse);
-            
-            
-        } catch (IOException e) {
-            connectionFunction();
+        /**
+         * Vai pedir credenciais ao cliente para fazer o login. Se os dados não estiverem na base de dados vai voltar a chamar esta função. Caso contrário vai avançar para o menu inicial
+         */
+        if (!flag) {
+            System.out.println("Utilizador não reconhecido!!!");
+            /*meter uma opção para voltar ao menu inicial e/ou fazer inscrição*/
         }
-        return flag;
+
+        System.out.println("\n\t\tLogIn");
+        System.out.print("\tUsername:");
+        person[0] = sc.nextLine();
+        System.out.print("\tPassword:");
+        person[1] = sc.nextLine();
+
+        postCard[0] = "log";
+        postCard[1] = person;
+
+        postCard = postOffice(postCard);
+
+        if (postCard[0].equals("userrec")) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
-    public boolean criaConta() throws ClassNotFoundException {
+    public boolean criaConta() {
 
-        Scanner sc = new Scanner(System.in);
-        String requestId;
         String[] newUserData = new String[4];
 
-        try {
+        System.out.println("\t\t\tNovo Utilizador\n\n");
+        System.out.print("\t\tPrimeiro Nome:");
+        newUserData[0] = sc.nextLine();
+        System.out.print("\t\tApelido:");
+        newUserData[1] = sc.nextLine();
+        System.out.print("\t\tUsername:");
+        newUserData[2] = sc.nextLine();
+        System.out.print("\t\tPassword:");
+        newUserData[3] = sc.nextLine();
 
-            System.out.println("\t\t\tNovo Utilizador\n\n");
-            System.out.print("\t\tPrimeiro Nome:");
-            newUserData[0] = sc.nextLine();
-            System.out.print("\t\tApelido:");
-            newUserData[1] = sc.nextLine();
-            System.out.print("\t\tUsername:");
-            newUserData[2] = sc.nextLine();
-            System.out.print("\t\tPassword:");
-            newUserData[3] = sc.nextLine();
+        postCard[0] = "new";
+        postCard[1] = newUserData;
 
-            postCard[0] = "new";
-            postCard[1] = newUserData;
+        postCard = postOffice(postCard);
 
-            if (myRequest.size() == 0) {
-                requestId = "" + 1;
-            } else {
-                requestId = "" + myRequest.size();
-            }
-            System.out.println("Requestid:"+requestId);
-            newRequest=null;
-            newRequest = new ClientRequest(requestId, postCard);
-            newRequest.setStage(0);
-            myRequest.add(newRequest);
-
-            sender.flush();
-            sender.writeUnshared(newRequest);
-
-            newResponse = (ClientRequest) reciver.readUnshared();
-
-            updateRequest(newRequest, newResponse);
-
-            if (newResponse.getResponse()[0].equals("infosave")) {
-                return true;
-            } else {
-                return false;
-            }
-
-        } catch (IOException e) {
-            connectionFunction();
+        if (postCard[0].equals("infosave")) {
+            return true;
+        } else {
+            return false;
         }
 
-        return false;
     }
 
-    public boolean consultaSaldo() throws IOException, ClassNotFoundException {
+    public boolean consultaSaldo() {
 
         String requestId;
 
-        try {
-            postCard[0] = "seesal";
-            postCard[1] = null;
+        postCard[0] = "seesal";
+        postCard[1] = null;
 
-            if (myRequest.size() == 0) {
-                requestId = "1";
-            } else {
-                requestId = "" + myRequest.size();
-            }
+        postCard = postOffice(postCard);
 
-            newRequest = new ClientRequest(requestId, postCard);
-            newRequest.setStage(0);
-            myRequest.add(newRequest);
-
-            sender.writeUnshared(newRequest);
-
-            newResponse = (ClientRequest) reciver.readObject();
-            updateRequest(newRequest, newResponse);
-
-            System.out.println("\t\tO seu saldo é de " + newResponse.getResponse()[1] + " euros.");
-
-        } catch (IOException e) {
-            connectionFunction();
-        }
+        System.out.println("\t\tO seu saldo é de " + postCard[1] + " euros.");
 
         return true;
     }
 
-    public boolean criaProjecto() throws IOException, ClassNotFoundException {
+    public boolean criaProjecto() {
 
-        Scanner sc = new Scanner(System.in);
         String[] newProjectData = new String[3];
-        String requestId;
 
-        try {
+        System.out.println("\n\t\tNovo Projecto");
+        System.out.println("\n\tNome do Projecto: ");
+        newProjectData[0] = sc.nextLine(); //Titulo do Projecto
+        System.out.println("\n\tDescrição do Projecto: ");
+        newProjectData[1] = sc.nextLine(); //Descrição do Projecto
+        System.out.println("\n\tValor Pretendido: ");
+        newProjectData[2] = sc.nextLine(); //Valor Pretendido para o Projecto
 
-            System.out.println("\n\t\tNovo Projecto");
-            System.out.println("\n\tNome do Projecto: ");
-            newProjectData[0] = sc.nextLine(); //Titulo do Projecto
-            System.out.println("\n\tDescrição do Projecto: ");
-            newProjectData[1] = sc.nextLine(); //Descrição do Projecto
-            System.out.println("\n\tValor Pretendido: ");
-            newProjectData[2] = sc.nextLine(); //Valor Pretendido para o Projecto
+        postCard[0] = "new_project";
+        postCard[1] = newProjectData;
 
-            postCard[0] = "new_project";
-            postCard[1] = newProjectData;
+        postCard = postOffice(postCard);
 
-            if (myRequest.size() == 0) {
-                requestId = "0";
-            } else {
-                requestId = "" + myRequest.size();
-            }
-
-            newRequest = new ClientRequest(requestId, postCard);
-            newRequest.setStage(0);
-            myRequest.add(newRequest);
-
-            sender.writeUnshared(newRequest);
-
-            newResponse = (ClientRequest) reciver.readObject();
-            updateRequest(newRequest, newResponse);
-
-            if (newResponse.getResponse()[0].equals("infosave")) {
-                return true;
-            } else {
-                return false;
-            }
-
-        } catch (IOException e) {
-            connectionFunction();
+        if (postCard[0].equals("infosave")) {
+            return true;
+        } else {
+            return false;
         }
-        return true;
-
-
     }
 
     public void mainMenu() throws IOException, ClassNotFoundException {
 
-        Scanner sc = new Scanner(System.in);
         boolean logResult = true;
         String userPick;
 
@@ -337,8 +283,7 @@ public class Client {
             userPick = sc.nextLine();
         }
         if (userPick.equals("1")) {
-            while (criaConta() != true)
-            {
+            while (criaConta() != true) {
                 System.out.println("Erro ao criar novo user!");
             }
         } else if (userPick.equals("2")) {
@@ -356,7 +301,7 @@ public class Client {
     }
 
     public void menuConta() throws IOException, ClassNotFoundException {
-        Scanner sc = new Scanner(System.in);
+
         String userPick;
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Consultar Saldo\n\n\n\t\t2 - Criar Projecto\n\n\n\t\t");

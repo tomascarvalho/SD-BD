@@ -4,10 +4,14 @@ import java.io.*;
 import java.rmi.*;
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * FundStart
+ *  Projecto para a cadeira de Sistemas Distribuidos
+ *  Ano Lectivo 2015/1016
+ *  Carlos Pinto 2011143469
+ *  Diana Umbelino 2012******
+ *  Tomás Carvalho 2012******
  */
+
 /**
  *
  * @author gabrieloliveira
@@ -140,10 +144,10 @@ class NewClient extends Thread {
                 
                 postCard = null;
                 postCard = (ClientRequest) reciver.readUnshared();
-
+                
                 alterRequest = postCard.getRequestID() + ("_" + myUserID);
                 postCard.setRequestID(alterRequest);
-                System.out.println(postCard.getRequestID());
+                System.out.println(postCard.getRequest()[0]);
 
                 System.out.println("[Server] Li a mensagem do cliente na boa.");
                 //mudar depois para um switch
