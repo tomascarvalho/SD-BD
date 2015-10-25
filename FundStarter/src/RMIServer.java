@@ -38,6 +38,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         resposta[0] = "userrec";
         resposta[1] = 11;
 
+        person.setResponse(resposta);
+        
         return person;
     }
 
@@ -50,12 +52,12 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         
         try
         {
-            System.out.println("cenas do "+userInfo[2]);
+            System.out.println("cenas do "+userInfo[1]);
             query = "SELECT * FROM utilizador WHERE username= '"+userInfo[2]+"'";
             request = connection.createStatement();
             rs = request.executeQuery(query);
-            rs.next();
-            if (rs == null)
+            
+            if (!rs.next())
             {
                 try {
                     query = "INSERT INTO utilizador (nome, apelido, username, pass, saldo) VALUES (?,?,?,?,?)";

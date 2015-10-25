@@ -138,7 +138,7 @@ class NewClient extends Thread {
         try {
             while (true) {
                 postCard = null;
-                postCard = (ClientRequest) reciver.readObject();
+                postCard = (ClientRequest) reciver.readUnshared();
 
                 alterRequest = postCard.getRequestID() + ("_" + myUserID);
                 postCard.setRequestID(alterRequest);
@@ -157,6 +157,10 @@ class NewClient extends Thread {
                     myMail.setStage(4);
 
                 } else if (postCard.getRequest()[0].equals("new")) {
+                    
+                    if(postCard.getResponse()!=null){
+                        System.out.println("Não és null por que caralho!&");
+                    }
 
                     postCard.setStage(1);
 
@@ -196,7 +200,6 @@ class NewClient extends Thread {
                 }
 
                 sender.writeUnshared(myMail);
-
             }
         } catch (Exception e) {
             System.out.print("[Server]");

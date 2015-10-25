@@ -217,9 +217,10 @@ public class Client {
             newRequest.setStage(0);
             myRequest.add(newRequest);
 
+            sender.flush();
             sender.writeUnshared(newRequest);
 
-            newResponse = (ClientRequest) reciver.readObject();
+            newResponse = (ClientRequest) reciver.readUnshared();
 
             updateRequest(newRequest, newResponse);
 
