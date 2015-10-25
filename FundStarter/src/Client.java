@@ -213,6 +213,8 @@ public class Client {
             } else {
                 requestId = "" + myRequest.size();
             }
+            System.out.println("Requestid:"+requestId);
+            newRequest=null;
             newRequest = new ClientRequest(requestId, postCard);
             newRequest.setStage(0);
             myRequest.add(newRequest);
@@ -363,7 +365,7 @@ public class Client {
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
         while ((userPick.equals("1") == false) && (userPick.equals("2") == false)) {
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
-            System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\n\n\t\t>>");
+            System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\n\n\t\t>>");
             userPick = sc.nextLine();
 
         }

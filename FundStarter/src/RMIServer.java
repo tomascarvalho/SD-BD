@@ -86,10 +86,14 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                     clrqst.setStage(3);
 
                     updateRequest(clrqst);
+                    
 
                 } catch (SQLException ex) {
-                    System.err.println("Erro:" + ex);
+                    System.err.println("Erro foi aqui?:" + ex);
                 } finally {
+                    if (resposta == null){
+                        resposta[0] = "erro";
+                    }
                     if (request != null) {
                         try {
                             request.close();
@@ -142,7 +146,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             request = connection.createStatement();
             rs = request.executeQuery(query);
 
-            rs.next();
+            if(!rs.next()){
+                System.out.println("Estou ficar farto desta merda!");
+            }
             resposta[0] = "infosave";
             resposta[1] = rs.getInt(1);
 

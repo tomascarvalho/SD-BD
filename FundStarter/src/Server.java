@@ -137,11 +137,13 @@ class NewClient extends Thread {
 
         try {
             while (true) {
+                
                 postCard = null;
                 postCard = (ClientRequest) reciver.readUnshared();
 
                 alterRequest = postCard.getRequestID() + ("_" + myUserID);
                 postCard.setRequestID(alterRequest);
+                System.out.println(postCard.getRequestID());
 
                 System.out.println("[Server] Li a mensagem do cliente na boa.");
                 //mudar depois para um switch
@@ -157,7 +159,7 @@ class NewClient extends Thread {
                     myMail.setStage(4);
 
                 } else if (postCard.getRequest()[0].equals("new")) {
-                    
+                    System.out.println("Fui chamado!");
                     if(postCard.getResponse()!=null){
                         System.out.println("Não és null por que caralho!&");
                     }
@@ -169,6 +171,9 @@ class NewClient extends Thread {
                     if (myMail.getResponse()[0].equals("infosave")) {
                         System.out.println("myUserID:" + (int) myMail.getResponse()[1]);
                         myUserID = (int) myMail.getResponse()[1];
+                    }
+                    else if (myMail.getResponse()[0].equals("erro")){
+                        System.out.println("ERRO!\n"); //Temos que tratar o erro
                     }
                     else if(myMail.getResponse()[0].equals("user_already_exists")){
                         System.out.println("User: "+ (String)myMail.getResponse()[1]+" already exists!");
@@ -190,6 +195,8 @@ class NewClient extends Thread {
                     myMail.setStage(4);
 
                 } else if (postCard.getRequest()[0].equals("seesal")) {
+                    
+                    System.out.println("Esteve aqui, como era suposto\n");
 
                     postCard.getRequest()[1] = myUserID;
                     postCard.setStage(1);
