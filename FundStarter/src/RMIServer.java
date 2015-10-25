@@ -50,9 +50,11 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         
         try
         {
+            System.out.println("cenas do "+userInfo[2]);
             query = "SELECT * FROM utilizador WHERE username= '"+userInfo[2]+"'";
             request = connection.createStatement();
             rs = request.executeQuery(query);
+            rs.next();
             if (rs == null)
             {
                 try {
