@@ -165,19 +165,26 @@ public class Client {
             }
 
             newRequest = new ClientRequest(requestId, postCard);
-            newRequest.setStage(0);
             myRequest.add(newRequest);
+            newRequest.setStage(0);
 
             sender.writeUnshared(newRequest);
 
             newResponse = (ClientRequest) reciver.readObject();
+            if(newResponse.getResponse()[0].equals("userrec")){
+                flag=true;
+            }
+            else{
+                flag=false;
+            }
+            newResponse.setStage(5);
             updateRequest(newRequest, newResponse);
-
-            return !newResponse.getResponse()[0].equals("usernotrec");
+            
+            
         } catch (IOException e) {
             connectionFunction();
         }
-        return false;
+        return flag;
     }
 
     public boolean criaConta() throws ClassNotFoundException {
@@ -210,9 +217,10 @@ public class Client {
             newRequest.setStage(0);
             myRequest.add(newRequest);
 
+            sender.flush();
             sender.writeUnshared(newRequest);
 
-            newResponse = (ClientRequest) reciver.readObject();
+            newResponse = (ClientRequest) reciver.readUnshared();
 
             updateRequest(newRequest, newResponse);
 
