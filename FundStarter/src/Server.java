@@ -11,7 +11,6 @@ import java.rmi.*;
  *  Diana Umbelino 2012******
  *  Tomás Carvalho 2012******
  */
-
 /**
  *
  * @author gabrieloliveira
@@ -24,6 +23,7 @@ public class Server {
     private int backupPort;
     private String backupIP;
     private String rmiLocation;
+    private String primary;
 
     public Server() {
         try {
@@ -31,9 +31,7 @@ public class Server {
             PropertiesReaderServer properties = new PropertiesReaderServer();
 
             /**
-             * Cria uma nova intancia do PropertiesReader para aceder aos dados 
-             * que estão no ficheiro configServer.properties.
-             * Depois vai criar um socket para fazer a ligação com os clientes.
+             * Cria uma nova intancia do PropertiesReader para aceder aos dados que estão no ficheiro configServer.properties. Depois vai criar um socket para fazer a ligação com os clientes.
              */
             serverIP = properties.getPrimaryIp();
             serverPort = properties.getPrimaryPort();
@@ -41,13 +39,12 @@ public class Server {
             backupPort = properties.getBackupPort();
             backupIP = properties.getBackupIP();
             rmiLocation = properties.getRmiLocation();
+            primary = properties.getPrimary();
             ServerSocket conectionToClient = new ServerSocket(serverPort);
             Socket cliente;
 
             /**
-             * Cria uma intância da classe UDPServer para receber 
-             * ping's do servidor backup e responder para mostrar ao
-             * backup que ainda está vivo.
+             * Cria uma intância da classe UDPServer para receber ping's do servidor backup e responder para mostrar ao backup que ainda está vivo.
              */
             UDPServer conectServer = new UDPServer(UDPPort);
 
@@ -60,25 +57,30 @@ public class Server {
 
             while (true) {
 
-                /**
-                 * Espera que um cliente se ligue.
-                 */
-                cliente = conectionToClient.accept();
+                if (primary.equals("true")) {
+                    /**
+                     * Espera que um cliente se ligue.
+                     */
+                    cliente = conectionToClient.accept();
 
-                /**
-                 * Por cada cliente que se liga, vai criar uma thread que fica encarregue de lidar com ele.
-                 */
-                new NewClient(cliente, remoteConection);
+                    /**
+                     * Por cada cliente que se liga, vai criar uma thread que fica encarregue de lidar com ele.
+                     */
+                    new NewClient(cliente, remoteConection);
+                    
+                    properties.writeProperties();
+                } else {
+                    new BackupServer(serverIP, UDPPort);
+                }
 
             }
 
         } catch (IOException e) {
             /**
-             * Esta excepção é apanhada quando já existe um servidor activo.
-             * Neste caso o servidor vai agir como servidor backup.
+             * Esta excepção é apanhada quando já existe um servidor activo. Neste caso o servidor vai agir como servidor backup.
              */
             if (e.getMessage().equals("Address already in use")) {
-                new BackupServer(serverIP,UDPPort);
+                new BackupServer(serverIP, UDPPort);
 
             } else {
                 e.printStackTrace();
@@ -141,10 +143,10 @@ class NewClient extends Thread {
 
         try {
             while (true) {
-                
+
                 postCard = null;
                 postCard = (ClientRequest) reciver.readUnshared();
-                
+
                 alterRequest = postCard.getRequestID() + ("_" + myUserID);
                 postCard.setRequestID(alterRequest);
                 System.out.println(postCard.getRequest()[0]);
@@ -164,7 +166,7 @@ class NewClient extends Thread {
 
                 } else if (postCard.getRequest()[0].equals("new")) {
                     System.out.println("Fui chamado!");
-                    if(postCard.getResponse()!=null){
+                    if (postCard.getResponse() != null) {
                         System.out.println("Não és null por que caralho!&");
                     }
 
@@ -175,12 +177,10 @@ class NewClient extends Thread {
                     if (myMail.getResponse()[0].equals("infosave")) {
                         System.out.println("myUserID:" + (int) myMail.getResponse()[1]);
                         myUserID = (int) myMail.getResponse()[1];
-                    }
-                    else if (myMail.getResponse()[0].equals("erro")){
+                    } else if (myMail.getResponse()[0].equals("erro")) {
                         System.out.println("ERRO!\n"); //Temos que tratar o erro
-                    }
-                    else if(myMail.getResponse()[0].equals("user_already_exists")){
-                        System.out.println("User: "+ (String)myMail.getResponse()[1]+" already exists!");
+                    } else if (myMail.getResponse()[0].equals("user_already_exists")) {
+                        System.out.println("User: " + (String) myMail.getResponse()[1] + " already exists!");
                     }
 
                     myMail.setStage(4);
@@ -199,7 +199,7 @@ class NewClient extends Thread {
                     myMail.setStage(4);
 
                 } else if (postCard.getRequest()[0].equals("seesal")) {
-                    
+
                     System.out.println("Esteve aqui, como era suposto\n");
 
                     postCard.getRequest()[1] = myUserID;
@@ -234,11 +234,10 @@ class BackupServer extends Thread {
     BackupServer(String hostIp, int udpPort) {
 
         /**
-         * Vai guradar o ip do Servidor principal para se poder ligar como backup
-         * e inicializa o contador para o caso de ocorrer um FailOver.
+         * Vai guradar o ip do Servidor principal para se poder ligar como backup e inicializa o contador para o caso de ocorrer um FailOver.
          */
         primaryServer = hostIp;
-        serverPort=udpPort;
+        serverPort = udpPort;
         failOverCounter = 0;
         this.start();
 
@@ -258,8 +257,7 @@ class BackupServer extends Thread {
                 try {
 
                     /**
-                     * vai fazer a ligação com o Servidor principal e mandar a mensagem 'ping'. 
-                     * Caso o servidor principal vai abaixo e espera até à terceira mensagem de erro para se tornar servdor principal.
+                     * vai fazer a ligação com o Servidor principal e mandar a mensagem 'ping'. Caso o servidor principal vai abaixo e espera até à terceira mensagem de erro para se tornar servdor principal.
                      */
                     pingMessage = "ping".getBytes();
                     hostConection = InetAddress.getByName(primaryServer);
@@ -284,8 +282,8 @@ class BackupServer extends Thread {
 
                         System.out.println("[Backup Server] O Servidor principal está em baixo, vouassumir o controlo.");
                         udpConection.close();
-                        
-                        PropertiesReaderServer prop=new PropertiesReaderServer();
+
+                        PropertiesReaderServer prop = new PropertiesReaderServer();
                         prop.switchIPS();
                         new Server();
                     }
