@@ -226,7 +226,7 @@ public class Client {
             connectionFunction();
         }
 
-        return true;
+        return false;
     }
 
     public boolean consultaSaldo() throws IOException, ClassNotFoundException {
@@ -304,8 +304,9 @@ public class Client {
         } catch (IOException e) {
             connectionFunction();
         }
-
         return true;
+
+
     }
 
     public void mainMenu() throws IOException, ClassNotFoundException {
