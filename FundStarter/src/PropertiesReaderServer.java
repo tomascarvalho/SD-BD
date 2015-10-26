@@ -27,7 +27,6 @@ public class PropertiesReaderServer {
     int backupPort;
     int UDPPort;
     String rmiLocation;
-    String primary;
 
     /**
      * Vai ler os dados do ficheiro configServer.properties para que o servidor
@@ -38,7 +37,7 @@ public class PropertiesReaderServer {
         Properties prop = new java.util.Properties();
 
         try {
-            input = new FileInputStream("src/configServer.properties");
+            input = new FileInputStream("./build/classes/configServer.properties");
 
             if (input == null) {
                 System.out.println("[Server]Não encontrei o ficheiro de configurações!");
@@ -53,7 +52,6 @@ public class PropertiesReaderServer {
             this.backupPort = Integer.parseInt(prop.getProperty("BackupPort"));
             this.UDPPort = Integer.parseInt(prop.getProperty("UDPPort"));
             this.rmiLocation = prop.getProperty("RMILocation");
-            this.primary = prop.getProperty("Primary");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -67,38 +65,7 @@ public class PropertiesReaderServer {
             }
         }
     }
-    
-    public void writeProperties(){
-        Properties prop = new java.util.Properties();
-        String temp;
-        
-        System.out.println("Escrevi");
-        try {
-
-            FileOutputStream output = new FileOutputStream("src/configServer.properties");
-
-            if (output == null) {
-                System.out.println("[Server]Não encontrei o ficheiro de configurações!");
-            }
-
-            prop.setProperty("MyIP", backupIP);
-            temp = "" + backupPort;
-            prop.setProperty("MyPort", temp);
-            prop.setProperty("BackupIP", primaryIp);
-            temp = "" + primaryPort;
-            prop.setProperty("BackupPort", temp);
-            prop.setProperty("RMILocation", rmiLocation);
-            temp = "" + UDPPort;
-            prop.setProperty("UDPPort", temp);
-            prop.setProperty("Primary", "false");
-
-            prop.store(output, "");
-            } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
+   
 
     /**
      * Sempre que um servidor vai abaixo troca os ip's e portos do ficheiro de propriedades.
@@ -124,7 +91,6 @@ public class PropertiesReaderServer {
             prop.setProperty("RMILocation", rmiLocation);
             temp = "" + UDPPort;
             prop.setProperty("UDPPort", temp);
-            prop.setProperty("Primary", primary);
 
             prop.store(output, "");
 
@@ -133,14 +99,6 @@ public class PropertiesReaderServer {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }
-
-    public void setPrimary(String primary) {
-        this.primary = primary;
-    }
-
-    public String getPrimary() {
-        return primary;
     }
 
     public int getPrimaryPort() {
