@@ -202,7 +202,7 @@ class NewClient extends Thread {
 
                 } else if (postCard.getRequest()[0].equals("seesal")) {
 
-                    System.out.println("Esteve aqui, como era suposto\n");
+                    System.out.println("Vim consultar o meu saldo\n");
 
                     postCard.getRequest()[1] = myUserID;
                     postCard.setStage(1);
@@ -210,6 +210,16 @@ class NewClient extends Thread {
                     myMail = remoteConection.getUserSaldo(postCard);
 
                     myMail.setStage(4);
+                    
+                } else if (postCard.getRequest()[0].equals("list_actual_projects"))
+                {
+                    System.out.print("Vim consultar os projectos actuais!\n");
+                    postCard.setStage(1);
+                    
+                    myMail = remoteConection.getActualProjects(postCard);
+                    
+                    myMail.setStage(4);
+                    
                 }
 
                 sender.writeUnshared(myMail);

@@ -213,6 +213,39 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         return clrqst;
     }
 
+    public ClientRequest getActualProjects(ClientRequest clrqst) throws RemoteException {
+        
+        System.out.println("[RMI Server] Função <getActualProjects> chamada!");
+        
+        clrqst.setStage(2);
+        myRequests.add(clrqst);
+        
+        try{
+            query = "SELECT * FROM projecto WHERE status = TRUE";
+            request = connection.createStatement();
+            rs = request.executeQuery(query);
+            if (!rs.next())
+            {
+                System.out.println("Nao ha projectos activos"); //Queremos mandar isto para o cliente?
+            }
+            
+            //Aqui quero percorrer os projectos e mandar algo como o título e o ID?
+            rs.next();
+            resposta[0] = rs.getInt("saldo");
+
+            clrqst.setResponse(resposta);
+            clrqst.setStage(3);
+
+            updateRequest(clrqst);
+            
+        }catch (SQLException ex){
+            System.err.println("SQLException:" + ex);
+            
+        }
+       
+        return clrqst; 
+    }
+    
     public void DB() throws RemoteException {
         System.out.println("-------- PostgreSQL "
                 + "JDBC Connection Testing ------------");
