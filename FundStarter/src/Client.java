@@ -266,6 +266,11 @@ public class Client {
     
     public void listarProjectosActuais() {
         
+        postCard[0] = "see_active_projects";
+        postCard[1] = null;
+        
+        postCard = postOffice(postCard);
+        
     }
 
     public void mainMenu() throws IOException, ClassNotFoundException {

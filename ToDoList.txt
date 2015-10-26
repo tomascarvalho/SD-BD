@@ -13,6 +13,15 @@
 ———————> Adicionar e Renovar recompensas ao projecto
 ———————> Cancelar Projecto
 ———————> Fim do projecto 
+
+:::::::::::::::::::::::::: Para a BD                 ::::::::::::::::::::::::::::::::
+———————> Campo "status" na tabela dos projectos
+———————> Data de fim do projecto? 
+
+:::::::::::::::::::::::::: Duvidas e pensamentos do Tom :::::::::::::::::::::::::::::
+- Quando eu quero listar todos os projectos... Como é que os mando todos no array resposta?
+
+
 :::::::::::::::::::::::::: Trabalho extra grupo de 3 ::::::::::::::::::::::::::::::::
 
 ———> Projectos podem ter vários admins que podem alterar e cancelar o projecto e responder a mensagens de utilizadores
