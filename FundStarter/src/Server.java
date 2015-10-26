@@ -24,7 +24,7 @@ public class Server {
     private String backupIP;
     private String rmiLocation;
 
-    public Server() {
+    public Server(boolean flag) {
         try {
 
             PropertiesReaderServer properties = new PropertiesReaderServer();
@@ -38,43 +38,38 @@ public class Server {
             backupPort = properties.getBackupPort();
             backupIP = properties.getBackupIP();
             rmiLocation = properties.getRmiLocation();
-            
-      
-            InetAddress teste= InetAddress.getByName(null);
-                
-            System.out.println("Teste:"+teste.toString());
-            
-            if(teste.toString().equals("localhost/127.0.0.1")){
-                System.out.println("CARALHO!");
-            }
 
-            ServerSocket conectionToClient = new ServerSocket(serverPort);
-            Socket cliente;
-
-            /**
-             * Cria uma intância da classe UDPServer para receber ping's do servidor backup e responder para mostrar ao backup que ainda está vivo.
-             */
-            UDPServer conectServer = new UDPServer(UDPPort);
-
-            /**
-             * Cria ligação com o servidor RMI.
-             */
-            RMIServerInterface remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
-
-            System.out.println("[Server] Servidor à escuta no porto " + serverPort);
-
-            while (true) {
+            if (flag) {
+                new BackupServer(serverIP, UDPPort);
+            } else {
+                ServerSocket conectionToClient = new ServerSocket(serverPort);
+                Socket cliente;
 
                 /**
-                 * Espera que um cliente se ligue.
+                 * Cria uma intância da classe UDPServer para receber ping's do servidor backup e responder para mostrar ao backup que ainda está vivo.
                  */
-                cliente = conectionToClient.accept();
+                UDPServer conectServer = new UDPServer(UDPPort);
 
                 /**
-                 * Por cada cliente que se liga, vai criar uma thread que fica encarregue de lidar com ele.
+                 * Cria ligação com o servidor RMI.
                  */
-                new NewClient(cliente, remoteConection);
+                RMIServerInterface remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
 
+                System.out.println("[Server] Servidor à escuta no porto " + serverPort);
+
+                while (true) {
+
+                    /**
+                     * Espera que um cliente se ligue.
+                     */
+                    cliente = conectionToClient.accept();
+
+                    /**
+                     * Por cada cliente que se liga, vai criar uma thread que fica encarregue de lidar com ele.
+                     */
+                    new NewClient(cliente, remoteConection);
+
+                }
             }
 
         } catch (IOException e) {
@@ -97,7 +92,7 @@ public class Server {
 
     public static void main(String[] args) {
 
-        new Server();
+        new Server(true);
 
     }
 }
@@ -296,7 +291,7 @@ class BackupServer extends Thread {
 
                         PropertiesReaderServer prop = new PropertiesReaderServer();
                         prop.switchIPS();
-                        new Server();
+                        new Server(false);
                     }
                 }
 
