@@ -39,9 +39,12 @@ public class Server {
             backupIP = properties.getBackupIP();
             rmiLocation = properties.getRmiLocation();
 
+
+
             if (flag) {
                 new BackupServer(serverIP, UDPPort);
             } else {
+               
                 ServerSocket conectionToClient = new ServerSocket(serverPort);
                 Socket cliente;
 
