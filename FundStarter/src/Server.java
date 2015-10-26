@@ -40,11 +40,11 @@ public class Server {
             rmiLocation = properties.getRmiLocation();
             
       
-            InetAddress teste= InetAddress.getByName(null);
+            InetAddress teste= InetAddress.getByName(serverIP);
                 
             System.out.println("Teste:"+teste.toString());
             
-            if(teste.toString().equals("localhost/127.0.0.1")){
+            if(!teste.isReachable(3000)){
                 System.out.println("CARALHO!");
             }
 
