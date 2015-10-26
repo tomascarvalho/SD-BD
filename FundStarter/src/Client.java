@@ -124,10 +124,11 @@ public class Client {
         String requestID;
 
         try {
+            
             if (myRequest.size() == 0) {
                 requestID = "1";
             } else {
-                requestID = "" + myRequest.size();
+                requestID = "" + (myRequest.size()+1);
             }
 
             newRequest = new ClientRequest(requestID, postCard);
@@ -167,6 +168,7 @@ public class Client {
         int requestIndex = myRequest.indexOf(oldrqst);
 
         myRequest.set(requestIndex, newrqst);
+        
 
     }
 

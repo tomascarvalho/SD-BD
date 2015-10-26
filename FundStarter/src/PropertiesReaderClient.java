@@ -28,7 +28,7 @@ public class PropertiesReaderClient {
         Properties prop=new java.util.Properties();
         
         try{
-            input=new FileInputStream("src/configClient.properties");
+            input=new FileInputStream("./build/classes/configClient.properties");
             
             if(input==null){
                 System.out.println("[Client]Não encontrei ficheiro de configurações!");
@@ -43,8 +43,6 @@ public class PropertiesReaderClient {
             this.secundaryPort=Integer.parseInt(prop.getProperty("SecundaryServerPort"));
             
             
-            System.out.println("[Reader]Li estes dados:");
-            System.out.println("->"+primaryIP+"\n->"+primaryPort+"\n->"+secundaryIP+"\n->"+secundaryPort);
         }catch(IOException e){
             e.printStackTrace();
         }finally{

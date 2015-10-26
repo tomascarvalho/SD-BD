@@ -23,7 +23,6 @@ public class Server {
     private int backupPort;
     private String backupIP;
     private String rmiLocation;
-    private String primary;
 
     public Server() {
         try {
@@ -39,7 +38,16 @@ public class Server {
             backupPort = properties.getBackupPort();
             backupIP = properties.getBackupIP();
             rmiLocation = properties.getRmiLocation();
-            primary = properties.getPrimary();
+            
+      
+            InetAddress teste= InetAddress.getByName(null);
+                
+            System.out.println("Teste:"+teste.toString());
+            
+            if(teste.toString().equals("localhost/127.0.0.1")){
+                System.out.println("CARALHO!");
+            }
+
             ServerSocket conectionToClient = new ServerSocket(serverPort);
             Socket cliente;
 
@@ -57,23 +65,15 @@ public class Server {
 
             while (true) {
 
-                if (primary.equals("true")) {
-                    /**
-                     * Espera que um cliente se ligue.
-                     */
-                    cliente = conectionToClient.accept();
+                /**
+                 * Espera que um cliente se ligue.
+                 */
+                cliente = conectionToClient.accept();
 
-                    /**
-                     * Por cada cliente que se liga, vai criar uma thread que fica encarregue de lidar com ele.
-                     */
-                    new NewClient(cliente, remoteConection);
-                    
-                    /*properties.setPrimary("false");
-                    properties.writeProperties();*/
-                    
-                } else {
-                    new BackupServer(serverIP, UDPPort);
-                }
+                /**
+                 * Por cada cliente que se liga, vai criar uma thread que fica encarregue de lidar com ele.
+                 */
+                new NewClient(cliente, remoteConection);
 
             }
 
@@ -210,16 +210,15 @@ class NewClient extends Thread {
                     myMail = remoteConection.getUserSaldo(postCard);
 
                     myMail.setStage(4);
-                    
-                } else if (postCard.getRequest()[0].equals("list_actual_projects"))
-                {
+
+                } else if (postCard.getRequest()[0].equals("list_actual_projects")) {
                     System.out.print("Vim consultar os projectos actuais!\n");
                     postCard.setStage(1);
-                    
+
                     myMail = remoteConection.getActualProjects(postCard);
-                    
+
                     myMail.setStage(4);
-                    
+
                 }
 
                 sender.writeUnshared(myMail);
