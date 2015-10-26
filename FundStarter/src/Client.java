@@ -236,6 +236,8 @@ public class Client {
         postCard[1] = null;
 
         postCard = postOffice(postCard);
+        
+            
 
         System.out.println("\t\tO seu saldo é de " + postCard[1] + " euros.");
 
@@ -268,10 +270,36 @@ public class Client {
     
     public void listarProjectosActuais() {
         
-        postCard[0] = "see_active_projects";
+        String array_projectos[];
+        String titulo, id;
+        postCard[0] = "list_actual_projects";
         postCard[1] = null;
         
         postCard = postOffice(postCard);
+        
+        String teste;
+        teste = ""+postCard[1];
+        int i = Integer.parseInt(teste); 
+        int j = 0;
+        array_projectos = (String[])postCard[0];
+        System.out.println("Projectos Actuais: ");
+        if (array_projectos == null)
+            System.out.println("NULOO");
+        if (!array_projectos[0].equals("error_no_active_projects"))
+        {
+            while (j<i){
+                id = array_projectos[j];
+                j++;
+                titulo = array_projectos[j];
+                j++;
+                System.out.println("ID: "+id+" Titulo: "+titulo);
+        
+            }
+        }
+        else{
+            System.out.println("Não há projectos activos!");
+        }
+        
         
     }
 
@@ -313,7 +341,7 @@ public class Client {
 
         String userPick;
         System.out.println("\t\t\tMenu Inicial\n\n");
-        System.out.print("\t\t1 - Consultar Saldo\n\n\n\t\t2 - Criar Projecto\n\n\n\t\t");
+        System.out.print("\t\t1 - Consultar Saldo\n\t2 - Criar Projecto\n\t3 - Listar Projectos Actuais\n\n\t\t");
         userPick = sc.nextLine();
 
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções

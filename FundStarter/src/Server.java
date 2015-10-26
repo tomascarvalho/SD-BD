@@ -9,7 +9,7 @@ import java.rmi.*;
  *  Ano Lectivo 2015/1016
  *  Carlos Pinto 2011143469
  *  Diana Umbelino 2012******
- *  Tomás Carvalho 2012******
+ *  Tomás Carvalho 2012138578
  */
 /**
  *
@@ -38,16 +38,7 @@ public class Server {
             backupPort = properties.getBackupPort();
             backupIP = properties.getBackupIP();
             rmiLocation = properties.getRmiLocation();
-            
-      
-            InetAddress teste= InetAddress.getByName(serverIP);
-                
-            System.out.println("Teste:"+teste.toString());
-            
-            if(!teste.isReachable(3000)){
-                System.out.println("CARALHO!");
-            }
-
+           
             ServerSocket conectionToClient = new ServerSocket(serverPort);
             Socket cliente;
 
@@ -190,6 +181,7 @@ class NewClient extends Thread {
                 } else if (postCard.getRequest()[0].equals("new_project")) {
 
                     postCard.setStage(1);
+                    postCard.getRequest()[0] = myUserID;
 
                     myMail = remoteConection.novoProjecto(postCard);
 

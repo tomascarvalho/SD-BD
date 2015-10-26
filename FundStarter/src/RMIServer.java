@@ -131,14 +131,16 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
         clrqst.setStage(2);
         myRequests.add(clrqst);
+        String myUserID = ""+clrqst.getRequest()[0];
 
         try {
-            query = "INSERT INTO projecto (titulo, descricao, valorpretendido, valoractual) VALUES (?,?,?,?)";
+            query = "INSERT INTO projecto (id_utilizador, titulo, descricao, valorpretendido, valoractual) VALUES (?,?,?,?,?)";
             preparedstatement = connection.prepareStatement(query);
-            preparedstatement.setString(1, projectInfo[0]);
-            preparedstatement.setString(2, projectInfo[1]);
-            preparedstatement.setInt(3, Integer.parseInt(projectInfo[2]));
-            preparedstatement.setInt(4, 0);
+            preparedstatement.setInt(1, Integer.parseInt(myUserID));
+            preparedstatement.setString(2, projectInfo[0]);
+            preparedstatement.setString(3, projectInfo[1]);
+            preparedstatement.setInt(4, Integer.parseInt(projectInfo[2]));
+            preparedstatement.setInt(5, 0);
             preparedstatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -215,7 +217,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
     public ClientRequest getActualProjects(ClientRequest clrqst) throws RemoteException {
         
+        int i;
         System.out.println("[RMI Server] Função <getActualProjects> chamada!");
+        String[] actual_projects = null;
         
         clrqst.setStage(2);
         myRequests.add(clrqst);
@@ -224,15 +228,29 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             query = "SELECT * FROM projecto WHERE status = TRUE";
             request = connection.createStatement();
             rs = request.executeQuery(query);
+            i = 0;
             if (!rs.next())
             {
                 System.out.println("Nao ha projectos activos"); //Queremos mandar isto para o cliente?
+                actual_projects[0]= "error_no_active_projects";
+                resposta[0] = actual_projects;
             }
             
             //Aqui quero percorrer os projectos e mandar algo como o título e o ID?
-            rs.next();
-            resposta[0] = rs.getInt("saldo");
-
+            
+            else {
+                
+                while (rs.next()) {
+                    actual_projects[i] = ""+rs.getInt("id");
+                    i++;
+                    actual_projects[i] = rs.getString("titulo");
+                    i++;
+              
+                }
+                resposta[0] = actual_projects;
+            }
+            resposta[1] = i;
+            
             clrqst.setResponse(resposta);
             clrqst.setStage(3);
 
