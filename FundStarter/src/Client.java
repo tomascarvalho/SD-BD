@@ -230,8 +230,6 @@ public class Client {
 
     public boolean consultaSaldo() {
 
-        String requestId;
-
         postCard[0] = "seesal";
         postCard[1] = null;
 
@@ -264,6 +262,10 @@ public class Client {
         } else {
             return false;
         }
+    }
+    
+    public void listarProjectosActuais() {
+        
     }
 
     public void mainMenu() throws IOException, ClassNotFoundException {
@@ -308,9 +310,9 @@ public class Client {
         userPick = sc.nextLine();
 
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
-        while ((userPick.equals("1") == false) && (userPick.equals("2") == false)) {
+        while ((userPick.equals("1") == false) && (userPick.equals("2") == false) && (userPick.equals("3") == false)) {
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
-            System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\n\n\t\t>>");
+            System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\n\t\t>>");
             userPick = sc.nextLine();
 
         }
@@ -318,6 +320,8 @@ public class Client {
             consultaSaldo();
         } else if (userPick.equals("2")) {
             criaProjecto(); //Caso de sucesso/falha?
+        } else if (userPick.equals("3")) {
+            listarProjectosActuais();
         }
 
     }

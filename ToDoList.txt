@@ -1,6 +1,6 @@
-——>Tratar das excepções
+﻿——>Tratar das excepções
 ——>Fazer funções:
-———————> Listar Projectos actuais, com o seu progresso
+———————> Listar Projectos actuais, com o seu progresso (Tomás)
 ———————> Listar Projectos Antigos
 ———————> Consultar detalhes de um projecto
 ———————> Registar Conta(FEITO)
