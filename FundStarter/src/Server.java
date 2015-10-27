@@ -38,17 +38,7 @@ public class Server {
             backupPort = properties.getBackupPort();
             backupIP = properties.getBackupIP();
             rmiLocation = properties.getRmiLocation();
-<<<<<<< HEAD
-           
-            ServerSocket conectionToClient = new ServerSocket(serverPort);
-            Socket cliente;
 
-            /**
-             * Cria uma intância da classe UDPServer para receber ping's do servidor backup e responder para mostrar ao backup que ainda está vivo.
-             */
-            UDPServer conectServer = new UDPServer(UDPPort);
-=======
->>>>>>> a85936eae0576752e53d57a2ed64f104ac786757
 
 
 
@@ -169,9 +159,14 @@ class NewClient extends Thread {
                     postCard.setStage(1);
                     myMail = remoteConection.verificaLogIn(postCard);
 
-                    if (myMail.getResponse()[0].equals("userrec")) {
+                    if (myMail.getResponse()[0].equals("log_in_correcto")) {
                         myUserID = (int) myMail.getResponse()[1];
                     }
+                    else if(myMail.getResponse()[0].equals("log_in_error")){
+                        System.out.println("Log in errado (Server error)");
+                        myUserID = (int) myMail.getResponse()[1];
+                    }
+                    
 
                     myMail.setStage(4);
 
@@ -221,8 +216,8 @@ class NewClient extends Thread {
 
                     myMail.setStage(4);
 
-                } else if (postCard.getRequest()[0].equals("list_actual_projects")) {
-                    System.out.print("Vim consultar os projectos actuais!\n");
+                } else if ((postCard.getRequest()[0].equals("list_actual_projects")) || (postCard.getRequest()[0].equals("list_old_projects"))) {
+                    System.out.print("Vim consultar os projectos!\n");
                     postCard.setStage(1);
 
                     myMail = remoteConection.getActualProjects(postCard);

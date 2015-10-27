@@ -1,10 +1,10 @@
 ﻿——>Tratar das excepções
 ——>Fazer funções:
-———————> Listar Projectos actuais, com o seu progresso (Tomás)
-———————> Listar Projectos Antigos
+———————> Listar Projectos actuais, com o seu progresso (FEITO)
+———————> Listar Projectos Antigos (FEITO)
 ———————> Consultar detalhes de um projecto
 ———————> Registar Conta(FEITO)
-———————> Login(falta testar com a base de dados)
+———————> Login(FEITO)
 ———————> Consultar saldo (FEITO)
 ———————> Consultar recompensas
 ———————> Doar dinheiro ao projecto
@@ -15,11 +15,8 @@
 ———————> Fim do projecto 
 
 :::::::::::::::::::::::::: Para a BD                 ::::::::::::::::::::::::::::::::
-———————> Campo "status" na tabela dos projectos
+———————> Campo "status" na tabela dos projectos (FEITO)
 ———————> Data de fim do projecto? 
-
-:::::::::::::::::::::::::: Duvidas e pensamentos do Tom :::::::::::::::::::::::::::::
-- Quando eu quero listar todos os projectos... Como é que os mando todos no array resposta?
 
 
 :::::::::::::::::::::::::: Trabalho extra grupo de 3 ::::::::::::::::::::::::::::::::

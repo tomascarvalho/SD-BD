@@ -71,10 +71,10 @@ public class BD {
 		
 		try{
 			query = "SELECT id, username, pass FROM utilizador WHERE username = ? AND pass = ?";
-            preparedstatement = connection.prepareStatement(query);
-            preparedstatement.setString(1, username);
-            preparedstatement.setString(2, pass);
-    		rs = preparedstatement.executeQuery();
+                        preparedstatement = connection.prepareStatement(query);
+                        preparedstatement.setString(1, username);
+                        preparedstatement.setString(2, pass);
+                        rs = preparedstatement.executeQuery();
             
             
             Statement request = connection.createStatement();

@@ -195,7 +195,7 @@ public class Client {
 
         postCard = postOffice(postCard);
 
-        if (postCard[0].equals("userrec")) {
+        if (postCard[0].equals("log_in_correcto")) {
             return true;
         } else {
             return false;
@@ -239,7 +239,7 @@ public class Client {
         
             
 
-        System.out.println("\t\tO seu saldo é de " + postCard[1] + " euros.");
+        System.out.println("\t\tO seu saldo é de " + postCard[0] + " euros.");
 
         return true;
     }
@@ -268,12 +268,18 @@ public class Client {
         }
     }
     
-    public void listarProjectosActuais() {
+    public void listarProjectosActuais(int choice) { // if choice 0 -> active projects
+                                                     // if choice 1 -> old projects
         
         String array_projectos[];
         String titulo, id;
-        postCard[0] = "list_actual_projects";
-        postCard[1] = null;
+        if (choice == 0){
+            postCard[0] = "list_actual_projects";  
+        }
+        else{
+            postCard[0] = "list_old_projects";
+        }
+        postCard[1] = choice;
         
         postCard = postOffice(postCard);
         
@@ -281,11 +287,16 @@ public class Client {
         teste = ""+postCard[1];
         int i = Integer.parseInt(teste); 
         int j = 0;
-        array_projectos = (String[])postCard[0];
-        System.out.println("Projectos Actuais: ");
-        if (array_projectos == null)
-            System.out.println("NULOO");
-        if (!array_projectos[0].equals("error_no_active_projects"))
+       
+        array_projectos = (String[])postCard[0]; //ISTO ESTA A NULL PORQUE?
+        if(choice == 0) {
+            System.out.println("Projectos Actuais: ");
+        }
+        else{
+            System.out.println("Projectos Antigos: ");
+        }
+        
+        if ((!array_projectos[0].equals("error_no_active_projects")) || (!array_projectos[0].equals("error_no_old_projects")))
         {
             while (j<i){
                 id = array_projectos[j];
@@ -297,11 +308,16 @@ public class Client {
             }
         }
         else{
-            System.out.println("Não há projectos activos!");
+            if (choice == 1)
+                System.out.println("Não há projectos activos!");
+            else
+                System.out.println("Não há projectos antigos!");
         }
         
         
     }
+    
+    
 
     public void mainMenu() throws IOException, ClassNotFoundException {
 
@@ -341,13 +357,13 @@ public class Client {
 
         String userPick;
         System.out.println("\t\t\tMenu Inicial\n\n");
-        System.out.print("\t\t1 - Consultar Saldo\n\t2 - Criar Projecto\n\t3 - Listar Projectos Actuais\n\n\t\t");
+        System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\n\t>>");
         userPick = sc.nextLine();
 
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
-        while ((userPick.equals("1") == false) && (userPick.equals("2") == false) && (userPick.equals("3") == false)) {
+        while ((userPick.equals("1") == false) && (userPick.equals("2") == false) && (userPick.equals("3") == false) && (userPick.equals("4") == false)) {
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
-            System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\n\t\t>>");
+            System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\n\t\t>>");
             userPick = sc.nextLine();
 
         }
@@ -356,8 +372,12 @@ public class Client {
         } else if (userPick.equals("2")) {
             criaProjecto(); //Caso de sucesso/falha?
         } else if (userPick.equals("3")) {
-            listarProjectosActuais();
+            listarProjectosActuais(0);
+        } else if(userPick.equals("4")){
+            listarProjectosActuais(1);
         }
+        
+        menuConta();
 
     }
 }

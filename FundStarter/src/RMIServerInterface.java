@@ -16,7 +16,7 @@ import java.rmi.*;
  */
 public interface RMIServerInterface extends Remote {
 
-    public ClientRequest verificaLogIn(ClientRequest person) throws RemoteException;
+    public ClientRequest verificaLogIn(ClientRequest clrqst) throws RemoteException;
 
     public ClientRequest novoUtilizador(ClientRequest userInfo) throws RemoteException;
 
