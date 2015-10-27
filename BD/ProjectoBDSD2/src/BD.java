@@ -5,11 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Calendar;
 import java.util.Properties;
 import java.util.Scanner;
 
 import org.omg.Messaging.SyncScopeHelper;
-
 
 public class BD {
 	Scanner sc=new Scanner(System.in);
@@ -27,8 +27,8 @@ public class BD {
 	
 	public BD() throws SQLException{
 		DB();
-		cria_user();
-//		novoProjecto();
+		//cria_user();
+		novoProjecto(2);
 		//nova_mensagem();
 		//login();																	TO BE CONTINUED
 	}
@@ -71,10 +71,10 @@ public class BD {
 		
 		try{
 			query = "SELECT id, username, pass FROM utilizador WHERE username = ? AND pass = ?";
-                        preparedstatement = connection.prepareStatement(query);
-                        preparedstatement.setString(1, username);
-                        preparedstatement.setString(2, pass);
-                        rs = preparedstatement.executeQuery();
+            preparedstatement = connection.prepareStatement(query);
+            preparedstatement.setString(1, username);
+            preparedstatement.setString(2, pass);
+    		rs = preparedstatement.executeQuery();
             
             
             Statement request = connection.createStatement();
@@ -197,16 +197,19 @@ public class BD {
 		
 		System.out.println("Valor actual: ");
 		int valorActual = sc.nextInt();
-				
+		
+		java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+		
 		try{			
 			//inserção na tabela
-			query = "INSERT INTO projecto (titulo, id_utilizador, descricao, valorPretendido, valorActual) VALUES(?,?,?,?,?)";
+			query = "INSERT INTO projecto (titulo, id_utilizador, descricao, valorPretendido, valorActual, data_inicio) VALUES(?,?,?,?,?,?)";
             preparedstatement = connection.prepareStatement(query);
             preparedstatement.setString(1, tituloProjecto);
             preparedstatement.setInt(2, idUser);
             preparedstatement.setString(3, descricao);
             preparedstatement.setInt(4, valorPretendido);
             preparedstatement.setInt(5, valorActual);
+            preparedstatement.setDate(6, date);
             preparedstatement.executeUpdate();
 		}
         catch(SQLException e)

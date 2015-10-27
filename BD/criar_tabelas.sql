@@ -32,7 +32,8 @@ CREATE TABLE Projecto
  valorPretendido INTEGER not null,
  valorActual INTEGER not null,
  status BOOLEAN not null default true,
-
+ data_inicio DATE ,
+ 
  CONSTRAINT Projecto_pk PRIMARY KEY(id),
  FOREIGN KEY (id_utilizador) REFERENCES utilizador(id)
 );

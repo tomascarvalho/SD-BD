@@ -272,7 +272,7 @@ public class Client {
                                                      // if choice 1 -> old projects
         
         String array_projectos[];
-        String titulo, id;
+        String titulo, id, valoractual, valorpretendido;
         if (choice == 0){
             postCard[0] = "list_actual_projects";  
         }
@@ -303,8 +303,14 @@ public class Client {
                 j++;
                 titulo = array_projectos[j];
                 j++;
-                System.out.println("ID: "+id+" Titulo: "+titulo);
-        
+                valoractual = array_projectos[j];
+                j++;
+                valorpretendido = array_projectos[j];
+                j++;
+                if (choice == 0)
+                    System.out.println("ID: "+id+" Titulo: "+titulo+" Progresso: "+valoractual+" euros angariados / "+valorpretendido+" euros pretendidos");
+                else
+                    System.out.println("ID: "+id+" Titulo: "+titulo);
             }
         }
         else{
@@ -327,12 +333,12 @@ public class Client {
         conectionError = 0;
 
         System.out.println("\t\t\tMenu Inicial\n\n");
-        System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\n\n\t\t>>");
+        System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
         userPick = sc.nextLine();
         //Verificar Escolhas
-        while ((userPick.equals("1") == false) && (userPick.equals("2") == false)) {
+        while ((userPick.equals("1") == false) && (userPick.equals("2") == false) && (userPick.equals("3") == false) && (userPick.equals("4")== false)) {
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
-            System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\n\n\t\t>>");
+            System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
             userPick = sc.nextLine();
         }
         if (userPick.equals("1")) {
@@ -347,7 +353,12 @@ public class Client {
                 logResult = false;
             }
 
+        } else if (userPick.equals("3")) {
+            listarProjectosActuais(0);
+        } else if(userPick.equals("4")){
+            listarProjectosActuais(1);
         }
+            
 
         menuConta();
 

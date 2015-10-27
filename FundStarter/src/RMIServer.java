@@ -286,12 +286,20 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                 i++;
                 actual_projects[i] = rs.getString("titulo");
                 i++;
+                actual_projects[i] = ""+rs.getInt("valoractual");
+                i++;
+                actual_projects[i] = ""+rs.getInt("valorpretendido");
+                i++;
                 
                 while (rs.next()) {
 
                     actual_projects[i] = ""+rs.getInt("id");
                     i++;
                     actual_projects[i] = rs.getString("titulo");
+                    i++;
+                    actual_projects[i] = ""+rs.getInt("valoractual");
+                    i++;
+                    actual_projects[i] = ""+rs.getInt("valorpretendido");
                     i++;
               
                 }
