@@ -189,10 +189,7 @@ class NewClient extends Thread {
 
                 } else if (postCard.getRequest()[0].equals("new")) {
                     System.out.println("Fui chamado!");
-                    if (postCard.getResponse() != null) {
-                        System.out.println("Não és null por que caralho!&");
-                    }
-
+                   
                     postCard.setStage(1);
 
                     myMail = remoteConection.novoUtilizador(postCard);

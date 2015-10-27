@@ -206,17 +206,13 @@ public class Client {
 
     public boolean criaConta() {
 
-        String[] newUserData = new String[4];
+        String[] newUserData = new String[2];
 
-        System.out.println("\t\t\tNovo Utilizador\n\n");
-        System.out.print("\t\tPrimeiro Nome:");
-        newUserData[0] = sc.nextLine();
-        System.out.print("\t\tApelido:");
-        newUserData[1] = sc.nextLine();
+   
         System.out.print("\t\tUsername:");
-        newUserData[2] = sc.nextLine();
+        newUserData[0] = sc.nextLine();
         System.out.print("\t\tPassword:");
-        newUserData[3] = sc.nextLine();
+        newUserData[1] = sc.nextLine();
 
         postCard[0] = "new";
         postCard[1] = newUserData;
@@ -247,8 +243,14 @@ public class Client {
 
     public boolean criaProjecto() {
 
-        String[] newProjectData = new String[3];
-
+        String[] newProjectData = new String[2000];
+        String constroi_data_limite;
+        int num_recompensas = 0;
+        int num_niveis_extra = 0;
+        int num_produto = 0;
+        int i = 0;
+        int j = 0;
+        String montante;
         System.out.println("\n\t\tNovo Projecto");
         System.out.println("\n\tNome do Projecto: ");
         newProjectData[0] = sc.nextLine(); //Titulo do Projecto
@@ -256,7 +258,58 @@ public class Client {
         newProjectData[1] = sc.nextLine(); //Descrição do Projecto
         System.out.println("\n\tValor Pretendido: ");
         newProjectData[2] = sc.nextLine(); //Valor Pretendido para o Projecto
-
+        System.out.println("\tData limite para a conclusão do Projecto(yyyy-mm-dd): ");
+        newProjectData[3] = sc.nextLine(); //Data Limite
+        System.out.println("\n\tQuantas Recompensas quer oferecer: ");
+        //while(!sc.hasNextInt()) sc.next();
+        num_recompensas= sc.nextInt();
+        sc.nextLine();
+        newProjectData[4] = ""+num_recompensas;
+        while (i<num_recompensas){
+            i++;
+            j++;
+            System.out.println("Recompensa nº"+i);
+            System.out.println("Montante a doar: ");
+            montante = sc.nextLine();
+            newProjectData[4+j] = montante;
+            j++;
+            System.out.println("Recompensa associada: ");
+            newProjectData[4+j] = sc.nextLine();   
+        }
+        j++;
+        System.out.println("\n\t Quantos níveis extra existem: ");
+        //while(!sc.hasNextInt()) sc.next();
+        num_niveis_extra = sc.nextInt();
+        sc.nextLine();
+        newProjectData[4+j] = ""+num_niveis_extra;
+        i = 0;
+        while (i<num_niveis_extra){
+            i++;
+            j++;
+            System.out.println("Nivel Extra nº"+i+"\nValor: ");
+            //while(!sc.hasNextInt()) sc.next();
+            montante = sc.nextLine();
+            newProjectData[4+j] = montante;
+            j++;
+            System.out.println("Nivel Extra: ");
+            newProjectData[4+j] = sc.nextLine();   
+        }
+        j++;
+        System.out.println("\n\t Quantos tipos diferentes de produto existem: ");
+        //while(!sc.hasNextInt()) sc.next();
+        num_produto = sc.nextInt();
+        sc.nextLine();
+        newProjectData[4+j] = ""+num_produto;
+        i = 0;
+        while(i< num_produto){
+            i++;
+            j++;
+            System.out.println("Tipo de Produto: ");
+            newProjectData[4+j] = sc.nextLine();
+            
+        }
+            
+        
         postCard[0] = "new_project";
         postCard[1] = newProjectData;
 

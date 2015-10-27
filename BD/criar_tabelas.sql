@@ -9,6 +9,16 @@ saldo INTEGER not null,
 CONSTRAINT Utilizador_pk PRIMARY KEY (id)
 );
 
+CREATE TABLE Niveis_Extra
+(
+ id SERIAL not null,
+ descricao VARCHAR(100) not null,
+ valor	INTEGER not null,
+ id_projecto INTEGER not null,
+
+ CONSTRAINT Niveis_Extra_pk PRIMARY KEY (id),
+ FOREIGN KEY (id_projecto) REFERENCES Projecto (id)
+);
 
 CREATE TABLE Projecto
 (
@@ -19,9 +29,9 @@ CREATE TABLE Projecto
  valorActual INTEGER not null,
  status BOOLEAN not null default true,
  data_limite DATE ,
- niveis_extra VARCHAR(100),
- valor_extra INTEGER,
- 
+ id_niveis_extra INTEGER,
+
+ FOREIGN KEY (id_niveis_extra) REFERENCES Niveis_Extra(id),
  CONSTRAINT Projecto_pk PRIMARY KEY(id)
 );
 
@@ -40,7 +50,7 @@ CONSTRAINT Mensagens_pk PRIMARY KEY (id)
 
 
 CREATE TABLE Recompensas(
- id 	INTEGER not null,
+ id 	SERIAL not null,
  valor INTEGER not null,
  id_projecto INTEGER not null,
  titulo VARCHAR(100) not null,

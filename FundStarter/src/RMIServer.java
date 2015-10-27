@@ -2,8 +2,9 @@
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -84,21 +85,19 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         
         try
         {
-            System.out.println("cenas do "+userInfo[1]);
-            query = "SELECT * FROM utilizador WHERE username= '"+userInfo[2]+"'";
+           
+            query = "SELECT * FROM utilizador WHERE username= '"+userInfo[0]+"'";
             request = connection.createStatement();
             rs = request.executeQuery(query);
             
             if (!rs.next()) //User não existe, logo insere
             {
                 try {
-                    query = "INSERT INTO utilizador (nome, apelido, username, pass, saldo) VALUES (?,?,?,?,?)";
+                    query = "INSERT INTO utilizador (username, pass, saldo) VALUES (?,?,?)";
                     preparedstatement = connection.prepareStatement(query);
                     preparedstatement.setString(1, userInfo[0]);
                     preparedstatement.setString(2, userInfo[1]);
-                    preparedstatement.setString(3, userInfo[2]);
-                    preparedstatement.setString(4, userInfo[3]);
-                    preparedstatement.setInt(5, 100);
+                    preparedstatement.setInt(3, 100);
                     preparedstatement.executeUpdate();
 
                 } catch (SQLException e) {
@@ -121,7 +120,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                     
 
                 } catch (SQLException ex) {
-                    System.err.println("Erro foi aqui?:" + ex);
+                    System.err.println("SQLException: " + ex);
                 } finally {
                     if (resposta == null){
                         resposta[0] = "erro";
@@ -138,7 +137,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             
             else{
                 resposta[0] = "user_already_exists";
-                resposta[1] = userInfo[2];
+                resposta[1] = userInfo[0];
                 clrqst.setResponse(resposta);
                 clrqst.setStage(3);
             }
@@ -151,40 +150,93 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         return clrqst;
     }
 
-    public ClientRequest novoProjecto(ClientRequest clrqst) throws RemoteException { //Verificar Erro?
+    public ClientRequest novoProjecto(ClientRequest clrqst) throws RemoteException { //Verificar Erro
 
         System.out.println("[RMI Server] Função <novoProjecto> chamada!");
 
         String[] projectInfo = (String[]) clrqst.getRequest()[1];
-
+        int id_niveis_extra = 0, id= 0, i, j;
         clrqst.setStage(2);
         myRequests.add(clrqst);
         String myUserID = ""+clrqst.getRequest()[0];
 
         try {
-            query = "INSERT INTO projecto (id_utilizador, titulo, descricao, valorpretendido, valoractual) VALUES (?,?,?,?,?)";
-            preparedstatement = connection.prepareStatement(query);
-            preparedstatement.setInt(1, Integer.parseInt(myUserID));
-            preparedstatement.setString(2, projectInfo[0]);
-            preparedstatement.setString(3, projectInfo[1]);
-            preparedstatement.setInt(4, Integer.parseInt(projectInfo[2]));
+            query = "INSERT INTO projecto (titulo, descricao, valorpretendido, data_limite, valoractual) VALUES (?,?,?,?,?)";
+            preparedstatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            preparedstatement.setString(1, projectInfo[0]);
+            preparedstatement.setString(2, projectInfo[1]);
+            preparedstatement.setInt(3, Integer.parseInt(projectInfo[2]));
+            preparedstatement.setDate(4, java.sql.Date.valueOf(projectInfo[3]));
             preparedstatement.setInt(5, 0);
             preparedstatement.executeUpdate();
+            rs = preparedstatement.getGeneratedKeys();
+            rs.next();
+            id = rs.getInt("id");
 
         } catch (SQLException e) {
             System.err.println("SQLException:" + e);
         }
 
         try {
-            query = "SELECT id FROM projecto WHERE titulo='" + projectInfo[0] + "'";
-            request = connection.createStatement();
-            rs = request.executeQuery(query);
+            i = 0;
+            j = 0;
+            if (Integer.parseInt(projectInfo[4]) != 0)
+            {
+                while (i<Integer.parseInt(projectInfo[4]))
+                {
+                    j++;
+                    i++;
+                    query = "INSERT INTO recompensas (valor, titulo, id_projecto) VALUES(?,?,?)";
+                    preparedstatement = connection.prepareStatement(query);
+                    preparedstatement.setInt(1, Integer.parseInt(projectInfo[4+j]));
+                    j++;
+                    preparedstatement.setString(2, projectInfo[4+j]);
+                    preparedstatement.setInt(3, id);
+                    preparedstatement.executeUpdate();
+                    
+                }
 
-            if(!rs.next()){
-                System.out.println("Estou ficar farto desta merda!");
             }
+            
+            j++;
+            i = 0;
+            if (Integer.parseInt(projectInfo[4+j])!= 0){
+                while (i< Integer.parseInt(projectInfo[4+j]))
+                {
+                    j++;
+                    i++;
+                    query = "INSERT INTO niveis_extra (descricao, valor, id_projecto) VALUES (?,?,?)";
+                    preparedstatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                    preparedstatement.setString(1, projectInfo[4+j]);
+                    j++;
+                    preparedstatement.setInt(2, Integer.parseInt(projectInfo[4+j]));
+                    preparedstatement.setInt(3, id);
+                    preparedstatement.executeUpdate();
+                }
+                rs = preparedstatement.getGeneratedKeys();
+                rs.next();
+                id_niveis_extra = rs.getInt("id");
+                query = "UPDATE projecto SET id_niveis_extra="+id_niveis_extra+" WHERE id="+id;
+                preparedstatement = connection.prepareStatement(query);
+                preparedstatement.executeUpdate();
+                
+                
+            }
+            
+            j++;
+            i = 0;
+            while (i< Integer.parseInt(projectInfo[4+j]))
+            {
+                i++;
+                j++;
+                query = "INSERT INTO product_type (descricao, id_project, contador) VALUES (?,?,?)";
+                preparedstatement = connection.prepareStatement(query);
+                preparedstatement.setString(1, projectInfo[4+j]);
+                preparedstatement.setInt(2, id);
+                preparedstatement.setInt(3,0);
+            }
+            
             resposta[0] = "infosave";
-            resposta[1] = rs.getInt(1);
 
             clrqst.setResponse(resposta);
             clrqst.setStage(3);
@@ -209,7 +261,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     public ClientRequest getUserSaldo(ClientRequest clrqst) throws RemoteException {
 
         System.out.println("[RMI Server] Função <getUserSaldo> chamada!");
-
+        
         int userID = (int) clrqst.getRequest()[1];
 
         clrqst.setStage(2);
