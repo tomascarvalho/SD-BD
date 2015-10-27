@@ -155,7 +155,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         System.out.println("[RMI Server] Função <novoProjecto> chamada!");
 
         String[] projectInfo = (String[]) clrqst.getRequest()[1];
-        int id_niveis_extra = 0, id= 0, i, j;
+        int id_niveis_extra = 0, id= 0, i, j, k;
         clrqst.setStage(2);
         myRequests.add(clrqst);
         String myUserID = ""+clrqst.getRequest()[0];
@@ -182,7 +182,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             j = 0;
             if (Integer.parseInt(projectInfo[4]) != 0)
             {
-                while (i<Integer.parseInt(projectInfo[4]))
+                k = Integer.parseInt(projectInfo[4]);
+                while (i<k)
                 {
                     j++;
                     i++;
@@ -201,15 +202,17 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             j++;
             i = 0;
             if (Integer.parseInt(projectInfo[4+j])!= 0){
-                while (i< Integer.parseInt(projectInfo[4+j]))
+                k = Integer.parseInt(projectInfo[4+j]);
+                while (i< k)
                 {
                     j++;
                     i++;
                     query = "INSERT INTO niveis_extra (descricao, valor, id_projecto) VALUES (?,?,?)";
                     preparedstatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-                    preparedstatement.setString(1, projectInfo[4+j]);
-                    j++;
                     preparedstatement.setInt(2, Integer.parseInt(projectInfo[4+j]));
+                    
+                    j++;
+                    preparedstatement.setString(1, projectInfo[4+j]);
                     preparedstatement.setInt(3, id);
                     preparedstatement.executeUpdate();
                 }
@@ -225,7 +228,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             
             j++;
             i = 0;
-            while (i< Integer.parseInt(projectInfo[4+j]))
+            k = Integer.parseInt(projectInfo[4+j]);
+            while (i< k)
             {
                 i++;
                 j++;
