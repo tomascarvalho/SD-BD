@@ -23,11 +23,10 @@ public class Server {
     private int backupPort;
     private String backupIP;
     private String rmiLocation;
-    private DatagramSocket conectionTest;
-    private DatagramPacket firstPing;
-    private InetAddress conection;
+    private Socket tryConnectToServer;
+    private boolean backup=true;
 
-    public Server(boolean flag) {
+    public Server(String flag) {
         try {
 
             PropertiesReaderServer properties = new PropertiesReaderServer();
@@ -43,31 +42,21 @@ public class Server {
             rmiLocation = properties.getRmiLocation();
 
             try {
-                System.out.println("cenas");
-                conection = InetAddress.getByName(serverIP);
-                byte[] message = "alive".getBytes();
-                firstPing = new DatagramPacket(message, message.length,conection,UDPPort);
-                conectionTest = new DatagramSocket();
-               
-                //conectionTest.setSoTimeout(1000);
-                conectionTest.send(firstPing);
-                 if(!conectionTest.isConnected()){
-                    System.out.println("pilas");
-                }
-                System.out.println("cenas");
-            } catch (Exception e) {
-                System.out.print("ola");
-                flag=false;
-                conectionTest.close();
+                System.out.println("conection test");
+                tryConnectToServer=new Socket(serverIP,serverPort);
+                
+            } catch (IOException e) {
+                backup=false;
             }
 
-            if (flag) {
+            if (backup) {
+                tryConnectToServer.close();
                 new BackupServer(serverIP, UDPPort);
             } else {
-
+                
                 ServerSocket conectionToClient = new ServerSocket(serverPort);
                 Socket cliente;
-
+                System.out.println(flag);
                 /**
                  * Cria uma intância da classe UDPServer para receber ping's do servidor backup e responder para mostrar ao backup que ainda está vivo.
                  */
@@ -78,6 +67,11 @@ public class Server {
                  */
                 RMIServerInterface remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
 
+                if(flag.equals("backup_to_primary")){
+                    System.out.println("[Server]Vou avisar o rmi para desligar o outro servidor!");
+                    
+                }
+                
                 System.out.println("[Server] Servidor à escuta no porto " + serverPort);
 
                 while (true) {
@@ -105,7 +99,7 @@ public class Server {
             } else {
                 e.printStackTrace();
             }*/
-            System.out.println("oioi");
+            System.out.println("Alguém fechou o socket!");
         } catch (Exception e) {
             System.out.print("[Server]");
             e.printStackTrace();
@@ -115,7 +109,7 @@ public class Server {
 
     public static void main(String[] args) {
 
-        new Server(true);
+        new Server("start_server");
 
     }
 }
@@ -153,8 +147,11 @@ class NewClient extends Thread {
              */
             this.start();
 
-        } catch (IOException e) {
-            System.out.print("[Server]");
+        } catch(EOFException ex){
+            System.out.println("Servidor Backup tentou ligar-se");
+            return;
+        }catch (IOException e) {
+            System.out.print("[NewClient]");
             e.printStackTrace();
         }
     }
@@ -242,8 +239,10 @@ class NewClient extends Thread {
 
                 sender.writeUnshared(myMail);
             }
-        } catch (Exception e) {
-            System.out.print("[Server]");
+        } catch (EOFException e) {
+            System.out.println("Cliente desligou-se!");
+            return;
+        }catch(Exception e){
             e.printStackTrace();
         }
     }
@@ -315,7 +314,7 @@ class BackupServer extends Thread {
 
                         PropertiesReaderServer prop = new PropertiesReaderServer();
                         prop.switchIPS();
-                        new Server(false);
+                        new Server("backup_to_primary");
                     }
                 }
 

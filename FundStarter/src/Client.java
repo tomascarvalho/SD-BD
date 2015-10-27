@@ -40,7 +40,7 @@ public class Client {
         port1 = properties.getPrimaryPort();
         port2 = properties.getSecundaryPort();
 
-        connectionFunction();
+        connectionFunction(false);
 
         try {
                 
@@ -55,12 +55,11 @@ public class Client {
     /**
      * Função responsável por fazer a conecção do servidor
      */
-    public void connectionFunction() {
+    public void connectionFunction(boolean reconnect) {
 
         int portTemp;
         String ipTemp;
 
-        while (true) {
             try {
 
                 /**
@@ -111,8 +110,12 @@ public class Client {
                     }
                 }
             }
+            
+            if(reconnect){
+                System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");
+            }
 
-        }
+            
     }
 
     /**
@@ -147,7 +150,7 @@ public class Client {
             return newResponse.getResponse();
 
         } catch (IOException ex) {
-            connectionFunction();
+            connectionFunction(true);
         } catch (ClassNotFoundException ex) {
             System.out.println("Classe não encontrada!");
         }
