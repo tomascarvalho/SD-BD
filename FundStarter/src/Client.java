@@ -43,6 +43,7 @@ public class Client {
         connectionFunction();
 
         try {
+                
 
             mainMenu();
         } catch (IOException e) {

@@ -23,6 +23,9 @@ public class Server {
     private int backupPort;
     private String backupIP;
     private String rmiLocation;
+    private DatagramSocket conectionTest;
+    private DatagramPacket firstPing;
+    private InetAddress conection;
 
     public Server(boolean flag) {
         try {
@@ -39,13 +42,29 @@ public class Server {
             backupIP = properties.getBackupIP();
             rmiLocation = properties.getRmiLocation();
 
-
-
+            try {
+                System.out.println("cenas");
+                conection = InetAddress.getByName(serverIP);
+                byte[] message = "alive".getBytes();
+                firstPing = new DatagramPacket(message, message.length,conection,UDPPort);
+                conectionTest = new DatagramSocket();
+               
+                //conectionTest.setSoTimeout(1000);
+                conectionTest.send(firstPing);
+                 if(!conectionTest.isConnected()){
+                    System.out.println("pilas");
+                }
+                System.out.println("cenas");
+            } catch (Exception e) {
+                System.out.print("ola");
+                flag=false;
+                conectionTest.close();
+            }
 
             if (flag) {
                 new BackupServer(serverIP, UDPPort);
             } else {
-               
+
                 ServerSocket conectionToClient = new ServerSocket(serverPort);
                 Socket cliente;
 
@@ -79,14 +98,14 @@ public class Server {
         } catch (IOException e) {
             /**
              * Esta excepção é apanhada quando já existe um servidor activo. Neste caso o servidor vai agir como servidor backup.
-             */
+             *
             if (e.getMessage().equals("Address already in use")) {
                 new BackupServer(serverIP, UDPPort);
 
             } else {
                 e.printStackTrace();
-            }
-
+            }*/
+            System.out.println("oioi");
         } catch (Exception e) {
             System.out.print("[Server]");
             e.printStackTrace();
@@ -161,12 +180,10 @@ class NewClient extends Thread {
 
                     if (myMail.getResponse()[0].equals("log_in_correcto")) {
                         myUserID = (int) myMail.getResponse()[1];
-                    }
-                    else if(myMail.getResponse()[0].equals("log_in_error")){
+                    } else if (myMail.getResponse()[0].equals("log_in_error")) {
                         System.out.println("Log in errado (Server error)");
                         myUserID = (int) myMail.getResponse()[1];
                     }
-                    
 
                     myMail.setStage(4);
 
