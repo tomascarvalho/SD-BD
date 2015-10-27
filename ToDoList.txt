@@ -1,4 +1,9 @@
-﻿——>Tratar das excepções
+﻿O que vai dar cocó:
+- Criar cliente: Já não temos apelido nem nome na BD! Cuidado!
+- Criar Projecto: É preciso dar as novas coisas!
+
+
+——>Tratar das excepções
 ——>Fazer funções:
 ———————> Listar Projectos actuais, com o seu progresso (FEITO)
 ———————> Listar Projectos Antigos (FEITO)
