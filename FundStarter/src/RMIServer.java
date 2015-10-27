@@ -37,14 +37,42 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         super();
     }
 
-    public ClientRequest verificaLogIn(ClientRequest person) throws RemoteException {
+    public ClientRequest verificaLogIn(ClientRequest clrqst) throws RemoteException {
 
-        resposta[0] = "userrec";
-        resposta[1] = 11;
+        Object[] objecto = clrqst.getRequest();
+        String[] person = (String[])objecto[1];
+        String user = person[0];
+        System.out.println(user);
+        String password = person[1];
+        int id = -1;
+      
+        try{
+            query = "SELECT id, username, pass FROM utilizador WHERE username = ? AND pass = ?";
+            preparedstatement = connection.prepareStatement(query);
+            preparedstatement.setString(1, user);
+            preparedstatement.setString(2, password);
+            rs = preparedstatement.executeQuery();
+            if (rs.next()){
+                System.out.println("O user existe e está correcto");
+                resposta[0] = "log_in_correcto";
+                id = rs.getInt("id");
+                resposta[1] = id;
+            }
+            else{
+                System.out.println("User/pass incorrecta/ não existentes");
+                resposta[0] = "log_in_error";
+                resposta[1] = id;
+            }
+                
 
-        person.setResponse(resposta);
+        }catch(SQLException ex){
+            System.err.println("SQLException: "+ex);
+        }
         
-        return person;
+        
+        clrqst.setResponse(resposta);
+        
+        return clrqst;
     }
 
     public ClientRequest novoUtilizador(ClientRequest clrqst) throws RemoteException {
@@ -61,7 +89,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             request = connection.createStatement();
             rs = request.executeQuery(query);
             
-            if (!rs.next())
+            if (!rs.next()) //User não existe, logo insere
             {
                 try {
                     query = "INSERT INTO utilizador (nome, apelido, username, pass, saldo) VALUES (?,?,?,?,?)";
@@ -131,14 +159,16 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
         clrqst.setStage(2);
         myRequests.add(clrqst);
+        String myUserID = ""+clrqst.getRequest()[0];
 
         try {
-            query = "INSERT INTO projecto (titulo, descricao, valorpretendido, valoractual) VALUES (?,?,?,?)";
+            query = "INSERT INTO projecto (id_utilizador, titulo, descricao, valorpretendido, valoractual) VALUES (?,?,?,?,?)";
             preparedstatement = connection.prepareStatement(query);
-            preparedstatement.setString(1, projectInfo[0]);
-            preparedstatement.setString(2, projectInfo[1]);
-            preparedstatement.setInt(3, Integer.parseInt(projectInfo[2]));
-            preparedstatement.setInt(4, 0);
+            preparedstatement.setInt(1, Integer.parseInt(myUserID));
+            preparedstatement.setString(2, projectInfo[0]);
+            preparedstatement.setString(3, projectInfo[1]);
+            preparedstatement.setInt(4, Integer.parseInt(projectInfo[2]));
+            preparedstatement.setInt(5, 0);
             preparedstatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -215,24 +245,68 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
     public ClientRequest getActualProjects(ClientRequest clrqst) throws RemoteException {
         
+        int i;
         System.out.println("[RMI Server] Função <getActualProjects> chamada!");
+        String[] actual_projects = new String[2000];
+        Object[] objecto = clrqst.getRequest();
+        int choice = (int)objecto[1];
         
         clrqst.setStage(2);
         myRequests.add(clrqst);
         
         try{
-            query = "SELECT * FROM projecto WHERE status = TRUE";
+            
+            if(choice == 0)
+                query = "SELECT * FROM projecto WHERE status = TRUE";
+            else
+                query = "SELECT * FROM projecto WHERE status = FALSE";
             request = connection.createStatement();
             rs = request.executeQuery(query);
+            i = 0;
             if (!rs.next())
             {
-                System.out.println("Nao ha projectos activos"); //Queremos mandar isto para o cliente?
+                if (choice == 0){
+                    System.out.println("Nao ha projectos activos"); //Queremos mandar isto para o cliente?
+                    actual_projects[0]= "error_no_active_projects";
+                    resposta[0] = actual_projects;
+                }
+                else{
+                    System.out.println("Não há projectos antigos");
+                    actual_projects[0]= "error_no_old_projects";
+                    resposta[0] = actual_projects;
+                }
+                
             }
             
-            //Aqui quero percorrer os projectos e mandar algo como o título e o ID?
-            rs.next();
-            resposta[0] = rs.getInt("saldo");
+            //Aqui percorro os projectos e mando o título e o ID
+            
+            else {
+            
+                actual_projects[i] = ""+rs.getInt("id");
+                i++;
+                actual_projects[i] = rs.getString("titulo");
+                i++;
+                actual_projects[i] = ""+rs.getInt("valoractual");
+                i++;
+                actual_projects[i] = ""+rs.getInt("valorpretendido");
+                i++;
+                
+                while (rs.next()) {
 
+                    actual_projects[i] = ""+rs.getInt("id");
+                    i++;
+                    actual_projects[i] = rs.getString("titulo");
+                    i++;
+                    actual_projects[i] = ""+rs.getInt("valoractual");
+                    i++;
+                    actual_projects[i] = ""+rs.getInt("valorpretendido");
+                    i++;
+              
+                }
+                resposta[0] = actual_projects;
+            }
+            resposta[1] = i;
+            
             clrqst.setResponse(resposta);
             clrqst.setStage(3);
 

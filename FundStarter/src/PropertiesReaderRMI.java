@@ -31,7 +31,7 @@ public class PropertiesReaderRMI {
         Properties prop = new java.util.Properties();
 
         try {
-            input = new FileInputStream("./build/classes/configRMI.properties");
+            input = new FileInputStream("src/configRMI.properties");
 
             if (input == null) {
                 System.out.println("[RMIServer]Não encontrei ficheiro de configurações!");

@@ -9,7 +9,7 @@ import java.rmi.*;
  *  Ano Lectivo 2015/1016
  *  Carlos Pinto 2011143469
  *  Diana Umbelino 2012******
- *  Tomás Carvalho 2012******
+ *  Tomás Carvalho 2012138578
  */
 /**
  *
@@ -24,7 +24,7 @@ public class Server {
     private String backupIP;
     private String rmiLocation;
 
-    public Server() {
+    public Server(boolean flag) {
         try {
 
             PropertiesReaderServer properties = new PropertiesReaderServer();
@@ -38,43 +38,42 @@ public class Server {
             backupPort = properties.getBackupPort();
             backupIP = properties.getBackupIP();
             rmiLocation = properties.getRmiLocation();
-            
-      
-            InetAddress teste= InetAddress.getByName(null);
-                
-            System.out.println("Teste:"+teste.toString());
-            
-            if(teste.toString().equals("localhost/127.0.0.1")){
-                System.out.println("CARALHO!");
-            }
 
-            ServerSocket conectionToClient = new ServerSocket(serverPort);
-            Socket cliente;
 
-            /**
-             * Cria uma intância da classe UDPServer para receber ping's do servidor backup e responder para mostrar ao backup que ainda está vivo.
-             */
-            UDPServer conectServer = new UDPServer(UDPPort);
 
-            /**
-             * Cria ligação com o servidor RMI.
-             */
-            RMIServerInterface remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
 
-            System.out.println("[Server] Servidor à escuta no porto " + serverPort);
-
-            while (true) {
+            if (flag) {
+                new BackupServer(serverIP, UDPPort);
+            } else {
+               
+                ServerSocket conectionToClient = new ServerSocket(serverPort);
+                Socket cliente;
 
                 /**
-                 * Espera que um cliente se ligue.
+                 * Cria uma intância da classe UDPServer para receber ping's do servidor backup e responder para mostrar ao backup que ainda está vivo.
                  */
-                cliente = conectionToClient.accept();
+                UDPServer conectServer = new UDPServer(UDPPort);
 
                 /**
-                 * Por cada cliente que se liga, vai criar uma thread que fica encarregue de lidar com ele.
+                 * Cria ligação com o servidor RMI.
                  */
-                new NewClient(cliente, remoteConection);
+                RMIServerInterface remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
 
+                System.out.println("[Server] Servidor à escuta no porto " + serverPort);
+
+                while (true) {
+
+                    /**
+                     * Espera que um cliente se ligue.
+                     */
+                    cliente = conectionToClient.accept();
+
+                    /**
+                     * Por cada cliente que se liga, vai criar uma thread que fica encarregue de lidar com ele.
+                     */
+                    new NewClient(cliente, remoteConection);
+
+                }
             }
 
         } catch (IOException e) {
@@ -97,7 +96,7 @@ public class Server {
 
     public static void main(String[] args) {
 
-        new Server();
+        new Server(true);
 
     }
 }
@@ -160,9 +159,14 @@ class NewClient extends Thread {
                     postCard.setStage(1);
                     myMail = remoteConection.verificaLogIn(postCard);
 
-                    if (myMail.getResponse()[0].equals("userrec")) {
+                    if (myMail.getResponse()[0].equals("log_in_correcto")) {
                         myUserID = (int) myMail.getResponse()[1];
                     }
+                    else if(myMail.getResponse()[0].equals("log_in_error")){
+                        System.out.println("Log in errado (Server error)");
+                        myUserID = (int) myMail.getResponse()[1];
+                    }
+                    
 
                     myMail.setStage(4);
 
@@ -190,6 +194,7 @@ class NewClient extends Thread {
                 } else if (postCard.getRequest()[0].equals("new_project")) {
 
                     postCard.setStage(1);
+                    postCard.getRequest()[0] = myUserID;
 
                     myMail = remoteConection.novoProjecto(postCard);
 
@@ -211,8 +216,8 @@ class NewClient extends Thread {
 
                     myMail.setStage(4);
 
-                } else if (postCard.getRequest()[0].equals("list_actual_projects")) {
-                    System.out.print("Vim consultar os projectos actuais!\n");
+                } else if ((postCard.getRequest()[0].equals("list_actual_projects")) || (postCard.getRequest()[0].equals("list_old_projects"))) {
+                    System.out.print("Vim consultar os projectos!\n");
                     postCard.setStage(1);
 
                     myMail = remoteConection.getActualProjects(postCard);
@@ -296,7 +301,7 @@ class BackupServer extends Thread {
 
                         PropertiesReaderServer prop = new PropertiesReaderServer();
                         prop.switchIPS();
-                        new Server();
+                        new Server(false);
                     }
                 }
 
