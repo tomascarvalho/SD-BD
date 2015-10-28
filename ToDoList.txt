@@ -14,7 +14,7 @@
 ———————> Consultar recompensas
 ———————> Doar dinheiro ao projecto
 ———————> Enviar mensagens para o projecto
-———————> Criar um projecto (FEITO, falta acrescentar as recompensas)
+———————> Criar um projecto (FEITO)
 ———————> Adicionar e Renovar recompensas ao projecto
 ———————> Cancelar Projecto
 ———————> Fim do projecto 

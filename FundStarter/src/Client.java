@@ -310,6 +310,7 @@ public class Client {
             System.out.println("Tipo de Produto: ");
             newProjectData[4+j] = sc.nextLine();
             
+            
         }
             
         
@@ -325,7 +326,7 @@ public class Client {
         }
     }
     
-    public void listarProjectosActuais(int choice) { // if choice 0 -> active projects
+    public void listarProjectosActuais(int choice) throws IOException, ClassNotFoundException { // if choice 0 -> active projects
                                                      // if choice 1 -> old projects
         
         String array_projectos[];
@@ -346,15 +347,16 @@ public class Client {
         int j = 0;
        
         array_projectos = (String[])postCard[0]; //ISTO ESTA A NULL PORQUE?
-        if(choice == 0) {
-            System.out.println("Projectos Actuais: ");
-        }
-        else{
-            System.out.println("Projectos Antigos: ");
-        }
         
         if ((!array_projectos[0].equals("error_no_active_projects")) || (!array_projectos[0].equals("error_no_old_projects")))
         {
+            if(choice == 0) {
+            System.out.println("Projectos Actuais: ");
+            }
+            else{
+                System.out.println("Projectos Antigos: ");
+            }
+        
             while (j<i){
                 id = array_projectos[j];
                 j++;
@@ -369,6 +371,23 @@ public class Client {
                 else
                     System.out.println("ID: "+id+" Titulo: "+titulo);
             }
+            if (choice == 0){
+                System.out.println("1 - Consultar detalhes de um projcto");
+                System.out.println("2 - Voltar ao Menu de Conta");
+                choice = sc.nextInt();
+                while (choice!=0 && choice != 1){
+                    System.out.println("1 - Consultar detalhes de um projcto");
+                    System.out.println("2 - Voltar ao Menu de Conta");
+                    
+                }
+                if (choice == 0){
+                    System.out.println("ID do projecto a consultar: ");
+                    choice = sc.nextInt();
+                    consultarDetalhesProjecto(choice);
+                }
+                menuConta();
+              
+            }
         }
         else{
             if (choice == 1)
@@ -380,8 +399,14 @@ public class Client {
         
     }
     
-    
-
+    public void consultarDetalhesProjecto(int id){
+        
+        postCard[0] = "list_project_details";
+        postCard[1] = id;
+        postCard = postOffice(postCard);
+        
+        
+    }
     public void mainMenu() throws IOException, ClassNotFoundException {
 
         boolean logResult = true;
