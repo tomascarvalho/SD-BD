@@ -3,6 +3,8 @@ import java.net.*;
 import java.io.*;
 import java.rmi.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * FundStart
@@ -29,7 +31,7 @@ public class Server {
     private int userIDCounter;
 
     public Server(String flag) {
-        
+
         try {
 
             PropertiesReaderServer properties = new PropertiesReaderServer();
@@ -43,7 +45,7 @@ public class Server {
             backupPort = properties.getBackupPort();
             backupIP = properties.getBackupIP();
             rmiLocation = properties.getRmiLocation();
-            userIDCounter=0;
+            userIDCounter = 0;
 
             try {
                 System.out.println("conection test");
@@ -71,11 +73,10 @@ public class Server {
                  */
                 RMIServerInterface remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
 
-                if (flag.equals("backup_to_primary")) {
-                    System.out.println("[Server]Vou avisar o rmi para desligar o outro servidor!");
+                /*if (flag.equals("backup_to_primary")) {
+                 System.out.println("[Server]Vou avisar o rmi para desligar o outro servidor!");
 
-                }
-
+                 }*/
                 System.out.println("[Server] Servidor à escuta no porto " + serverPort);
 
                 while (true) {
@@ -84,13 +85,11 @@ public class Server {
                      * Espera que um cliente se ligue.
                      */
                     cliente = conectionToClient.accept();
-                    
-                    
 
                     /**
                      * Por cada cliente que se liga, vai criar uma thread que fica encarregue de lidar com ele.
                      */
-                    new NewClient(cliente, remoteConection);
+                    new NewClient(cliente, remoteConection, rmiLocation);
 
                 }
             }
@@ -129,8 +128,9 @@ class NewClient extends Thread {
     int myUserID;
     int myProjectID;
     String alterRequest;
+    String rmiLocation;
 
-    NewClient(Socket cliente, RMIServerInterface rmiConection) {
+    NewClient(Socket cliente, RMIServerInterface rmiConection, String ipRMI) {
 
         try {
             /**
@@ -138,6 +138,7 @@ class NewClient extends Thread {
              */
             myClient = cliente;
             remoteConection = rmiConection;
+            rmiLocation = ipRMI;
 
             /**
              * cria canais de comunicação com os clientes.
@@ -240,9 +241,9 @@ class NewClient extends Thread {
                 } else if (postCard.getRequest()[0].equals("see_last_request")) {
 
                     System.out.println("Vim consultar ultimo request");
-                    
-                    myMail=remoteConection.seeLastRequest(postCard);
-                    
+
+                    myMail = remoteConection.seeLastRequest(postCard);
+
                 }
 
                 sender.writeUnshared(myMail);
@@ -250,8 +251,20 @@ class NewClient extends Thread {
         } catch (EOFException e) {
             System.out.println("Cliente desligou-se!");
             return;
+        } catch (RemoteException e) {
+            System.out.println("[Server]Erro no RMI!");
+            while (true) {
+                try {
+                    remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
+                    return;
+                } catch (NotBoundException ex) {
+                    System.out.println("[Server]Não me consigo ligar ao RMI!");
+                } catch (MalformedURLException | RemoteException exp) {
+                    System.out.println("[Server]RMI morreu para a vida!");
+                }
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();x
         }
     }
 }
