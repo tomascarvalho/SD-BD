@@ -410,13 +410,14 @@ public class Client {
             if (choice == 0){
                 System.out.println("1 - Consultar detalhes de um projcto");
                 System.out.println("2 - Voltar ao Menu de Conta");
+                System.out.println(">>>");
                 choice = sc.nextInt();
-                while (choice!=0 && choice != 1){
+                while ((choice!=1)&& (choice != 2)){
                     System.out.println("1 - Consultar detalhes de um projcto");
                     System.out.println("2 - Voltar ao Menu de Conta");
-                    
+                    choice = sc.nextInt();
                 }
-                if (choice == 0){
+                if (choice == 1){
                     System.out.println("ID do projecto a consultar: ");
                     choice = sc.nextInt();
                     consultarDetalhesProjecto(choice);
