@@ -164,12 +164,10 @@ class NewClient extends Thread {
                 postCard = null;
                 postCard = (ClientRequest) reciver.readUnshared();
 
-                alterRequest = postCard.getRequestID() + ("_" + myUserID);
-                postCard.setRequestID(alterRequest);
                 System.out.println(postCard.getRequest()[0]);
 
                 System.out.println("[Server] Li a mensagem do cliente na boa.");
-                //mudar depois para um switch
+                
                 if (postCard.getRequest()[0].equals("log")) {
 
                     postCard.setStage(1);
@@ -235,6 +233,12 @@ class NewClient extends Thread {
 
                     myMail.setStage(4);
 
+                }
+                else if(postCard.getRequest()[0].equals("see_last_request")){
+                    
+                    System.out.println("Vim consultar ultimo request");
+                  
+                    System.out.println("Last request id->"+postCard.getRequestID());
                 }
 
                 sender.writeUnshared(myMail);

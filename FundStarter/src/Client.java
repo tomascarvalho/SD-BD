@@ -11,7 +11,6 @@ import java.io.*;
  *  Diana Umbelino 2012******
  *  Tomás Carvalho 2012******
  */
-
 /**
  *
  * @author gabrieloliveira
@@ -27,6 +26,7 @@ public class Client {
     private Object[] postCard = new Object[2];
     private ArrayList<ClientRequest> myRequest = new ArrayList<ClientRequest>();
     private PropertiesReaderClient properties;
+    private int myId;
     private Scanner sc = new Scanner(System.in);
 
     public Client() throws ClassNotFoundException {
@@ -43,7 +43,6 @@ public class Client {
         connectionFunction(false);
 
         try {
-                
 
             mainMenu();
         } catch (IOException e) {
@@ -59,7 +58,7 @@ public class Client {
 
         int portTemp;
         String ipTemp;
-
+        while (true) {
             try {
 
                 /**
@@ -75,6 +74,12 @@ public class Client {
                 sender.flush();
 
                 reciver = new ObjectInputStream(conectionToServer.getInputStream());
+
+                if (reconnect) {
+                    System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");
+                    checkRequest();
+                }
+                
                 return;
 
             } catch (IOException e) {
@@ -97,6 +102,12 @@ public class Client {
                          */
                         properties.writeOnFile();
                         conectionError = 0;
+
+                        if (reconnect) {
+                            System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");
+                            checkRequest();
+                        }
+                        
                         return;
                     } catch (IOException exp) {
                         System.out.println("[Cliente] Não me consigo ligar ao Servidor de Backup.");
@@ -110,12 +121,21 @@ public class Client {
                     }
                 }
             }
-            
-            if(reconnect){
-                System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");
-            }
+        }
 
-            
+    }
+
+    public void checkRequest() {
+
+        int lastRequestIndex = myRequest.size() - 1;
+
+        postCard[0] = "see_last_request";
+        postCard[1] = myRequest.get(lastRequestIndex).getRequestID();
+
+        postCard = postOffice(postCard);
+
+        System.out.println("Last Request Stage->" + postCard[0]);
+
     }
 
     /**
@@ -128,11 +148,11 @@ public class Client {
         String requestID;
 
         try {
-            
+
             if (myRequest.size() == 0) {
-                requestID = "1";
+                requestID = "1_"+myId;
             } else {
-                requestID = "" + (myRequest.size()+1);
+                requestID = "" + (myRequest.size() + 1)+"_"+myId;
             }
 
             newRequest = new ClientRequest(requestID, postCard);
@@ -172,7 +192,6 @@ public class Client {
         int requestIndex = myRequest.indexOf(oldrqst);
 
         myRequest.set(requestIndex, newrqst);
-        
 
     }
 
@@ -200,6 +219,7 @@ public class Client {
         postCard = postOffice(postCard);
 
         if (postCard[0].equals("log_in_correcto")) {
+            myId=(int)postCard[1];
             return true;
         } else {
             return false;
@@ -211,7 +231,6 @@ public class Client {
 
         String[] newUserData = new String[2];
 
-   
         System.out.print("\t\tUsername:");
         newUserData[0] = sc.nextLine();
         System.out.print("\t\tPassword:");
@@ -223,6 +242,7 @@ public class Client {
         postCard = postOffice(postCard);
 
         if (postCard[0].equals("infosave")) {
+            myId=(int)postCard[1];
             return true;
         } else {
             return false;
@@ -236,8 +256,6 @@ public class Client {
         postCard[1] = null;
 
         postCard = postOffice(postCard);
-        
-            
 
         System.out.println("\t\tO seu saldo é de " + postCard[0] + " euros.");
 
@@ -265,54 +283,53 @@ public class Client {
         newProjectData[3] = sc.nextLine(); //Data Limite
         System.out.println("\n\tQuantas Recompensas quer oferecer: ");
         //while(!sc.hasNextInt()) sc.next();
-        num_recompensas= sc.nextInt();
+        num_recompensas = sc.nextInt();
         sc.nextLine();
-        newProjectData[4] = ""+num_recompensas;
-        while (i<num_recompensas){
+        newProjectData[4] = "" + num_recompensas;
+        while (i < num_recompensas) {
             i++;
             j++;
-            System.out.println("Recompensa nº"+i);
+            System.out.println("Recompensa nº" + i);
             System.out.println("Montante a doar: ");
             montante = sc.nextLine();
-            newProjectData[4+j] = montante;
+            newProjectData[4 + j] = montante;
             j++;
             System.out.println("Recompensa associada: ");
-            newProjectData[4+j] = sc.nextLine();   
+            newProjectData[4 + j] = sc.nextLine();
         }
         j++;
         System.out.println("\n\t Quantos níveis extra existem: ");
         //while(!sc.hasNextInt()) sc.next();
         num_niveis_extra = sc.nextInt();
         sc.nextLine();
-        newProjectData[4+j] = ""+num_niveis_extra;
+        newProjectData[4 + j] = "" + num_niveis_extra;
         i = 0;
-        while (i<num_niveis_extra){
+        while (i < num_niveis_extra) {
             i++;
             j++;
-            System.out.println("Nivel Extra nº"+i+"\nValor: ");
+            System.out.println("Nivel Extra nº" + i + "\nValor: ");
             //while(!sc.hasNextInt()) sc.next();
             montante = sc.nextLine();
-            newProjectData[4+j] = montante;
+            newProjectData[4 + j] = montante;
             j++;
             System.out.println("Nivel Extra: ");
-            newProjectData[4+j] = sc.nextLine();   
+            newProjectData[4 + j] = sc.nextLine();
         }
         j++;
         System.out.println("\n\t Quantos tipos diferentes de produto existem: ");
         //while(!sc.hasNextInt()) sc.next();
         num_produto = sc.nextInt();
         sc.nextLine();
-        newProjectData[4+j] = ""+num_produto;
+        newProjectData[4 + j] = "" + num_produto;
         i = 0;
-        while(i< num_produto){
+        while (i < num_produto) {
             i++;
             j++;
             System.out.println("Tipo de Produto: ");
-            newProjectData[4+j] = sc.nextLine();
-            
+            newProjectData[4 + j] = sc.nextLine();
+
         }
-            
-        
+
         postCard[0] = "new_project";
         postCard[1] = newProjectData;
 
@@ -324,38 +341,35 @@ public class Client {
             return false;
         }
     }
-    
+
     public void listarProjectosActuais(int choice) { // if choice 0 -> active projects
-                                                     // if choice 1 -> old projects
-        
+        // if choice 1 -> old projects
+
         String array_projectos[];
         String titulo, id, valoractual, valorpretendido;
-        if (choice == 0){
-            postCard[0] = "list_actual_projects";  
-        }
-        else{
+        if (choice == 0) {
+            postCard[0] = "list_actual_projects";
+        } else {
             postCard[0] = "list_old_projects";
         }
         postCard[1] = choice;
-        
+
         postCard = postOffice(postCard);
-        
+
         String teste;
-        teste = ""+postCard[1];
-        int i = Integer.parseInt(teste); 
+        teste = "" + postCard[1];
+        int i = Integer.parseInt(teste);
         int j = 0;
-       
-        array_projectos = (String[])postCard[0]; //ISTO ESTA A NULL PORQUE?
-        if(choice == 0) {
+
+        array_projectos = (String[]) postCard[0]; //ISTO ESTA A NULL PORQUE?
+        if (choice == 0) {
             System.out.println("Projectos Actuais: ");
-        }
-        else{
+        } else {
             System.out.println("Projectos Antigos: ");
         }
-        
-        if ((!array_projectos[0].equals("error_no_active_projects")) || (!array_projectos[0].equals("error_no_old_projects")))
-        {
-            while (j<i){
+
+        if ((!array_projectos[0].equals("error_no_active_projects")) || (!array_projectos[0].equals("error_no_old_projects"))) {
+            while (j < i) {
                 id = array_projectos[j];
                 j++;
                 titulo = array_projectos[j];
@@ -364,23 +378,21 @@ public class Client {
                 j++;
                 valorpretendido = array_projectos[j];
                 j++;
-                if (choice == 0)
-                    System.out.println("ID: "+id+" Titulo: "+titulo+" Progresso: "+valoractual+" euros angariados / "+valorpretendido+" euros pretendidos");
-                else
-                    System.out.println("ID: "+id+" Titulo: "+titulo);
+                if (choice == 0) {
+                    System.out.println("ID: " + id + " Titulo: " + titulo + " Progresso: " + valoractual + " euros angariados / " + valorpretendido + " euros pretendidos");
+                } else {
+                    System.out.println("ID: " + id + " Titulo: " + titulo);
+                }
+            }
+        } else {
+            if (choice == 1) {
+                System.out.println("Não há projectos activos!");
+            } else {
+                System.out.println("Não há projectos antigos!");
             }
         }
-        else{
-            if (choice == 1)
-                System.out.println("Não há projectos activos!");
-            else
-                System.out.println("Não há projectos antigos!");
-        }
-        
-        
+
     }
-    
-    
 
     public void mainMenu() throws IOException, ClassNotFoundException {
 
@@ -393,7 +405,7 @@ public class Client {
         System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
         userPick = sc.nextLine();
         //Verificar Escolhas
-        while ((userPick.equals("1") == false) && (userPick.equals("2") == false) && (userPick.equals("3") == false) && (userPick.equals("4")== false)) {
+        while ((userPick.equals("1") == false) && (userPick.equals("2") == false) && (userPick.equals("3") == false) && (userPick.equals("4") == false)) {
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
             System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
             userPick = sc.nextLine();
@@ -412,10 +424,9 @@ public class Client {
 
         } else if (userPick.equals("3")) {
             listarProjectosActuais(0);
-        } else if(userPick.equals("4")){
+        } else if (userPick.equals("4")) {
             listarProjectosActuais(1);
         }
-            
 
         menuConta();
 
@@ -441,10 +452,10 @@ public class Client {
             criaProjecto(); //Caso de sucesso/falha?
         } else if (userPick.equals("3")) {
             listarProjectosActuais(0);
-        } else if(userPick.equals("4")){
+        } else if (userPick.equals("4")) {
             listarProjectosActuais(1);
         }
-        
+
         menuConta();
 
     }
