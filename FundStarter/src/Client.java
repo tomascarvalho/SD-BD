@@ -411,7 +411,7 @@ public class Client {
                 System.out.println("1 - Consultar detalhes de um projcto");
                 System.out.println("2 - Voltar ao Menu de Conta");
                 choice = sc.nextInt();
-                while (choice!=0 && choice != 1){
+                while (choice!=0  || choice != 1){
                     System.out.println("1 - Consultar detalhes de um projcto");
                     System.out.println("2 - Voltar ao Menu de Conta");
                     
