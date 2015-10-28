@@ -215,8 +215,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
                     preparedstatement = connection.prepareStatement(query);
                     preparedstatement.setInt(2, Integer.parseInt(projectInfo[4+j]));
-                    
-
+                    j++;
+                 
                     preparedstatement.setString(1, projectInfo[4 + j]);
                     preparedstatement.setInt(3, id);
                     preparedstatement.executeUpdate();
@@ -227,16 +227,20 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             j++;
             i = 0;
 
-            k = Integer.parseInt(projectInfo[4 + j]);
-            while (i < k) {
-                i++;
-                j++;
-                query = "INSERT INTO product_type (descricao, id_project, contador) VALUES (?,?,?)";
-                preparedstatement = connection.prepareStatement(query);
-                preparedstatement.setString(1, projectInfo[4 + j]);
-                preparedstatement.setInt(2, id);
-                preparedstatement.setInt(3, 0);
+            if (Integer.parseInt(projectInfo[4 + j]) != 0){
+                k = Integer.parseInt(projectInfo[4 + j]);
+                while (i < k) {
+                    i++;
+                    j++;
+                    query = "INSERT INTO product_type (descricao, id_project, contador) VALUES (?,?,?)";
+                    preparedstatement = connection.prepareStatement(query);
+                    preparedstatement.setString(1, projectInfo[4 + j]);
+                    preparedstatement.setInt(2, id);
+                    preparedstatement.setInt(3, 0);
+                }
+                
             }
+            
 
 
             resposta[0] = "infosave";
