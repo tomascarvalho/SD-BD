@@ -2,6 +2,7 @@
 import java.net.*;
 import java.io.*;
 import java.rmi.*;
+import java.util.ArrayList;
 
 /*
  * FundStart
@@ -24,9 +25,11 @@ public class Server {
     private String backupIP;
     private String rmiLocation;
     private Socket tryConnectToServer;
-    private boolean backup=true;
+    private boolean backup = true;
+    private int userIDCounter;
 
     public Server(String flag) {
+        
         try {
 
             PropertiesReaderServer properties = new PropertiesReaderServer();
@@ -40,20 +43,21 @@ public class Server {
             backupPort = properties.getBackupPort();
             backupIP = properties.getBackupIP();
             rmiLocation = properties.getRmiLocation();
+            userIDCounter=0;
 
             try {
                 System.out.println("conection test");
-                tryConnectToServer=new Socket(serverIP,serverPort);
-                
+                tryConnectToServer = new Socket(serverIP, serverPort);
+
             } catch (IOException e) {
-                backup=false;
+                backup = false;
             }
 
             if (backup) {
                 tryConnectToServer.close();
                 new BackupServer(serverIP, UDPPort);
             } else {
-                
+
                 ServerSocket conectionToClient = new ServerSocket(serverPort);
                 Socket cliente;
                 System.out.println(flag);
@@ -67,11 +71,11 @@ public class Server {
                  */
                 RMIServerInterface remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
 
-                if(flag.equals("backup_to_primary")){
+                if (flag.equals("backup_to_primary")) {
                     System.out.println("[Server]Vou avisar o rmi para desligar o outro servidor!");
-                    
+
                 }
-                
+
                 System.out.println("[Server] Servidor à escuta no porto " + serverPort);
 
                 while (true) {
@@ -80,6 +84,8 @@ public class Server {
                      * Espera que um cliente se ligue.
                      */
                     cliente = conectionToClient.accept();
+                    
+                    
 
                     /**
                      * Por cada cliente que se liga, vai criar uma thread que fica encarregue de lidar com ele.
@@ -93,12 +99,10 @@ public class Server {
             /**
              * Esta excepção é apanhada quando já existe um servidor activo. Neste caso o servidor vai agir como servidor backup.
              *
-            if (e.getMessage().equals("Address already in use")) {
-                new BackupServer(serverIP, UDPPort);
-
-            } else {
-                e.printStackTrace();
-            }*/
+             * if (e.getMessage().equals("Address already in use")) { new BackupServer(serverIP, UDPPort);
+             *
+             * } else { e.printStackTrace(); }
+             */
             System.out.println("Alguém fechou o socket!");
         } catch (Exception e) {
             System.out.print("[Server]");
@@ -147,10 +151,10 @@ class NewClient extends Thread {
              */
             this.start();
 
-        } catch(EOFException ex){
+        } catch (EOFException ex) {
             System.out.println("Servidor Backup tentou ligar-se");
             return;
-        }catch (IOException e) {
+        } catch (IOException e) {
             System.out.print("[NewClient]");
             e.printStackTrace();
         }
@@ -167,7 +171,7 @@ class NewClient extends Thread {
                 System.out.println(postCard.getRequest()[0]);
 
                 System.out.println("[Server] Li a mensagem do cliente na boa.");
-                
+
                 if (postCard.getRequest()[0].equals("log")) {
 
                     postCard.setStage(1);
@@ -184,7 +188,7 @@ class NewClient extends Thread {
 
                 } else if (postCard.getRequest()[0].equals("new")) {
                     System.out.println("Fui chamado!");
-                   
+
                     postCard.setStage(1);
 
                     myMail = remoteConection.novoUtilizador(postCard);
@@ -233,12 +237,12 @@ class NewClient extends Thread {
 
                     myMail.setStage(4);
 
-                }
-                else if(postCard.getRequest()[0].equals("see_last_request")){
-                    
+                } else if (postCard.getRequest()[0].equals("see_last_request")) {
+
                     System.out.println("Vim consultar ultimo request");
-                  
-                    System.out.println("Last request id->"+postCard.getRequestID());
+                    
+                    myMail=remoteConection.seeLastRequest(postCard);
+                    
                 }
 
                 sender.writeUnshared(myMail);
@@ -246,7 +250,7 @@ class NewClient extends Thread {
         } catch (EOFException e) {
             System.out.println("Cliente desligou-se!");
             return;
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

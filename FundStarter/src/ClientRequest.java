@@ -7,8 +7,8 @@ import java.io.Serializable;
  *  Ano Lectivo 2015/1016
  *  Carlos Pinto 2011143469
  *  Diana Umbelino 2012******
- *  Tomás Carvalho 2012******
- */
+ *  Tomás Carvalho 2012138578
+*/
 /**
  *
  * @author gabrieloliveira
@@ -32,14 +32,16 @@ public class ClientRequest implements Serializable{
     private Object[] request;
     private Object[] response; 
     private String[] stgType={"clrqst","inprog","rmiin","rmiout","bckcl","done"};
+    private String timestamp;
     
     
-    public ClientRequest(String id,Object[] pedido){
+    public ClientRequest(String id,Object[] pedido,String time){
         
         this.requestID=id;
         this.request=pedido;
         this.stage=stgType[0];
         this.response=null;
+        this.timestamp=time;
     }
     
     
@@ -74,6 +76,11 @@ public class ClientRequest implements Serializable{
     public void setResponse(Object[] response) {
         this.response = response;
     }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+    
     
     
 }

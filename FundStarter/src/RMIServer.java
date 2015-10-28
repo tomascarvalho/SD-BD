@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  *  Ano Lectivo 2015/1016
  *  Carlos Pinto 2011143469
  *  Diana Umbelino 2012******
- *  Tomás Carvalho 2012******
+ *  Tomás Carvalho 2012138578
  */
 /**
  *
@@ -45,7 +45,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         System.out.println(user);
         String password = person[1];
         int id = -1;
-
+        System.out.println("This is a request->" + clrqst.getRequest());
         try {
             query = "SELECT id, username, pass FROM utilizador WHERE username = ? AND pass = ?";
             preparedstatement = connection.prepareStatement(query);
@@ -57,8 +57,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                 resposta[0] = "log_in_correcto";
                 id = rs.getInt("id");
                 resposta[1] = id;
-                
-                
+
                 System.out.println("ID request->" + clrqst.getRequestID());
             } else {
                 System.out.println("User/pass incorrecta/ não existentes");
@@ -359,6 +358,73 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
         }
 
+        return clrqst;
+    }
+
+    public ClientRequest seeLastRequest(ClientRequest clrqst) throws RemoteException {
+        System.out.println("Funçao <seeLastRequest> chamada!");
+        ClientRequest auxRequest = null;
+
+        for (int i = 0; i < myRequests.size(); i++) {
+            if (myRequests.get(i).getRequestID().equals(clrqst.getRequestID())) {
+                if (myRequests.get(i).getTimestamp().equals(clrqst.getTimestamp())) {
+                    auxRequest = myRequests.get(i);
+                    break;
+                }
+            }
+        }
+
+        if (auxRequest == null) {
+            //não entra na puta do switch
+            switch ((String) clrqst.getRequest()[0]) {
+                case "log":
+                    clrqst = verificaLogIn(auxRequest);
+                    break;
+                case "new":
+                    clrqst = novoUtilizador(auxRequest);
+                    break;
+                case "new_project":
+                    clrqst = novoProjecto(auxRequest);
+                    break;
+                case "seesal":
+                    clrqst = getUserSaldo(auxRequest);
+                    System.out.println("CARALHO!");
+                    break;
+                case "list_actual_projects":
+                    clrqst = getActualProjects(auxRequest);
+                    break;
+                case "list_old_projects":
+                    clrqst = getActualProjects(auxRequest);
+                    break;
+            }
+        } else if (auxRequest.getStage().equals("rmiout")) {
+            clrqst = auxRequest;
+        } else {
+            //acho que não chega aqui
+            System.out.println("Entrei dentro do else");
+            switch ((String) auxRequest.getRequest()[0]) {
+                case "log":
+                    clrqst = verificaLogIn(auxRequest);
+                    break;
+                case "new":
+                    clrqst = novoUtilizador(auxRequest);
+                    break;
+                case "new_project":
+                    clrqst = novoProjecto(auxRequest);
+                    break;
+                case "seesal":
+                    clrqst = getUserSaldo(auxRequest);
+                    break;
+                case "list_actual_projects":
+                    clrqst = getActualProjects(auxRequest);
+                    break;
+                case "list_old_projects":
+                    clrqst = getActualProjects(auxRequest);
+                    break;
+            }
+
+        }
+        System.out.println("resposta->"+clrqst);
         return clrqst;
     }
 

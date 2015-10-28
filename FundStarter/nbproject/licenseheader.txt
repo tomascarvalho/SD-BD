@@ -6,7 +6,7 @@ ${licensePrefix} Projecto para a cadeira de Sistemas Distribuidos
 ${licensePrefix} Ano Lectivo 2015/1016
 ${licensePrefix} Carlos Pinto 2011143469
 ${licensePrefix} Diana Umbelino 2012******
-${licensePrefix} Tomás Carvalho 2012******
+${licensePrefix} Tomás Carvalho 2012138578
 <#if licenseLast??>
 ${licenseLast}
 </#if>

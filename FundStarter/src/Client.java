@@ -2,6 +2,8 @@
 import java.net.*;
 import java.util.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * FundStart
@@ -9,7 +11,7 @@ import java.io.*;
  *  Ano Lectivo 2015/1016
  *  Carlos Pinto 2011143469
  *  Diana Umbelino 2012******
- *  Tomás Carvalho 2012******
+ *  Tomás Carvalho 2012138578
  */
 /**
  *
@@ -125,17 +127,29 @@ public class Client {
 
     }
 
-    public void checkRequest() {
+    public void checkRequest() throws IOException {
 
         int lastRequestIndex = myRequest.size() - 1;
 
-        postCard[0] = "see_last_request";
-        postCard[1] = myRequest.get(lastRequestIndex).getRequestID();
+        System.out.println("Last Request->"+myRequest.get(lastRequestIndex).getRequest()[0]);
+        
+        if(!myRequest.get(lastRequestIndex).getStage().equals("done")){
+            postCard[0] = "see_last_request";
+            postCard[1] = myRequest.get(lastRequestIndex).getRequestID();
+            
+            postCard = postOffice(postCard);
+        }
+        
+        else{
+            try {
+                menuConta();
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
 
-        postCard = postOffice(postCard);
-
-        System.out.println("Last Request Stage->" + postCard[0]);
-
+        System.out.println("Resposta do RMI->"+postCard[1]);
     }
 
     /**
@@ -146,6 +160,7 @@ public class Client {
         ClientRequest newRequest;
         ClientRequest newResponse;
         String requestID;
+        Date requestDate=new Date();
 
         try {
 
@@ -155,10 +170,10 @@ public class Client {
                 requestID = "" + (myRequest.size() + 1)+"_"+myId;
             }
 
-            newRequest = new ClientRequest(requestID, postCard);
+            newRequest = new ClientRequest(requestID, postCard,requestDate.toString());
             myRequest.add(newRequest);
             newRequest.setStage(0);
-
+            
             sender.reset();
             sender.writeUnshared(newRequest);
 

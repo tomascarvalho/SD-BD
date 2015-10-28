@@ -7,7 +7,7 @@ import java.rmi.*;
  *  Ano Lectivo 2015/1016
  *  Carlos Pinto 2011143469
  *  Diana Umbelino 2012******
- *  Tomás Carvalho 2012******
+ *  Tomás Carvalho 2012138578
  */
 
 /**
@@ -27,5 +27,7 @@ public interface RMIServerInterface extends Remote {
     public void DB() throws RemoteException;
 
     public ClientRequest novoProjecto(ClientRequest clrqst) throws RemoteException;
+    
+    public ClientRequest seeLastRequest(ClientRequest clrqst) throws RemoteException;
 
 }
