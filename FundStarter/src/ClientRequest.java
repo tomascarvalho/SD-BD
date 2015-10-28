@@ -6,7 +6,7 @@ import java.io.Serializable;
  *  Projecto para a cadeira de Sistemas Distribuidos
  *  Ano Lectivo 2015/1016
  *  Carlos Pinto 2011143469
- *  Diana Umbelino 2012******
+ *  Diana Umbelino 2012169525
  *  Tomás Carvalho 2012138578
 */
 /**

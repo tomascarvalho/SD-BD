@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  *  Projecto para a cadeira de Sistemas Distribuidos
  *  Ano Lectivo 2015/1016
  *  Carlos Pinto 2011143469
- *  Diana Umbelino 2012******
+ *  Diana Umbelino 2012169525
  *  Tomás Carvalho 2012138578
  */
 /**
@@ -410,13 +410,16 @@ public class Client {
             if (choice == 0){
                 System.out.println("1 - Consultar detalhes de um projcto");
                 System.out.println("2 - Voltar ao Menu de Conta");
+                System.out.println(">>>");
                 choice = sc.nextInt();
-                while (choice!=0  || choice != 1){
+
+                while ((choice!=1)&& (choice != 2)){
+
                     System.out.println("1 - Consultar detalhes de um projcto");
                     System.out.println("2 - Voltar ao Menu de Conta");
-                    
+                    choice = sc.nextInt();
                 }
-                if (choice == 0){
+                if (choice == 1){
                     System.out.println("ID do projecto a consultar: ");
                     choice = sc.nextInt();
                     consultarDetalhesProjecto(choice);
@@ -435,6 +438,7 @@ public class Client {
 
     }
 
+
     
     public void consultarDetalhesProjecto(int id){
         
@@ -451,7 +455,7 @@ public class Client {
         String userPick;
 
         conectionError = 0;
-
+            
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
         userPick = sc.nextLine();
