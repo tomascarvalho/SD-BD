@@ -412,7 +412,7 @@ public class Client {
                 System.out.println("2 - Voltar ao Menu de Conta");
                 System.out.println(">>>");
                 choice = sc.nextInt();
-
+        
                 while ((choice!=1)&& (choice != 2)){
 
                     System.out.println("1 - Consultar detalhes de um projcto");
