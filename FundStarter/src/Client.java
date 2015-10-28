@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  *  Projecto para a cadeira de Sistemas Distribuidos
  *  Ano Lectivo 2015/1016
  *  Carlos Pinto 2011143469
- *  Diana Umbelino 2012******
+ *  Diana Umbelino 2012169525
  *  Tomás Carvalho 2012138578
  */
 /**
@@ -409,13 +409,14 @@ public class Client {
 
     }
 
+  
     public void mainMenu() throws IOException, ClassNotFoundException {
 
         boolean logResult = true;
         String userPick;
 
         conectionError = 0;
-
+            
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
         userPick = sc.nextLine();

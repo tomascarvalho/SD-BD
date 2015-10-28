@@ -1,4 +1,5 @@
 ﻿
+
 CREATE TABLE Utilizador
 (
 id 	SERIAL not null,
@@ -31,7 +32,7 @@ CREATE TABLE Projecto
  data_limite DATE ,
  id_niveis_extra INTEGER,
 
- FOREIGN KEY (id_niveis_extra) REFERENCES Niveis_Extra(id),
+-- FOREIGN KEY (id_niveis_extra) REFERENCES Niveis_Extra(id),
  CONSTRAINT Projecto_pk PRIMARY KEY(id)
 );
 

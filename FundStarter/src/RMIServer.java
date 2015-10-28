@@ -7,13 +7,15 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Date;
+
 
 /*
  * FundStart
  *  Projecto para a cadeira de Sistemas Distribuidos
  *  Ano Lectivo 2015/1016
  *  Carlos Pinto 2011143469
- *  Diana Umbelino 2012******
+ *  Diana Umbelino 2012169525
  *  Tomás Carvalho 2012138578
  */
 /**
@@ -288,6 +290,40 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         return clrqst;
     }
 
+    	 public class actualizaProjectosThread extends Thread {
+
+		    public void run() {
+		        Date date = new Date(new java.util.Date().getTime());
+		        System.out.println(date.toString());
+		        
+		        //ArrayList<Date> lista_datas = new ArrayList <Date>();
+		        
+		        Date dataLimite;
+		        try {
+
+			        query = "SELECT data_limite, status FROM projeto";
+			        request = connection.createStatement();
+			        rs = request.executeQuery(query);
+			        
+			        if(rs.next()){
+			        	dataLimite = rs.getDate("data_limite");
+			        	if(dataLimite.before(date)){
+			        		 preparedstatement.setBoolean(2,false);
+			        	
+			        	}
+			        	
+			        }
+			        
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        
+		        }
+
+		    }
+    
+    
     public ClientRequest getActualProjects(ClientRequest clrqst) throws RemoteException {
 
         int i;
@@ -468,7 +504,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         }
 
     }
-
+    
     /**
      * Função responsável para actualizar os pedidos do cliente, a medida que eles vão sendo tratados.
      */
