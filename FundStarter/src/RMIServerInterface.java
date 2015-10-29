@@ -24,6 +24,8 @@ public interface RMIServerInterface extends Remote {
 
     public ClientRequest getUserSaldo(ClientRequest clrqst) throws RemoteException;
     
+    public void terminaProjecto() throws RemoteException;
+    
     public ClientRequest getActualProjects(ClientRequest clrqst) throws RemoteException;
     
     public void DB() throws RemoteException;

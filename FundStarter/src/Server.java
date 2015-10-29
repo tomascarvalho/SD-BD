@@ -1,6 +1,7 @@
 
 import java.net.*;
 import java.io.*;
+import static java.lang.Thread.sleep;
 import java.rmi.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -77,6 +78,7 @@ public class Server {
                  System.out.println("[Server]Vou avisar o rmi para desligar o outro servidor!");
 
                  }*/
+                new cronoThread(remoteConection);
                 System.out.println("[Server] Servidor à escuta no porto " + serverPort);
 
                 while (true) {
@@ -116,6 +118,35 @@ public class Server {
 
     }
 }
+
+    class cronoThread extends Thread {
+        RMIServerInterface remoteConection;
+        
+        
+        public cronoThread(RMIServerInterface rmiConection) {
+            remoteConection=rmiConection;
+            this.start();
+        }
+
+        
+        public void run() {
+            while(true){
+                try{
+                   remoteConection.terminaProjecto();
+                   System.out.println("Estou a correr, amigos!");
+                   sleep(10000);
+                }
+                catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                } catch (RemoteException ex) {
+                    System.out.println("Houve um erro com o RMI.");
+                } 
+            }
+        }        
+
+    }
+
 
 class NewClient extends Thread {
 
