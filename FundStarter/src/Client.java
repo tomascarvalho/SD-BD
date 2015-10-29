@@ -451,7 +451,7 @@ public class Client {
         int num_dados = (int)(postCard[1]);
         int i = 0, num_recompensas = 0, j = 0;
         
-        if (!project_details[0].equals("no_projects_to_show")){
+        if (!project_details[0].equals("no_project_to_show")){
             System.out.println("Detalhes do Projecto "+id);
             titulo_projecto = project_details[i];
             i++;
