@@ -24,7 +24,7 @@ import java.util.Date;
  */
 public class RMIServer extends UnicastRemoteObject implements RMIServerInterface {
 
-    public Object[] resposta = new Object[2];
+    public Object[] resposta = new Object[4]; //alterei
     private ArrayList<ClientRequest> myRequests = new ArrayList<ClientRequest>();
 
     Scanner sc = new Scanner(System.in);
@@ -236,6 +236,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                     preparedstatement.setString(1, projectInfo[4 + j]);
                     preparedstatement.setInt(2, id);
                     preparedstatement.setInt(3, 0);
+                    preparedstatement.executeUpdate();
                 }
 
             }
@@ -578,6 +579,121 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         } catch (SQLException ex) {
             System.err.println("SQLException:" + ex);
 
+        }
+        clrqst.setResponse(resposta);
+        clrqst.setStage(3);
+        return clrqst;
+    }
+    
+    public ClientRequest pledgeToProject(ClientRequest clrqst) throws RemoteException{
+        System.out.println("[RMI Server] Função <pledgeToProject> chamada!");
+        Object[] objecto = clrqst.getRequest();
+        int[] how_much__to_who = (int[])(objecto[1]);
+        int how_much = how_much__to_who[0];
+        int to_who = how_much__to_who[1];
+        int user_id = (int)objecto[0];
+        int novo_valor_actual = 0, novo_saldo = 0;
+        System.out.println(user_id);
+        int saldo = 0, i = 0;
+        String recompensas = new String();
+        int id_recompensa = 0;
+        
+        try{
+            query = "SELECT saldo "
+                    + "FROM utilizador "
+                    + "WHERE id ="+user_id;
+            request = connection.createStatement();
+            rs = request.executeQuery(query);
+            if(rs.next()){
+                saldo = rs.getInt("saldo");
+            }
+            if(saldo >= how_much){
+                
+                try{
+                    System.out.println(to_who);
+                    query = "SELECT valoractual FROM projecto WHERE id = "+to_who;
+                    request = connection.createStatement();
+                    rs = request.executeQuery(query);
+                    rs.next();
+                    novo_valor_actual = rs.getInt("valoractual");
+                    novo_valor_actual = novo_valor_actual + how_much;
+                } catch(SQLException ex) {
+                    System.err.println("SQLException 622: "+ex);
+                }
+                try{
+                    query = "UPDATE projecto SET valoractual = "+novo_valor_actual+" WHERE id = "+to_who;
+                    request = connection.createStatement();
+                    request.executeUpdate(query);
+                    
+                } catch (SQLException ex) {
+                System.err.println("SQLException: How much " + ex);
+                }
+                
+                try{
+                    query = "SELECT saldo FROM utilizador WHERE id = "+user_id;
+                    request = connection.createStatement();
+                    rs = request.executeQuery(query);
+                    rs.next();
+                    novo_saldo = rs.getInt("saldo")-how_much;
+                } catch (SQLException ex){
+                    System.out.println("SQLException 630: "+ex);
+                }
+                try{
+                    query = "UPDATE utilizador SET saldo = "+novo_saldo+" WHERE id = "+user_id;
+                    request = connection.createStatement();
+                    request.executeUpdate(query);
+                    
+                } catch (SQLException ex) {
+                System.err.println("SQLException 640 :" + ex);
+                }
+                
+                try{
+                    query = "SELECT * "
+                            + "FROM recompensas "
+                            + "WHERE id_projecto ="+to_who+" "
+                            + "AND valor <="+how_much+" "
+                            + "ORDER BY valor DESC";
+                    request = connection.createStatement();
+                    rs = request.executeQuery(query);
+                    if (rs.next()){
+                        i++;
+                        recompensas = rs.getString("titulo");
+                        id_recompensa = rs.getInt("id");
+                        resposta[2] = i;
+                        resposta[3] = recompensas;
+                        
+                        try{
+                           
+                            query = "INSERT INTO recompensa_user (id_recompensa, id_user) VALUES (CAST(? AS integer),CAST(? AS integer))";
+                            preparedstatement = connection.prepareStatement(query);
+                            preparedstatement.setInt(1, (int)(id_recompensa));
+                            preparedstatement.setInt(2, (int)(user_id));
+                            preparedstatement.executeUpdate();
+                            
+                        } catch (SQLException ex){
+                            System.out.println("SQLException: 665 "+ex);
+                        }
+    
+                    }
+                    else{
+                        resposta[2] = i;
+                        resposta[3] = "No reward";
+                    }
+               
+                } catch (SQLException ex) {
+                    System.err.println("SQLException:" + ex);
+                }
+                
+                resposta[0] = "pledged";
+                resposta[1] = saldo-how_much;
+            }
+            else{
+                System.out.println("sem saldo");
+                resposta[0] = "Sem saldo";
+                resposta[1]= saldo;
+            }
+        } catch (SQLException ex) {
+            System.err.println("SQLException:" + ex);
         }
         clrqst.setResponse(resposta);
         clrqst.setStage(3);

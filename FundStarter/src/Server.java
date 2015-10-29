@@ -282,6 +282,12 @@ class NewClient extends Thread {
                     System.out.println("Vim consultar ultimo request");
 
                     myMail = remoteConection.seeLastRequest(postCard);
+                    
+                } else if (postCard.getRequest()[0].equals("pledge")) {
+                    System.out.println("[Server] Pledge");
+                    postCard.getRequest()[0] = myUserID;
+                    myMail = remoteConection.pledgeToProject(postCard);
+                    myMail.setStage(4);
                 }
 
                
