@@ -179,6 +179,7 @@ class NewClient extends Thread {
                     myMail = remoteConection.verificaLogIn(postCard);
 
                     if (myMail.getResponse()[0].equals("log_in_correcto")) {
+                        System.out.println("Log in Correcto");
                         myUserID = (int) myMail.getResponse()[1];
                     } else if (myMail.getResponse()[0].equals("log_in_error")) {
                         System.out.println("Log in errado (Server error)");
@@ -251,7 +252,7 @@ class NewClient extends Thread {
                     myMail = remoteConection.seeLastRequest(postCard);
                 }
 
-
+               
                 sender.writeUnshared(myMail);
             }
         } catch (EOFException e) {
@@ -270,7 +271,7 @@ class NewClient extends Thread {
                 }
             }
         } catch (Exception e) {
-            //e.printStackTrace();x
+            e.printStackTrace();
         }
     }
 }

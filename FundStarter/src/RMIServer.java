@@ -47,7 +47,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         System.out.println(user);
         String password = person[1];
         int id = -1;
-        System.out.println("This is a request->" + clrqst.getRequest());
+
         try {
             query = "SELECT id, username, pass FROM utilizador WHERE username = ? AND pass = ?";
             preparedstatement = connection.prepareStatement(query);
