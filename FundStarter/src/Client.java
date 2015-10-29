@@ -232,9 +232,10 @@ public class Client {
         postCard[1] = person;
 
         postCard = postOffice(postCard);
-
+        
         if (postCard[0].equals("log_in_correcto")) {
             myId=(int)postCard[1];
+            System.out.println("Credenciais Correctas");
             return true;
         } else {
             return false;
@@ -345,7 +346,6 @@ public class Client {
             newProjectData[4+j] = sc.nextLine();
             
         }
-
         postCard[0] = "new_project";
         postCard[1] = newProjectData;
 
@@ -470,13 +470,12 @@ public class Client {
                 System.out.println("Erro ao criar novo user!");
             }
         } else if (userPick.equals("2")) {
-            /**
-             * vai chamar a função para fazer o login se ela returnar null muda o argumento e volta a chamar a função
-             */
+            
             while (!LogIn(logResult)) {
                 logResult = false;
+                
             }
-
+            menuConta();
         } else if (userPick.equals("3")) {
             listarProjectosActuais(0);
         } else if (userPick.equals("4")) {
@@ -490,7 +489,7 @@ public class Client {
     public void menuConta() throws IOException, ClassNotFoundException {
 
         String userPick;
-        sc.nextLine();
+        
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\n\t>>");
         userPick = sc.nextLine();
