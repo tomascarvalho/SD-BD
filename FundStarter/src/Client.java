@@ -358,7 +358,7 @@ public class Client {
         }
     }
     
-    public void listarProjectosActuais(int choice) throws IOException, ClassNotFoundException { // if choice 0 -> active projects
+    public void listarProjectosActuais(int choice, int logged) throws IOException, ClassNotFoundException { // if choice 0 -> active projects
                                                      // if choice 1 -> old projects
         
 
@@ -414,7 +414,7 @@ public class Client {
                 choice = sc.nextInt();
                 while ((choice!=1)&& (choice != 2)){
                     System.out.println("1 - Consultar detalhes de um projcto");
-                    System.out.println("2 - Voltar ao Menu de Conta");
+                    System.out.println("2 - Voltar ao Menu");
                     choice = sc.nextInt();
                 }
                 if (choice == 1){
@@ -422,7 +422,8 @@ public class Client {
                     choice = sc.nextInt();
                     consultarDetalhesProjecto(choice);
                 }
-                menuConta();
+                if (logged == 0)  mainMenu();
+                else menuConta();
               
             }
         }
@@ -443,7 +444,94 @@ public class Client {
         postCard[0] = "list_project_details";
         postCard[1] = id;
         postCard = postOffice(postCard);
+        Object[] objecto = postCard;
+        String[] project_details = new String[2000];
+        project_details= (String[])objecto[0];
+        String titulo_projecto, descricao_projecto, valor_pretendido, valor_actual, data, nome_recompensa, valor;
+        int num_dados = (int)(postCard[1]);
+        int i = 0, num_recompensas = 0, j = 0;
         
+        if (!project_details[0].equals("no_projects_to_show")){
+            System.out.println("Detalhes do Projecto "+id);
+            titulo_projecto = project_details[i];
+            i++;
+            descricao_projecto = project_details[i];
+            i++;
+            valor_pretendido = project_details[i];
+            i++;
+            valor_actual = project_details[i];
+            i++;
+            data = project_details[i];
+            i++;
+            System.out.println("Titulo: "+titulo_projecto+"\n"
+                    + "Descricao: "+descricao_projecto+"\n"
+                    + "Angariados "+valor_actual+" euros dos "+valor_pretendido+" euros pretendidos\n"
+                    + "Data Limite: "+data);
+            
+            if(project_details[i].equals("0")){
+                System.out.println("Não há recompensas associadas a este projecto");
+            }
+            else{
+                num_recompensas = Integer.parseInt(project_details[i]);
+                System.out.println("Recompensas associadas a este projecto: ");
+                j= 0;
+                while( j < num_recompensas){
+                    i++;
+                    j++;
+                    nome_recompensa = project_details[i];
+                    i++;
+                    j++;
+                    valor = project_details[i];
+                    System.out.println("Se doar "+valor+" euros terá direito a...\nRecompensa: "+nome_recompensa);
+                    
+                }
+            }
+            i++;
+            if (project_details[i].equals("0")){
+                System.out.println("Não há niveis extra associados a este projecto");
+                
+            }
+            else{
+                num_recompensas = Integer.parseInt(project_details[i]);
+                System.out.println("Niveis extra associados a este projecto: ");
+                j = 0;
+                while (j< num_recompensas){
+                    i++;
+                    j++;
+                    nome_recompensa = project_details[i];
+                    i++;
+                    j++;
+                    valor = project_details[i];
+                    System.out.println("Se o projecto chegar aos "+valor+" euros em doações, implementaremos...\n"+nome_recompensa);
+                }
+                
+                
+            }
+            i++;
+            if (project_details[i].equals("0")){
+                System.out.println("Não há diferentes tipos de producto");
+                
+            }
+            else{
+                num_recompensas = Integer.parseInt(project_details[i]);
+                System.out.println("Diferentes possibilidades para o nosso produto: ");
+                j = 0;
+                while (j< num_recompensas){
+                    i++;
+                    j++;
+                    nome_recompensa = project_details[i];
+                    i++;
+                    j++;
+                    valor = project_details[i];
+                    System.out.println(nome_recompensa+" conta com "+valor+" votos!");
+                }
+                
+                
+            }
+            
+        } else {
+            System.out.println("Sem projectos para mostrar");
+        }
         
     }
 
@@ -473,14 +561,15 @@ public class Client {
                 logResult = false;
                 
             }
-            menuConta();
+           
         } else if (userPick.equals("3")) {
-            listarProjectosActuais(0);
+            listarProjectosActuais(0,0);
         } else if (userPick.equals("4")) {
-            listarProjectosActuais(1);
+            listarProjectosActuais(1,0);
         }
+        mainMenu();
 
-        menuConta();
+       
 
     }
 
@@ -504,9 +593,9 @@ public class Client {
         } else if (userPick.equals("2")) {
             criaProjecto(); //Caso de sucesso/falha?
         } else if (userPick.equals("3")) {
-            listarProjectosActuais(0);
+            listarProjectosActuais(0,1);
         } else if (userPick.equals("4")) {
-            listarProjectosActuais(1);
+            listarProjectosActuais(1,1);
         }
 
         menuConta();

@@ -241,9 +241,10 @@ class NewClient extends Thread {
 
 
                 } else if ((postCard.getRequest()[0].equals("list_project_details"))){
-                    System.out.println("Vim consultar os detalhes do projecto id: "+Integer.parseInt((String)postCard.getRequest()[1]));
+                    System.out.println("Vim consultar os detalhes do projecto");
                     postCard.setStage(1);
                     myMail = remoteConection.getProjectDetails(postCard);
+                    myMail.setStage(4);
 
                 } else if (postCard.getRequest()[0].equals("see_last_request")) {
 

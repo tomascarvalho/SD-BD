@@ -479,10 +479,11 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     public ClientRequest getProjectDetails(ClientRequest clrqst) throws RemoteException{
         System.out.println("[RMI Server] Função <getProjectDetails chamada!");
         
-        int i = 0, j =0;
+        int i = 0, j =0, pointer = 0;
         String[] project_details = new String[2000];
         Object[] objecto = clrqst.getRequest();
-        int id_projecto = Integer.parseInt((String)objecto[1]);
+        
+        int id_projecto = (int)objecto[1];
         int num_recompensas = 0, num_niveis_extra = 0, num_product_type = 0;
         
         try{
@@ -494,6 +495,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             request = connection.createStatement();
             rs = request.executeQuery(query);
             if (rs.next()){
+                System.out.println("Devia funcar");
                 project_details[j] = rs.getString("titulo");
                 j++;
                 project_details[j] = rs.getString("descricao");
@@ -505,18 +507,78 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                 project_details[j] = ""+rs.getDate("data_limite");
                 j++;
                 
+                
                 try{
-                    query = "SELECT";
+                    query = "SELECT titulo, valor FROM recompensas WHERE id_projecto ="+id_projecto;
                     request = connection.createStatement();
                     rs = request.executeQuery(query);
+                    pointer = j;
+                    while(rs.next()){
+                        num_recompensas++;
+                        j++;
+                        project_details[j] = rs.getString("titulo");
+                        num_recompensas++;
+                        j++;
+                        project_details[j] = ""+rs.getInt("valor");
+                    }
+                    
                 }catch (SQLException ex){
                     System.err.println("SQLException:" + ex);
                 }
+                project_details[pointer] = ""+num_recompensas;
+                j++;
+                pointer = j;
                 
+                try{
+                    
+                    query = "SELECT descricao, valor FROM niveis_extra WHERE id_projecto ="+id_projecto;
+                    request = connection.createStatement();
+                    rs = request.executeQuery(query);
+                    while(rs.next()){
+                        num_niveis_extra ++;
+                        j++;
+                        project_details[j] = rs.getString("descricao");
+                        num_niveis_extra++;
+                        j++;
+                        project_details[j] = ""+rs.getInt("valor");
+                        
+                    }
+                    
+   
+                }catch (SQLException ex){
+                    System.err.println("SQLException:" + ex);
+                }
+                project_details[pointer] = ""+num_niveis_extra;
+                j++;
+                pointer = j;
                 
+                try{
+                    query = "SELECT descricao, contador FROM product_type WHERE id_projecto="+id_projecto;
+                    request = connection.createStatement();
+                    rs = request.executeQuery(query);
+                    while(rs.next()){
+                        j++;
+                        num_product_type++;
+                        project_details[j] = rs.getString("descricao");
+                        j++;
+                        num_product_type++;
+                        project_details[j] = ""+rs.getInt("contador");
+                    }
+                    
+                }catch (SQLException ex){
+                    System.err.println("SQLException:" + ex);
+                }
+                project_details[pointer] = ""+num_product_type;
+                resposta[0] = project_details;
+                resposta[1] = j;
+      
                 
-                
-            } else System.out.println("No Project Found!");
+            } else {
+                System.out.println("No Project Found!");
+                project_details[0] = "no_project_to_show";
+                resposta[0] = project_details;
+            }
+           
                 
             
             
@@ -524,6 +586,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             System.err.println("SQLException:" + ex);
         
         }
+        clrqst.setResponse(resposta);
+        clrqst.setStage(3);
         return clrqst;
     }
     
