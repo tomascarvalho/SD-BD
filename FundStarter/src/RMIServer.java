@@ -301,39 +301,37 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
         return clrqst;
     }
+      
 
-    	 public class actualizaProjectosThread extends Thread {
+        public void terminaProjecto() throws RemoteException{
+            Date date = new Date();
+            System.out.println(date.toString());
+            System.out.println("OLA AMIGOS!");
+            //ArrayList<Date> lista_datas = new ArrayList <Date>();
 
-		    public void run() {
-		        Date date = new Date(new java.util.Date().getTime());
-		        System.out.println(date.toString());
-		        
-		        //ArrayList<Date> lista_datas = new ArrayList <Date>();
-		        
-		        Date dataLimite;
-		        try {
+            Date dataLimite;
+            try {
+                    System.out.println("ola tomas, estou aqui!");
+                    query = "SELECT data_limite, status FROM projecto";
+                    request = connection.createStatement();
+                    rs = request.executeQuery(query);
 
-			        query = "SELECT data_limite, status FROM projeto";
-			        request = connection.createStatement();
-			        rs = request.executeQuery(query);
-			        
-			        if(rs.next()){
-			        	dataLimite = rs.getDate("data_limite");
-			        	if(dataLimite.before(date)){
-			        		 preparedstatement.setBoolean(2,false);
-			        	
-			        	}
-			        	
-			        }
-			        
-				} catch (SQLException e) {
-					
-					e.printStackTrace();
-				}
-		        
-		        }
+                    if(rs.next()){
+                            dataLimite = rs.getDate("data_limite");
+                            if(dataLimite.before(date)){
+                                   preparedstatement.setBoolean(2,false);
 
-		    }
+                            }
+
+                    }
+
+                    } catch (SQLException e) {
+
+                            e.printStackTrace();
+                    }
+
+            }
+
     
     
     public ClientRequest getActualProjects(ClientRequest clrqst) throws RemoteException {
@@ -585,7 +583,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         String rmiName;
         String bdPort;
         String bdName;
-
+        
+        //cronoThread;
         PropertiesReaderRMI properties = new PropertiesReaderRMI();
 
         rmiPort = properties.getPort();
