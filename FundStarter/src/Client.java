@@ -563,6 +563,7 @@ public class Client {
                 logResult = false;
                 
             }
+            menuConta();
            
         } else if (userPick.equals("3")) {
             listarProjectosActuais(0,0);

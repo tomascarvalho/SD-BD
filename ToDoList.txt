@@ -1,13 +1,9 @@
-﻿O que vai dar cocó:
-- Criar cliente: Já não temos apelido nem nome na BD! Cuidado!
-- Criar Projecto: É preciso dar as novas coisas!
-
-
+﻿
 ——>Tratar das excepções
 ——>Fazer funções:
 ———————> Listar Projectos actuais, com o seu progresso (FEITO)
 ———————> Listar Projectos Antigos (FEITO)
-———————> Consultar detalhes de um projecto
+———————> Consultar detalhes de um projecto (FEITO)
 ———————> Registar Conta(FEITO)
 ———————> Login(FEITO)
 ———————> Consultar saldo (FEITO)
