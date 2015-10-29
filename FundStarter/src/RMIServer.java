@@ -155,9 +155,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         clrqst.setStage(2);
         myRequests.add(clrqst);
 
-        String myUserID = ""+clrqst.getRequest()[0];
+        String myUserID = "" + clrqst.getRequest()[0];
         int userID = Integer.parseInt(myUserID);
-
 
         try {
             query = "INSERT INTO projecto (titulo, descricao, valorpretendido, data_limite, valoractual) VALUES (?,?,?,?,?)";
@@ -214,9 +213,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                     query = "INSERT INTO niveis_extra (descricao, valor, id_projecto) VALUES (?,?,?)";
 
                     preparedstatement = connection.prepareStatement(query);
-                    preparedstatement.setInt(2, Integer.parseInt(projectInfo[4+j]));
+                    preparedstatement.setInt(2, Integer.parseInt(projectInfo[4 + j]));
                     j++;
-                 
+
                     preparedstatement.setString(1, projectInfo[4 + j]);
                     preparedstatement.setInt(3, id);
                     preparedstatement.executeUpdate();
@@ -227,7 +226,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             j++;
             i = 0;
 
-            if (Integer.parseInt(projectInfo[4 + j]) != 0){
+            if (Integer.parseInt(projectInfo[4 + j]) != 0) {
                 k = Integer.parseInt(projectInfo[4 + j]);
                 while (i < k) {
                     i++;
@@ -238,10 +237,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                     preparedstatement.setInt(2, id);
                     preparedstatement.setInt(3, 0);
                 }
-                
-            }
-            
 
+            }
 
             resposta[0] = "infosave";
 
@@ -301,39 +298,43 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
         return clrqst;
     }
-      
 
-        public void terminaProjecto() throws RemoteException{
-            Date date = new Date();
-            System.out.println(date.toString());
-            System.out.println("OLA AMIGOS!");
-            //ArrayList<Date> lista_datas = new ArrayList <Date>();
+    public void terminaProjecto() throws RemoteException {
+        Date date = new Date();
+        System.out.println(date.toString());
+        System.out.println("OLA AMIGOS!");
+        //ArrayList<Date> lista_datas = new ArrayList <Date>();
 
-            Date dataLimite;
-            try {
-                    System.out.println("ola tomas, estou aqui!");
-                    query = "SELECT data_limite, status FROM projecto";
-                    request = connection.createStatement();
-                    rs = request.executeQuery(query);
+        Date dataLimite;
+        int projectID;
+        try {
+            System.out.println("ola tomas, estou aqui!");
+            query = "SELECT id,data_limite, status FROM projecto";
+            request = connection.createStatement();
+            rs = request.executeQuery(query);
 
-                    if(rs.next()){
-                            dataLimite = rs.getDate("data_limite");
-                            if(dataLimite.before(date)){
-                                   preparedstatement.setBoolean(2,false);
-
-                            }
-
-                    }
-
-                    } catch (SQLException e) {
-
-                            e.printStackTrace();
-                    }
+           while (rs.next()) {
+                dataLimite = rs.getDate("data_limite");
+                if (dataLimite.before(date) && rs.getBoolean("status")) {
+                    projectID=rs.getInt("id");
+                    System.out.println("Vou alterar no projecto com id "+projectID);
+                    query = "UPDATE projecto SET status=? WHERE id=?";
+                    preparedstatement = connection.prepareStatement(query);
+                    preparedstatement.setBoolean(1, false);
+                    preparedstatement.setInt(2, projectID);
+                    preparedstatement.executeUpdate();
+                    System.out.println("Executei a query");
+                }
 
             }
 
-    
-    
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+
+    }
+
     public ClientRequest getActualProjects(ClientRequest clrqst) throws RemoteException {
 
         int i;
@@ -470,125 +471,118 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             }
 
         }
-        System.out.println("resposta->"+clrqst);
+        System.out.println("resposta->" + clrqst);
         return clrqst;
     }
 
-    public ClientRequest getProjectDetails(ClientRequest clrqst) throws RemoteException{
+    public ClientRequest getProjectDetails(ClientRequest clrqst) throws RemoteException {
         System.out.println("[RMI Server] Função <getProjectDetails chamada!");
-        
-        int i = 0, j =0, pointer = 0;
+
+        int i = 0, j = 0, pointer = 0;
         String[] project_details = new String[2000];
         Object[] objecto = clrqst.getRequest();
-        
-        int id_projecto = (int)objecto[1];
+
+        int id_projecto = (int) objecto[1];
         int num_recompensas = 0, num_niveis_extra = 0, num_product_type = 0;
-        
-        try{
+
+        try {
             query = "SELECT titulo, descricao, valorpretendido, valoractual, data_limite "
                     + "FROM projecto "
-                    + "WHERE projecto.id ="+id_projecto+" "
+                    + "WHERE projecto.id =" + id_projecto + " "
                     + "AND status =TRUE";
-            
+
             request = connection.createStatement();
             rs = request.executeQuery(query);
-            if (rs.next()){
+            if (rs.next()) {
                 System.out.println("Devia funcar");
                 project_details[j] = rs.getString("titulo");
                 j++;
                 project_details[j] = rs.getString("descricao");
                 j++;
-                project_details[j] = ""+rs.getInt("valorpretendido");
+                project_details[j] = "" + rs.getInt("valorpretendido");
                 j++;
-                project_details[j] = ""+rs.getInt("valoractual");
+                project_details[j] = "" + rs.getInt("valoractual");
                 j++;
-                project_details[j] = ""+rs.getDate("data_limite");
+                project_details[j] = "" + rs.getDate("data_limite");
                 j++;
-                
-                
-                try{
-                    query = "SELECT titulo, valor FROM recompensas WHERE id_projecto ="+id_projecto;
+
+                try {
+                    query = "SELECT titulo, valor FROM recompensas WHERE id_projecto =" + id_projecto;
                     request = connection.createStatement();
                     rs = request.executeQuery(query);
                     pointer = j;
-                    while(rs.next()){
+                    while (rs.next()) {
                         num_recompensas++;
                         j++;
                         project_details[j] = rs.getString("titulo");
                         num_recompensas++;
                         j++;
-                        project_details[j] = ""+rs.getInt("valor");
+                        project_details[j] = "" + rs.getInt("valor");
                     }
-                    
-                }catch (SQLException ex){
+
+                } catch (SQLException ex) {
                     System.err.println("SQLException:" + ex);
                 }
-                project_details[pointer] = ""+num_recompensas;
+                project_details[pointer] = "" + num_recompensas;
                 j++;
                 pointer = j;
-                
-                try{
-                    
-                    query = "SELECT descricao, valor FROM niveis_extra WHERE id_projecto ="+id_projecto;
+
+                try {
+
+                    query = "SELECT descricao, valor FROM niveis_extra WHERE id_projecto =" + id_projecto;
                     request = connection.createStatement();
                     rs = request.executeQuery(query);
-                    while(rs.next()){
-                        num_niveis_extra ++;
+                    while (rs.next()) {
+                        num_niveis_extra++;
                         j++;
                         project_details[j] = rs.getString("descricao");
                         num_niveis_extra++;
                         j++;
-                        project_details[j] = ""+rs.getInt("valor");
-                        
+                        project_details[j] = "" + rs.getInt("valor");
+
                     }
-                    
-   
-                }catch (SQLException ex){
+
+                } catch (SQLException ex) {
                     System.err.println("SQLException:" + ex);
                 }
-                project_details[pointer] = ""+num_niveis_extra;
+                project_details[pointer] = "" + num_niveis_extra;
                 j++;
                 pointer = j;
-                
-                try{
-                    query = "SELECT descricao, contador FROM product_type WHERE id_projecto="+id_projecto;
+
+                try {
+                    query = "SELECT descricao, contador FROM product_type WHERE id_projecto=" + id_projecto;
                     request = connection.createStatement();
                     rs = request.executeQuery(query);
-                    while(rs.next()){
+                    while (rs.next()) {
                         j++;
                         num_product_type++;
                         project_details[j] = rs.getString("descricao");
                         j++;
                         num_product_type++;
-                        project_details[j] = ""+rs.getInt("contador");
+                        project_details[j] = "" + rs.getInt("contador");
                     }
-                    
-                }catch (SQLException ex){
+
+                } catch (SQLException ex) {
                     System.err.println("SQLException:" + ex);
                 }
-                project_details[pointer] = ""+num_product_type;
+                project_details[pointer] = "" + num_product_type;
                 resposta[0] = project_details;
                 resposta[1] = j;
-      
-                
+
             } else {
                 System.out.println("No Project Found!");
                 project_details[0] = "no_project_to_show";
                 resposta[0] = project_details;
             }
-           
-                
-            
-            
-        }catch (SQLException ex){
+
+        } catch (SQLException ex) {
             System.err.println("SQLException:" + ex);
-        
+
         }
         clrqst.setResponse(resposta);
         clrqst.setStage(3);
         return clrqst;
     }
-    
 
     public void DB() throws RemoteException {
         System.out.println("-------- PostgreSQL "
@@ -630,7 +624,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         }
 
     }
-    
+
     /**
      * Função responsável para actualizar os pedidos do cliente, a medida que eles vão sendo tratados.
      */
@@ -647,7 +641,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         String rmiName;
         String bdPort;
         String bdName;
-        
+
         //cronoThread;
         PropertiesReaderRMI properties = new PropertiesReaderRMI();
 
