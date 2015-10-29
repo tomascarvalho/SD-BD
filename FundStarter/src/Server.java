@@ -270,7 +270,7 @@ class NewClient extends Thread {
                 }
             }
         } catch (Exception e) {
-            //e.printStackTrace();x
+            e.printStackTrace();
         }
     }
 }

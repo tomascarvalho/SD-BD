@@ -490,6 +490,7 @@ public class Client {
     public void menuConta() throws IOException, ClassNotFoundException {
 
         String userPick;
+        sc.nextLine();
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\n\t>>");
         userPick = sc.nextLine();
