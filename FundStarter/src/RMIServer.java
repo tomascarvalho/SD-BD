@@ -314,6 +314,31 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         
     }
     
+    public ClientRequest enviaMensagem(ClientRequest clrqst) throws RemoteException{
+        System.out.println("[RMI Server] Função <enviaMensagem> chamada!");
+        int userID = (int) clrqst.getRequest()[0];
+        int projectID = (int) clrqst.getRequest()[1];
+        String mensagem = (String) clrqst.getRequest()[2];
+        clrqst.setStage(2);
+        myRequests.add(clrqst);
+        try{
+            query = "INSERT INTO mensagem(id_user_envia, id_projecto,pergunta) VALUES (?,?,?)";
+            preparedstatement = connection.prepareStatement(query);
+            preparedstatement.setInt(1, userID);
+            preparedstatement.setInt(2, projectID);
+            preparedstatement.setString(3, mensagem);
+            preparedstatement.executeUpdate();            
+            
+        }catch (SQLException ex) {
+            System.err.println("Erro:" + ex);
+        }
+        resposta[0] = "Mensagem enviada";
+        clrqst.setResponse(resposta);
+        clrqst.setStage(3);
+        updateRequest(clrqst);
+        return clrqst;
+    }
+    
     public ClientRequest apagaProjecto(ClientRequest clrqst) throws RemoteException{
         System.out.println("[RMI Server] Função <apagaProjecto> chamada!");
         int userID = (int) clrqst.getRequest()[0];
