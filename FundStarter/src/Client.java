@@ -2,8 +2,6 @@
 import java.net.*;
 import java.util.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * FundStart
@@ -30,6 +28,7 @@ public class Client {
     private PropertiesReaderClient properties;
     private int myId;
     private Scanner sc = new Scanner(System.in);
+    private String[] myCredentials = new String[2];
 
     public Client() throws ClassNotFoundException {
         /**
@@ -78,10 +77,12 @@ public class Client {
                 reciver = new ObjectInputStream(conectionToServer.getInputStream());
 
                 if (reconnect) {
-                    System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");
-                    checkRequest();
+                    System.out.println("[Cliente]Vou fazer o login de novo");//apagar depois
+                    reLog();
+                   // System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");//apagar depois
+                   // checkRequest();
                 }
-                
+
                 return;
 
             } catch (IOException e) {
@@ -106,10 +107,12 @@ public class Client {
                         conectionError = 0;
 
                         if (reconnect) {
-                            System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");
+                            System.out.println("[Cliente]Vou fazer o login de novo");//apagar depois
+                            reLog();
+                            System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");//apagar depois
                             checkRequest();
                         }
-                        
+
                         return;
                     } catch (IOException exp) {
                         System.out.println("[Cliente] Não me consigo ligar ao Servidor de Backup.");
@@ -127,29 +130,42 @@ public class Client {
 
     }
 
+    public void reLog() throws IOException {
+        System.out.println("[reLog]Fui chamdo");
+        while (true) {
+            System.out.println("[reLog]Passei aqui");
+            postCard[0] = "log";
+            postCard[1] = myCredentials;
+
+            postCard = postOffice(postCard);
+            System.out.println("Fiz o login....");
+            if(postCard[0].equals("log_in_correcto")){
+                System.out.println("I'm Back Bitches...");
+                break;
+            }
+        }
+    }
+
     public void checkRequest() throws IOException {
 
         int lastRequestIndex = myRequest.size() - 1;
 
-        System.out.println("Last Request->"+myRequest.get(lastRequestIndex).getRequest()[0]);
-        
-        if(!myRequest.get(lastRequestIndex).getStage().equals("done")){
+        System.out.println("Last Request->" + myRequest.get(lastRequestIndex).getRequest()[0]);
+
+        if (!myRequest.get(lastRequestIndex).getStage().equals("done")) {
             postCard[0] = "see_last_request";
             postCard[1] = myRequest.get(lastRequestIndex).getRequestID();
-            
+
             postCard = postOffice(postCard);
-        }
-        
-        else{
+        } else {
             try {
                 menuConta();
             } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
         }
-        
 
-        System.out.println("Resposta do RMI->"+postCard[1]);
+        System.out.println("Resposta do RMI->" + postCard[1]);
     }
 
     /**
@@ -160,20 +176,20 @@ public class Client {
         ClientRequest newRequest;
         ClientRequest newResponse;
         String requestID;
-        Date requestDate=new Date();
+        Date requestDate = new Date();
 
         try {
 
             if (myRequest.size() == 0) {
-                requestID = "1_"+myId;
+                requestID = "1_" + myId;
             } else {
-                requestID = "" + (myRequest.size() + 1)+"_"+myId;
+                requestID = "" + (myRequest.size() + 1) + "_" + myId;
             }
 
-            newRequest = new ClientRequest(requestID, postCard,requestDate.toString());
+            newRequest = new ClientRequest(requestID, postCard, requestDate.toString());
             myRequest.add(newRequest);
             newRequest.setStage(0);
-            
+            System.out.println("Vou enviar cenas");
             sender.reset();
             sender.writeUnshared(newRequest);
 
@@ -232,9 +248,11 @@ public class Client {
         postCard[1] = person;
 
         postCard = postOffice(postCard);
-        
+
         if (postCard[0].equals("log_in_correcto")) {
-            myId=(int)postCard[1];
+            myId = (int) postCard[1];
+            myCredentials[0] = person[0];
+            myCredentials[1] = person[1];
             System.out.println("Credenciais Correctas");
             return true;
         } else {
@@ -258,7 +276,9 @@ public class Client {
         postCard = postOffice(postCard);
 
         if (postCard[0].equals("infosave")) {
-            myId=(int)postCard[1];
+            myId = (int) postCard[1];
+            myCredentials[0] = newUserData[0];
+            myCredentials[1] = newUserData[1];
             return true;
         } else {
             return false;
@@ -343,8 +363,8 @@ public class Client {
             j++;
             System.out.println("Tipo de Produto: ");
 
-            newProjectData[4+j] = sc.nextLine();
-            
+            newProjectData[4 + j] = sc.nextLine();
+
         }
         postCard[0] = "new_project";
         postCard[1] = newProjectData;
@@ -357,10 +377,9 @@ public class Client {
             return false;
         }
     }
-    
+
     public void listarProjectosActuais(int choice, int logged) throws IOException, ClassNotFoundException { // if choice 0 -> active projects
-                                                     // if choice 1 -> old projects
-        
+        // if choice 1 -> old projects
 
         // 0 - I am not logged
         // 1 - I am logged
@@ -380,19 +399,16 @@ public class Client {
         int i = Integer.parseInt(numero_de_iteracoes);
         int j = 0;
 
-       
-        array_projectos = (String[])postCard[0];
-        
-        if ((!array_projectos[0].equals("error_no_active_projects")) || (!array_projectos[0].equals("error_no_old_projects")))
-        {
-            if(choice == 0) {
-            System.out.println("Projectos Actuais: ");
-            }
-            else{
+        array_projectos = (String[]) postCard[0];
+
+        if ((!array_projectos[0].equals("error_no_active_projects")) || (!array_projectos[0].equals("error_no_old_projects"))) {
+            if (choice == 0) {
+                System.out.println("Projectos Actuais: ");
+            } else {
                 System.out.println("Projectos Antigos: ");
             }
-        
-            while (j<i){
+
+            while (j < i) {
 
                 id = array_projectos[j];
                 j++;
@@ -409,38 +425,41 @@ public class Client {
                 }
             }
 
-            if (choice == 0){
+            if (choice == 0) {
                 System.out.println("1 - Consultar detalhes de um projcto");
                 System.out.println("2 - Voltar ao Menu de Conta");
                 System.out.println(">>>");
                 choice = sc.nextInt();
-        
-                while ((choice!=1)&& (choice != 2)){
+
+                while ((choice != 1) && (choice != 2)) {
 
                     System.out.println("1 - Consultar detalhes de um projcto");
                     System.out.println("2 - Voltar ao Menu");
                     choice = sc.nextInt();
                 }
-                if (choice == 1){
+                if (choice == 1) {
                     System.out.println("ID do projecto a consultar: ");
                     choice = sc.nextInt();
                     consultarDetalhesProjecto(choice, logged);
                 }
-                if (logged == 0)  mainMenu();
-                else menuConta();
-              
+                if (logged == 0) {
+                    mainMenu();
+                } else {
+                    menuConta();
+                }
+
             }
-        }
-        else{
-            if (choice == 1)
+        } else {
+            if (choice == 1) {
                 System.out.println("Não há projectos activos!");
-            else {
+            } else {
                 System.out.println("Não há projectos antigos!");
             }
         }
 
     }
 
+    //public void consultarDetalhesProjecto(int id) {
 
     
     public void consultarDetalhesProjecto(int id, int logged) throws IOException, ClassNotFoundException{
@@ -453,13 +472,13 @@ public class Client {
         postCard = postOffice(postCard);
         Object[] objecto = postCard;
         String[] project_details = new String[2000];
-        project_details= (String[])objecto[0];
+        project_details = (String[]) objecto[0];
         String titulo_projecto, descricao_projecto, valor_pretendido, valor_actual, data, nome_recompensa, valor;
-        int num_dados = (int)(postCard[1]);
+        int num_dados = (int) (postCard[1]);
         int i = 0, num_recompensas = 0, j = 0;
-        
-        if (!project_details[0].equals("no_project_to_show")){
-            System.out.println("Detalhes do Projecto "+id);
+
+        if (!project_details[0].equals("no_project_to_show")) {
+            System.out.println("Detalhes do Projecto " + id);
             titulo_projecto = project_details[i];
             i++;
             descricao_projecto = project_details[i];
@@ -470,97 +489,71 @@ public class Client {
             i++;
             data = project_details[i];
             i++;
-            System.out.println("Titulo: "+titulo_projecto+"\n"
-                    + "Descricao: "+descricao_projecto+"\n"
-                    + "Angariados "+valor_actual+" euros dos "+valor_pretendido+" euros pretendidos\n"
-                    + "Data Limite: "+data);
-            
-            if(project_details[i].equals("0")){
+            System.out.println("Titulo: " + titulo_projecto + "\n"
+                    + "Descricao: " + descricao_projecto + "\n"
+                    + "Angariados " + valor_actual + " euros dos " + valor_pretendido + " euros pretendidos\n"
+                    + "Data Limite: " + data);
+
+            if (project_details[i].equals("0")) {
                 System.out.println("Não há recompensas associadas a este projecto");
-            }
-            else{
+            } else {
                 num_recompensas = Integer.parseInt(project_details[i]);
                 System.out.println("Recompensas associadas a este projecto: ");
-                j= 0;
-                while( j < num_recompensas){
+                j = 0;
+                while (j < num_recompensas) {
                     i++;
                     j++;
                     nome_recompensa = project_details[i];
                     i++;
                     j++;
                     valor = project_details[i];
-                    System.out.println("Se doar "+valor+" euros terá direito a...\nRecompensa: "+nome_recompensa);
-                    
+                    System.out.println("Se doar " + valor + " euros terá direito a...\nRecompensa: " + nome_recompensa);
+
                 }
             }
             i++;
-            if (project_details[i].equals("0")){
+            if (project_details[i].equals("0")) {
                 System.out.println("Não há niveis extra associados a este projecto");
-                
-            }
-            else{
+
+            } else {
                 num_recompensas = Integer.parseInt(project_details[i]);
                 System.out.println("Niveis extra associados a este projecto: ");
                 j = 0;
-                while (j< num_recompensas){
+                while (j < num_recompensas) {
                     i++;
                     j++;
                     nome_recompensa = project_details[i];
                     i++;
                     j++;
                     valor = project_details[i];
-                    System.out.println("Se o projecto chegar aos "+valor+" euros em doações, implementaremos...\n"+nome_recompensa);
+                    System.out.println("Se o projecto chegar aos " + valor + " euros em doações, implementaremos...\n" + nome_recompensa);
                 }
-                
-                
+
             }
             i++;
-            if (project_details[i].equals("0")){
+            if (project_details[i].equals("0")) {
                 System.out.println("Não há diferentes tipos de producto");
-                
-            }
-            else{
+
+            } else {
                 num_recompensas = Integer.parseInt(project_details[i]);
                 System.out.println("Diferentes possibilidades para o nosso produto: ");
                 j = 0;
-                while (j< num_recompensas){
+                while (j < num_recompensas) {
                     i++;
                     j++;
                     nome_recompensa = project_details[i];
                     i++;
                     j++;
                     valor = project_details[i];
-                    System.out.println(nome_recompensa+" conta com "+valor+" votos!");
+                    System.out.println(nome_recompensa + " conta com " + valor + " votos!");
                 }
-                
-                
-            }
-            
-            if(logged == 1){
-                System.out.println("1- Doar ao projecto\n"
-                        + "2- Voltar ao Menu");
-                choice = sc.nextInt();
-                while ((choice!=1)&& (choice != 2)){
 
-                    System.out.println("1 - Doar ao projecto");
-                    System.out.println("2 - Voltar ao Menu");
-                    choice = sc.nextInt();
-                }
-                if (choice == 1){
-                    pledgeToProject(id);
-                }
-                else{
-                    menuConta();
-                }
-                
-           
-                
             }
-            
+
         } else {
             System.out.println("Sem projectos para mostrar");
         }
-        
+
     }
     
     public void pledgeToProject(int id){
@@ -606,6 +599,7 @@ public class Client {
         ArrayList<Integer> titulo_projecto = (ArrayList)postCard[1];
         int tamanho = id_projecto.size();
         
+
         if (tamanho>0){
             
             System.out.println("Os meus projectos: ");
@@ -647,9 +641,10 @@ public class Client {
                     
 
                 }
-                //cancelarProjecto(id_projecto_pick);
+                cancelarProjecto(id_projecto_pick);
             }
             
+
         }
         else System.out.println("Não é Administrador de nenhum projecto...");
         menuConta();
@@ -667,6 +662,7 @@ public class Client {
         postCard[2] = id_projecto;
         postCard = postOffice(postCard);
         
+
         Object[] objecto = postCard;
         String status = (String)(objecto[2]);
         if (status.equals("done")){
@@ -674,13 +670,19 @@ public class Client {
         }
         else{
             System.out.println("O utilizador "+username+" não existe!");
+
         }
         
     }
     
-    public void cancelarProjecto(){        
-        System.out.println("ID do projecto que deseja cancelar:");
-        int cancelaID = sc.nextInt();
+    public void cancelarProjecto(int cancelaID) throws IOException, ClassNotFoundException{        
+
+        
+        postCard[0] = "delete_project";
+        postCard[1] = cancelaID;
+        postCard = postOffice(postCard);
+        
+        System.out.println(postCard[0]);
         
     }
 
@@ -693,7 +695,7 @@ public class Client {
         String userPick;
 
         conectionError = 0;
-            
+
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
         userPick = sc.nextLine();
@@ -708,21 +710,19 @@ public class Client {
                 System.out.println("Erro ao criar novo user!");
             }
         } else if (userPick.equals("2")) {
-            
+
             while (!LogIn(logResult)) {
                 logResult = false;
-                
+
             }
             menuConta();
-           
+
         } else if (userPick.equals("3")) {
-            listarProjectosActuais(0,0);
+            listarProjectosActuais(0, 0);
         } else if (userPick.equals("4")) {
-            listarProjectosActuais(1,0);
+            listarProjectosActuais(1, 0);
         }
         mainMenu();
-
-       
 
     }
 
@@ -732,7 +732,7 @@ public class Client {
         // 1 - I am logged
         
         String userPick;
-        
+
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\n\n\t\t>>");
         userPick = sc.nextLine();
@@ -749,11 +749,12 @@ public class Client {
         } else if (userPick.equals("2")) {
             criaProjecto(); //Caso de sucesso/falha?
         } else if (userPick.equals("3")) {
-            listarProjectosActuais(0,1);
+            listarProjectosActuais(0, 1);
         } else if (userPick.equals("4")) {
             listarProjectosActuais(1,1);
         } else if (userPick.equals("5")){
             consultarProjectosUser();
+            listarProjectosActuais(1, 1);
         }
 
         menuConta();
