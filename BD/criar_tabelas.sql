@@ -85,3 +85,12 @@ CREATE TABLE Recompensa_User(
  FOREIGN KEY (id_user) REFERENCES Utilizador(id)
 );
 
+CREATE TABLE Pledge_User
+(
+id_user	INTEGER not null,
+id_projecto INTEGER not null,
+valor INTEGER not null,
+
+ FOREIGN KEY (id_user) REFERENCES Utilizador(id),
+ FOREIGN KEY (id_projecto) REFERENCES Projecto(id)
+);

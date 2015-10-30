@@ -229,6 +229,7 @@ public class Client {
     public boolean LogIn(boolean flag) {
 
         String[] person = new String[2];
+        sc.nextLine();
 
         /**
          * Vai pedir credenciais ao cliente para fazer o login. Se os dados não estiverem na base de dados vai voltar a chamar esta função. Caso contrário vai avançar para o menu inicial
@@ -427,11 +428,11 @@ public class Client {
 
             if (choice == 0) {
                 System.out.println("1 - Consultar detalhes de um projcto");
-                System.out.println("2 - Voltar ao Menu de Conta");
-                System.out.println(">>>");
+                System.out.println("2 - Voltar ao Menu");
+                System.out.print(">>>");
                 choice = sc.nextInt();
 
-                while ((choice != 1) && (choice != 2)) {
+                while ((choice != 1) && (choice != 2) ) {
 
                     System.out.println("1 - Consultar detalhes de um projcto");
                     System.out.println("2 - Voltar ao Menu");
@@ -442,6 +443,7 @@ public class Client {
                     choice = sc.nextInt();
                     consultarDetalhesProjecto(choice, logged);
                 }
+                
                 if (logged == 0) {
                     mainMenu();
                 } else {
@@ -549,6 +551,32 @@ public class Client {
                 }
 
             }
+            if (logged == 1){
+                System.out.println("\n 1 - Doar ao Projecto"
+                    + "\n2 - Enviar Mensagem ao Projecto"
+                    + "\n3 - Voltar ao Menu");
+                System.out.print(">>");
+                choice = sc.nextInt();
+                
+                while ((choice != 1)&&(choice != 2)&&(choice != 3)){
+                    System.out.println("\n 1 - Doar ao Projecto"
+                    + "\n2 - Enviar Mensagem ao Projecto"
+                    + "\n3 - Voltar ao Menu");
+                    System.out.print(">>");
+                    choice = sc.nextInt();
+                }
+                if (choice == 1){
+                    pledgeToProject(id);
+                    
+                }
+                else if(choice == 2){
+                    //CHAMAR ENVIAR MENSAGEM PROJECTO (ID)
+                }
+                menuConta();
+            }
+            
+            
+            
 
         } else {
             System.out.println("Sem projectos para mostrar");
@@ -569,11 +597,21 @@ public class Client {
         int boolean_recompensa = (int)resposta[2];
         String recompensa = (String)(postCard[3]);
         int saldo = (int)(postCard[1]);
+        ArrayList <String> product_type = (ArrayList)resposta[4];
+        Iterator <String> it = product_type.iterator();
+        int conta = 0;
+        String produto_votado;
+   
         
         if (answer.equals("pledged")){
             System.out.println("Doou com sucesso");
             if (boolean_recompensa == 1){
                 System.out.println("Ganhou a seguinte recompensa: "+recompensa);
+                System.out.print("Se desejar manter a sua recompensa seleccione 1. Caso a deseje oferecer a outro utilizador seleccione 2\n>>");
+                conta = sc.nextInt();
+                if (conta == 2){
+                    //IMPLEMENTAR DOAR RECOMPENSA donateReward(id_projecto);
+                }
             } else{
                 System.out.println("Não ganhou recompensas");
             }
@@ -583,6 +621,29 @@ public class Client {
             System.out.println("O seu saldo não é suficiente para doar!");
             System.out.println("Tem "+saldo+" euros na sua conta!");
         }
+        if (product_type.size()>0){
+            conta = 0;
+            System.out.println("Tem a possibilidade de votar no tipo de produto que o projecto vai produzir: ");
+            while(it.hasNext()){
+                conta++;
+                System.out.println(conta+ " - "+it.next());
+            }
+            System.out.println("Em que produto deseja votar? Escolher 0 se em nenhum: ");
+            conta = sc.nextInt();
+            
+            if(conta != 0 && conta < product_type.size()+1){
+                produto_votado = product_type.get(conta-1);
+                System.out.println(produto_votado);
+                voteForProduct((String)produto_votado);
+            }
+        }
+    }
+    
+    public void voteForProduct(String produto_votado){
+        
+        postCard[0] = "vote_for_product";
+        postCard[1] = produto_votado;
+        postCard = postOffice(postCard);
     }
     
     public void consultarProjectosUser() throws IOException, ClassNotFoundException{
@@ -692,34 +753,37 @@ public class Client {
         // 1 - I am logged
 
         boolean logResult = true;
-        String userPick;
+        int userPick;
 
         conectionError = 0;
 
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
-        userPick = sc.nextLine();
+        userPick = sc.nextInt();
         //Verificar Escolhas
-        while ((userPick.equals("1") == false) && (userPick.equals("2") == false) && (userPick.equals("3") == false) && (userPick.equals("4") == false)) {
+        while ((userPick == 1) && (userPick == 2) && (userPick == 3) && (userPick == 4)) {
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
             System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
-            userPick = sc.nextLine();
+            userPick = sc.nextInt();
         }
-        if (userPick.equals("1")) {
+        if (userPick == 1) {
             while (criaConta() != true) {
                 System.out.println("Erro ao criar novo user!");
             }
-        } else if (userPick.equals("2")) {
+        } else if (userPick == 2) {
 
-            while (!LogIn(logResult)) {
+            if (!LogIn(logResult)) {
                 logResult = false;
+                System.out.println("Username ou Password erradas");
+                mainMenu();
+                
 
             }
             menuConta();
 
-        } else if (userPick.equals("3")) {
+        } else if (userPick == 3) {
             listarProjectosActuais(0, 0);
-        } else if (userPick.equals("4")) {
+        } else if (userPick == 4) {
             listarProjectosActuais(1, 0);
         }
         mainMenu();
@@ -731,28 +795,30 @@ public class Client {
         // 0 - I am not logged
         // 1 - I am logged
         
-        String userPick;
+        
+        
+        int userPick;
 
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\n\n\t\t>>");
-        userPick = sc.nextLine();
+        userPick = sc.nextInt();
 
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
-        while ((userPick.equals("1") == false) && (userPick.equals("2") == false) && (userPick.equals("3") == false) && (userPick.equals("4") == false)&& (userPick.equals("5") == false)) {
+        while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5)) {
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
             System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\n\n\t\t>>");
-            userPick = sc.nextLine();
+            userPick = sc.nextInt();
 
         }
-        if (userPick.equals("1")) {
+        if (userPick == 1) {
             consultaSaldo();
-        } else if (userPick.equals("2")) {
+        } else if (userPick == 2) {
             criaProjecto(); //Caso de sucesso/falha?
-        } else if (userPick.equals("3")) {
+        } else if (userPick == 3) {
             listarProjectosActuais(0, 1);
-        } else if (userPick.equals("4")) {
+        } else if (userPick == 4) {
             listarProjectosActuais(1,1);
-        } else if (userPick.equals("5")){
+        } else if (userPick == 5){
             consultarProjectosUser();
             listarProjectosActuais(1, 1);
         }
