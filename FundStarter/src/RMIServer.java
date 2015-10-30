@@ -757,6 +757,42 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         clrqst.setStage(3);
         return clrqst;
     }
+    
+    public ClientRequest addAdminToProject(ClientRequest clrqst) throws RemoteException{
+        
+        System.out.println("[RMI Server] Função <addAdminToProject> chamada!");
+        Object[] objecto = clrqst.getRequest();
+        String user = (String)(objecto[1]);
+        int id_projecto = (int)(objecto[2]);
+        int id_user = 0;
+        
+        try{
+            query = "SELECT id FROM utilizador WHERE username= '"+user+"'";
+            request = connection.createStatement();
+            rs = request.executeQuery(query);
+            if (rs.next()){
+                id_user = rs.getInt("id");
+                try{
+                    query = "INSERT INTO projecto_user (id_projecto, id_user) VALUES ("+id_projecto+","+id_user+")";
+                    preparedstatement = connection.prepareStatement(query);
+ 
+                    preparedstatement.executeUpdate();
+                    resposta[2] ="done";
+                    
+                } catch (SQLException ex) {
+                    System.err.println("SQLException:" + ex);
+                }
+            } else resposta[2] ="no_user";
+            
+            
+        } catch (SQLException ex) {
+            System.err.println("SQLException:" + ex);
+        }
+        if (resposta[2] == null) resposta[2] = "bode";
+        clrqst.setResponse(resposta);
+        clrqst.setStage(3);
+        return clrqst;
+    }
 
     public void DB() throws RemoteException {
         System.out.println("-------- PostgreSQL "

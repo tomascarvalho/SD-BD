@@ -272,7 +272,7 @@ class NewClient extends Thread {
                     myMail.setStage(4);
                     
                 
-            }else if ((postCard.getRequest()[0].equals("list_actual_projects")) || (postCard.getRequest()[0].equals("list_old_projects"))) {
+                }else if ((postCard.getRequest()[0].equals("list_actual_projects")) || (postCard.getRequest()[0].equals("list_old_projects"))) {
                     System.out.print("Vim consultar os projectos!\n");
                     postCard.setStage(1);
 
@@ -297,6 +297,12 @@ class NewClient extends Thread {
                     System.out.println("[Server] Pledge");
                     postCard.getRequest()[0] = myUserID;
                     myMail = remoteConection.pledgeToProject(postCard);
+                    myMail.setStage(4);
+                    
+                } else if (postCard.getRequest()[0].equals("add_Admin")) {
+                    System.out.println("[Server] Add Admin");
+                    postCard.setStage(1);
+                    myMail = remoteConection.addAdminToProject(postCard);
                     myMail.setStage(4);
                 }
 
