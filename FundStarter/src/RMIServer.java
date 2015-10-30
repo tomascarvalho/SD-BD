@@ -23,7 +23,7 @@ import java.util.Date;
  */
 public class RMIServer extends UnicastRemoteObject implements RMIServerInterface {
 
-    public Object[] resposta = new Object[4]; //alterei
+    public Object[] resposta = new Object[5]; //alterei
     private ArrayList<ClientRequest> myRequests = new ArrayList<ClientRequest>();
 
     Scanner sc = new Scanner(System.in);
@@ -407,6 +407,23 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
         return clrqst;
     }
+    
+    public ClientRequest voteForProduct(ClientRequest clrqst) throws RemoteException{
+        
+        myRequests.add(clrqst);
+        String product_type = (String)clrqst.getRequest()[1];
+        
+        try{
+            query = "UPDATE product_type SET contador = contador +1 WHERE descricao = '"+product_type+"'";
+            preparedstatement = connection.prepareStatement(query);
+            preparedstatement.executeUpdate();
+        } catch(SQLException ex){
+            System.err.print("SQLException 395: "+ex);
+        }
+        clrqst.setResponse(resposta);
+        updateRequest(clrqst);
+        return clrqst;
+    }
 
     public void terminaProjecto() throws RemoteException {
         Date date = new Date();
@@ -699,9 +716,10 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         int[] how_much__to_who = (int[])(objecto[1]);
         int how_much = how_much__to_who[0];
         int to_who = how_much__to_who[1];
+        
         int user_id = (int)objecto[0];
         int novo_valor_actual = 0, novo_saldo = 0;
-        System.out.println(user_id);
+        ArrayList <String> product_type = new ArrayList();
         int saldo = 0, i = 0;
         String recompensas = new String();
         int id_recompensa = 0;
@@ -792,16 +810,32 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                     System.err.println("SQLException:" + ex);
                 }
                 
+                
+                
+                try {
+                    query = "SELECT descricao FROM product_type WHERE id_projecto ="+to_who;
+                    request = connection.createStatement();
+                    rs = request.executeQuery(query);
+                    while(rs.next()){
+                        product_type.add(rs.getString("descricao"));
+                    }
+                    
+                } catch (SQLException ex) {
+                     System.err.println("SQLException 784:" + ex);
+                }
+                
                 resposta[0] = "pledged";
                 resposta[1] = saldo-how_much;
+                resposta[4] = product_type;
             }
             else{
                 System.out.println("sem saldo");
                 resposta[0] = "Sem saldo";
                 resposta[1]= saldo;
+                resposta[4] = product_type;
             }
         } catch (SQLException ex) {
-            System.err.println("SQLException:" + ex);
+            System.err.println("SQLException 791:" + ex);
         }
         clrqst.setResponse(resposta);
         clrqst.setStage(3);

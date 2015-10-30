@@ -324,7 +324,14 @@ class NewClient extends Thread {
                     postCard.setStage(1);
                     myMail = remoteConection.addAdminToProject(postCard);
                     myMail.setStage(4);
+                    
+                } else if (postCard.getRequest()[0].equals("vote_for_product")){
+                    System.out.println("[Server] Vote For Product");
+                    postCard.setStage(1);
+                    myMail = remoteConection.voteForProduct(postCard);
+                    myMail.setStage(4);
                 }
+                 
 
                 sender.writeUnshared(myMail);
                 postCard = null;
