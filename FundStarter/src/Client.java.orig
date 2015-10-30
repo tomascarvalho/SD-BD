@@ -563,6 +563,7 @@ public class Client {
         
     }
     
+<<<<<<< Updated upstream
     public void pledgeToProject(int id){
         int[] how_much__to_who= new int[2];
         System.out.println("Quanto quer doar a este projecto: ");
@@ -590,8 +591,8 @@ public class Client {
             System.out.println("O seu saldo não é suficiente para doar!");
             System.out.println("Tem "+saldo+" euros na sua conta!");
         }
-    }
-    
+        
+=======
     public void consultarProjectosUser(){
         
         postCard[0] = "list_my_projects";
@@ -620,8 +621,9 @@ public class Client {
         System.out.println("ID do projecto que deseja cancelar:");
         int cancelaID = sc.nextInt();
         
+                        
+>>>>>>> Stashed changes
     }
-
 
     public void mainMenu() throws IOException, ClassNotFoundException {
         // 0 - I am not logged

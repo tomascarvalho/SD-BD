@@ -4,6 +4,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -262,7 +263,64 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
         return clrqst;
     }
+    
+    
+   
+    public ClientRequest getUserProjects(ClientRequest clrqst) throws RemoteException{
+        
+        System.out.println("[RMI Server] Função <getUserProjects> chamada!");
+        ArrayList <Integer> lista_ids = new ArrayList<Integer>();
+        ArrayList <String> lista_projectos = new ArrayList<String>();
+        
+        int project_id =0;
+        int userID = (int) clrqst.getRequest()[1];
+        
+        clrqst.setStage(2);
+        myRequests.add(clrqst);
+        
+        try{
+            query = "SELECT id_projecto FROM projecto_user WHERE id_user ="+userID;
+            request = connection.createStatement();
+            //preparedstatement.setInt(1, userID);
+            rs = request.executeQuery(query);
+            
+            
+            
+            
+            while(rs.next()){
 
+                lista_ids.add(rs.getInt("id_projecto"));
+            }
+            resposta[0] = lista_ids;
+        }catch (SQLException ex) {
+            System.err.println("Erro 1:" + ex);
+        }
+            
+        try{
+            Iterator <Integer> it = lista_ids.iterator();
+            while (it.hasNext()){
+                project_id = it.next();
+                query = "SELECT titulo FROM projecto WHERE id="+ project_id ;
+                request = connection.createStatement();
+                rs = request.executeQuery(query);
+                if(rs.next()){
+                    lista_projectos.add(rs.getString("titulo"));
+                }
+            }
+            
+            resposta[1] = lista_projectos;
+        }catch (SQLException ex) {
+            System.err.println("Erro 2:" + ex);
+        }
+            clrqst.setResponse(resposta);
+            clrqst.setStage(3);
+            
+            updateRequest(clrqst);
+
+        return clrqst;
+        
+    }
+    
     public ClientRequest getUserSaldo(ClientRequest clrqst) throws RemoteException {
 
         System.out.println("[RMI Server] Função <getUserSaldo> chamada!");

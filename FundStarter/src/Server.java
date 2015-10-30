@@ -262,7 +262,17 @@ class NewClient extends Thread {
 
                     myMail.setStage(4);
 
-                } else if ((postCard.getRequest()[0].equals("list_actual_projects")) || (postCard.getRequest()[0].equals("list_old_projects"))) {
+                }else if (postCard.getRequest()[0].equals("list_my_projects")){
+                    System.out.println("Vim consultar os meus projectos!\n");
+                    
+                    postCard.getRequest()[1] = myUserID;
+                    postCard.setStage(1);
+                    
+                    myMail = remoteConection.getUserProjects(postCard);
+                    myMail.setStage(4);
+                    
+                
+            }else if ((postCard.getRequest()[0].equals("list_actual_projects")) || (postCard.getRequest()[0].equals("list_old_projects"))) {
                     System.out.print("Vim consultar os projectos!\n");
                     postCard.setStage(1);
 
