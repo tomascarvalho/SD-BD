@@ -1,4 +1,4 @@
-﻿
+
 ——>Tratar das excepções
 ——>Fazer funções:
 ———————> Listar Projectos actuais, com o seu progresso (FEITO)
@@ -13,7 +13,7 @@
 ———————> Criar um projecto (FEITO)
 ———————> Adicionar e Renovar recompensas ao projecto
 ———————> Cancelar Projecto
-———————> Fim do projecto 
+———————> Fim do projecto
 
 :::::::::::::::::::::::::: Para a BD                 ::::::::::::::::::::::::::::::::
 ———————> Campo "status" na tabela dos projectos (FEITO)

@@ -1,7 +1,6 @@
 import java.util.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 /*
  * FundStart
  *  Projecto para a cadeira de Sistemas Distribuidos

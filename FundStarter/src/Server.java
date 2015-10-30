@@ -3,10 +3,6 @@ import java.net.*;
 import java.io.*;
 import static java.lang.Thread.sleep;
 import java.rmi.*;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /*
  * FundStart
  *  Projecto para a cadeira de Sistemas Distribuidos
@@ -78,7 +74,7 @@ public class Server {
                  System.out.println("[Server]Vou avisar o rmi para desligar o outro servidor!");
 
                  }*/
-                new cronoThread(remoteConection);
+                new cronoThread(remoteConection, rmiLocation);
                 System.out.println("[Server] Servidor à escuta no porto " + serverPort);
 
                 while (true) {
@@ -119,34 +115,48 @@ public class Server {
     }
 }
 
-    class cronoThread extends Thread {
-        RMIServerInterface remoteConection;
-        
-        
-        public cronoThread(RMIServerInterface rmiConection) {
-            remoteConection=rmiConection;
-            this.start();
-        }
+class cronoThread extends Thread {
 
-        
-        public void run() {
-            while(true){
-                try{
-                   remoteConection.terminaProjecto();
-                   System.out.println("Estou a correr, amigos!");
-                   sleep(10000);
-                }
-                catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                } catch (RemoteException ex) {
-                    System.out.println("Houve um erro com o RMI.");
-                } 
-            }
-        }        
+    RMIServerInterface remoteConection;
+    String rmiLocation;
+
+    public cronoThread(RMIServerInterface rmiConection, String rmiPlace) {
+
+        remoteConection = rmiConection;
+        rmiLocation = rmiPlace;
+        this.start();
 
     }
 
+    public void run() {
+        while (true) {
+            try {
+                remoteConection.terminaProjecto();
+                System.out.println("Estou a correr, amigos!");
+                sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (RemoteException ex) {
+                System.out.println("Houve um erro com o RMI.");
+                while (true) {
+                    try {
+                        System.out.println("[CronoThread]Vou tentar ligar ao RMI!");
+                        remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
+                        System.out.println("[CronoThread]Voltei a ligar ao RMI!");
+                        break;
+                    } catch (NotBoundException e) {
+                        System.out.println("[CronoThread]Não me consigo ligar ao RMI!");
+                    } catch (MalformedURLException e) {
+                        System.out.println("[CronoThread]MalformedRLException");
+                    } catch (RemoteException e) {
+                        System.out.println("[CronoThread]RMI morreu para a vida!");
+                    }
+                }
+            }
+        }
+    }
+
+}
 
 class NewClient extends Thread {
 
@@ -194,12 +204,12 @@ class NewClient extends Thread {
 
     public void run() {
 
-        try {
-            while (true) {
+        while (true) {
+            try {
 
-                postCard = null;
-                postCard = (ClientRequest) reciver.readUnshared();
-
+                if (postCard == null) {
+                    postCard = (ClientRequest) reciver.readUnshared();
+                }
                 System.out.println(postCard.getRequest()[0]);
 
                 System.out.println("[Server] Li a mensagem do cliente na boa.");
@@ -288,8 +298,7 @@ class NewClient extends Thread {
 
                     myMail.setStage(4);
 
-
-                } else if ((postCard.getRequest()[0].equals("list_project_details"))){
+                } else if ((postCard.getRequest()[0].equals("list_project_details"))) {
                     System.out.println("Vim consultar os detalhes do projecto");
                     postCard.setStage(1);
                     myMail = remoteConection.getProjectDetails(postCard);
@@ -308,26 +317,31 @@ class NewClient extends Thread {
                     myMail.setStage(4);
                 }
 
-               
                 sender.writeUnshared(myMail);
-            }
-        } catch (EOFException e) {
-            System.out.println("Cliente desligou-se!");
-            return;
-        } catch (RemoteException e) {
-            System.out.println("[Server]Erro no RMI!");
-            while (true) {
-                try {
-                    remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
-                    return;
-                } catch (NotBoundException ex) {
-                    System.out.println("[Server]Não me consigo ligar ao RMI!");
-                } catch (MalformedURLException | RemoteException exp) {
-                    System.out.println("[Server]RMI morreu para a vida!");
+                postCard = null;
+
+            } catch (EOFException e) {
+                System.out.println("Cliente desligou-se!");
+                return;
+            } catch (RemoteException e) {
+                System.out.println("[Server]Erro no RMI!");
+                while (true) {
+                    try {
+                        System.out.println("[Server]Vou tentar ligar ao RMI!");
+                        remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
+                        System.out.println("[Server]Voltei a ligar ao RMI!");
+                        break;
+                    } catch (NotBoundException ex) {
+                        System.out.println("[Server]Não me consigo ligar ao RMI!");
+                    } catch (MalformedURLException ex) {
+                        System.out.println("[Server]MalformedRLException");
+                    } catch (RemoteException ex) {
+                        System.out.println("[Server]RMI morreu para a vida!");
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
