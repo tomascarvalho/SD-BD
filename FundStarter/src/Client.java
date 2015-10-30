@@ -79,8 +79,8 @@ public class Client {
                 if (reconnect) {
                     System.out.println("[Cliente]Vou fazer o login de novo");//apagar depois
                     reLog();
-                    System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");//apagar depois
-                    checkRequest();
+                   // System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");//apagar depois
+                   // checkRequest();
                 }
 
                 return;
@@ -131,13 +131,14 @@ public class Client {
     }
 
     public void reLog() throws IOException {
-
+        System.out.println("[reLog]Fui chamdo");
         while (true) {
+            System.out.println("[reLog]Passei aqui");
             postCard[0] = "log";
             postCard[1] = myCredentials;
 
             postCard = postOffice(postCard);
-            
+            System.out.println("Fiz o login....");
             if(postCard[0].equals("log_in_correcto")){
                 System.out.println("I'm Back Bitches...");
                 break;
@@ -188,7 +189,7 @@ public class Client {
             newRequest = new ClientRequest(requestID, postCard, requestDate.toString());
             myRequest.add(newRequest);
             newRequest.setStage(0);
-
+            System.out.println("Vou enviar cenas");
             sender.reset();
             sender.writeUnshared(newRequest);
 

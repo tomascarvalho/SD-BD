@@ -207,9 +207,9 @@ class NewClient extends Thread {
         while (true) {
             try {
 
-                if (postCard == null) {
+                //if (postCard == null) {
                     postCard = (ClientRequest) reciver.readUnshared();
-                }
+               // }
                 System.out.println(postCard.getRequest()[0]);
 
                 System.out.println("[Server] Li a mensagem do cliente na boa.");
