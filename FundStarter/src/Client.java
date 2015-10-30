@@ -585,39 +585,98 @@ public class Client {
         }
     }
     
-    public void consultarProjectosUser(){
+    public void consultarProjectosUser() throws IOException, ClassNotFoundException{
         
         postCard[0] = "list_my_projects";
-
+        
         postCard = postOffice(postCard);
         
-        
+        String userPick;
+        int id_projecto_pick;
+        int i;
         Object[] objecto = postCard;
         ArrayList<Integer> id_projecto = (ArrayList)postCard[0];
         ArrayList<Integer> titulo_projecto = (ArrayList)postCard[1];
-        
-        System.out.println("Os meus projectos: ");
         int tamanho = id_projecto.size();
-        int i;
         
-        System.out.println("\t\tID\t\t\tTítulo");
-        for(i=0; i<tamanho; i++){
-            System.out.println("\t\t" + id_projecto.get(i) + "\t\t" + titulo_projecto.get(i));
+
+        if (tamanho>0){
+            
+            System.out.println("Os meus projectos: ");
+            
+        
+            System.out.println("\t\tID\t\t\tTítulo");
+            for(i=0; i<tamanho; i++){
+                System.out.println(id_projecto.get(i) + "\t\t" + titulo_projecto.get(i));
+            }
+            System.out.println("\t\t\tMenu Admin\n\n");
+            System.out.print("\t\t1 - Adicionar Administrador ao Projecto\n\t\t2 - Cancelar Projectos\n\t\t3 - Consultar Mensagens de um Projecto\n\t\t4 -Voltar ao Menu\n\n\n\t\t>>");
+            userPick = sc.nextLine();
+            //Verificar Escolhas
+            while ((userPick.equals("1") == false) && (userPick.equals("2") == false) && (userPick.equals("3") == false) && (userPick.equals("4") == false)) {
+                System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
+                System.out.print("\t\t1 - Adicionar Administrador ao Projecto\n\t\t2 - Cancelar Projectos\n\t\t3 - Consultar Mensagens de um Projecto\n\t\t4 -Voltar ao Menu\n\n\n\t\t>>");
+                userPick = sc.nextLine();
+            }
+            if (userPick.equals("1")) {
+                System.out.println("ID do projecto ao qual quer adicionar um administrador: ");
+                id_projecto_pick = sc.nextInt();
+                while(!id_projecto.contains(id_projecto_pick)){
+                    System.out.println("Não é admin do projecto que escolheu!");
+                    System.out.print("ID do projecto ao qual quer adicionar um administrador: ");
+                    id_projecto_pick = sc.nextInt();
+
+                }
+                addAdminToProject(id_projecto_pick);
+
+            }
+            else if (userPick.equals("2")) {
+                System.out.println("ID do projecto a cancelar: ");
+                id_projecto_pick = sc.nextInt();
+             
+                while(!id_projecto.contains(id_projecto_pick)){
+                    System.out.println("Não é admin do projecto que escolheu!");
+                    System.out.print("ID do projecto a cancelar: ");
+                    id_projecto_pick = sc.nextInt();
+                    
+
+                }
+                cancelarProjecto(id_projecto_pick);
+            }
+            
+
         }
+        else System.out.println("Não é Administrador de nenhum projecto...");
+        menuConta();
+    }
+    
+    public void addAdminToProject(int id_projecto) {
         
-        try {
-            cancelarProjecto();
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        String username;
+        sc.nextLine();
+        System.out.println("Username do Administrador a acrescentar ao seu projecto: ");
+        username = sc.nextLine();
+      
+        postCard[0] = "add_Admin";
+        postCard[1] = username;
+        postCard[2] = id_projecto;
+        postCard = postOffice(postCard);
+        
+
+        Object[] objecto = postCard;
+        String status = (String)(objecto[2]);
+        if (status.equals("done")){
+            System.out.println(username+" foi adicionado como administrador ao projecto id: "+id_projecto);
+        }
+        else{
+            System.out.println("O utilizador "+username+" não existe!");
+
         }
         
     }
     
-    public void cancelarProjecto() throws IOException, ClassNotFoundException{        
-        System.out.println("ID do projecto que deseja cancelar:");
-        int cancelaID = sc.nextInt();
+    public void cancelarProjecto(int cancelaID) throws IOException, ClassNotFoundException{        
+
         
         postCard[0] = "delete_project";
         postCard[1] = cancelaID;
@@ -675,13 +734,13 @@ public class Client {
         String userPick;
 
         System.out.println("\t\t\tMenu Inicial\n\n");
-        System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Cancelar Projecto\n\n\n\t\t>>");
+        System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\n\n\t\t>>");
         userPick = sc.nextLine();
 
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
         while ((userPick.equals("1") == false) && (userPick.equals("2") == false) && (userPick.equals("3") == false) && (userPick.equals("4") == false)&& (userPick.equals("5") == false)) {
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
-            System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Cancelar Projecto\n\n\n\t\t>>");
+            System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\n\n\t\t>>");
             userPick = sc.nextLine();
 
         }
