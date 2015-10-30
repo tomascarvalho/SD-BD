@@ -42,7 +42,7 @@ CREATE TABLE Mensagem
  id_user_envia	INTEGER not null,
  id_projecto	INTEGER not null,
  pergunta 	VARCHAR(50) not null,
- resposta	VARCHAR(100) not null,
+ resposta	VARCHAR(100),
 
 FOREIGN KEY (id_user_envia) REFERENCES Utilizador(id),
 FOREIGN KEY (id_projecto) REFERENCES Projecto(id),
