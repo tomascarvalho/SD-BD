@@ -261,7 +261,15 @@ class NewClient extends Thread {
                     myMail = remoteConection.getUserSaldo(postCard);
 
                     myMail.setStage(4);
-
+                }else if (postCard.getRequest()[0].equals("delete_project")){
+                    System.out.println("Apagar um projecto\n");
+                    postCard.getRequest()[0] = myUserID;
+                    
+                    postCard.setStage(1);
+                    
+                    myMail = remoteConection.apagaProjecto(postCard);
+                    myMail.setStage(4);
+                    
                 }else if (postCard.getRequest()[0].equals("list_my_projects")){
                     System.out.println("Vim consultar os meus projectos!\n");
                     

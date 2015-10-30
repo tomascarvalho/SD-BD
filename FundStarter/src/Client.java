@@ -609,16 +609,28 @@ public class Client {
         
         System.out.println("\t\tID\t\t\tTítulo");
         for(i=0; i<tamanho; i++){
-            System.out.println(id_projecto.get(i) + "\t\t" + titulo_projecto.get(i));
+            System.out.println("\t\t" + id_projecto.get(i) + "\t\t" + titulo_projecto.get(i));
         }
         
-        //cancelarProjecto();
+        try {
+            cancelarProjecto();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     
-    public void cancelarProjecto(){        
+    public void cancelarProjecto() throws IOException, ClassNotFoundException{        
         System.out.println("ID do projecto que deseja cancelar:");
         int cancelaID = sc.nextInt();
+        
+        postCard[0] = "delete_project";
+        postCard[1] = cancelaID;
+        postCard = postOffice(postCard);
+        
+        System.out.println(postCard[0]);
         
     }
 

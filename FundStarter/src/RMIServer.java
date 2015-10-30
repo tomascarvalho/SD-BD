@@ -283,10 +283,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             request = connection.createStatement();
             //preparedstatement.setInt(1, userID);
             rs = request.executeQuery(query);
-            
-            
-            
-            
             while(rs.next()){
 
                 lista_ids.add(rs.getInt("id_projecto"));
@@ -320,6 +316,38 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         return clrqst;
         
     }
+    
+    public ClientRequest apagaProjecto(ClientRequest clrqst) throws RemoteException{
+        System.out.println("[RMI Server] Função <apagaProjecto> chamada!");
+        int userID = (int) clrqst.getRequest()[0];
+        int projectID = (int) clrqst.getRequest()[1];
+        clrqst.setStage(2);
+        myRequests.add(clrqst);
+         try{
+            System.out.println("oi janeiro!!!!!!!!!!!  "  + projectID);
+            query = "DELETE FROM projecto WHERE id =" + projectID;
+            request = connection.createStatement();
+            rs = request.executeQuery(query);
+            rs.next();
+            
+        }catch (SQLException ex) {
+            System.err.println("Erro:" + ex);
+        }
+        try{
+            query = "DELETE FROM projecto_user WHERE id_user=" + userID + "AND id_projecto =" + projectID;
+            request = connection.createStatement();
+            rs = request.executeQuery(query);
+            rs.next();
+        } catch (SQLException ex) {
+            System.err.println("Erro:" + ex);
+        }
+        
+        resposta[0] = "projecto apagado";
+        clrqst.setResponse(resposta);
+        clrqst.setStage(3);
+        return clrqst;
+    }
+    
     
     public ClientRequest getUserSaldo(ClientRequest clrqst) throws RemoteException {
 
