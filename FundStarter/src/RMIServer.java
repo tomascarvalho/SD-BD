@@ -279,7 +279,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         try{
             query = "SELECT id_projecto FROM projecto_user WHERE id_user ="+userID;
             request = connection.createStatement();
-            //preparedstatement.setInt(1, userID);
             rs = request.executeQuery(query);
             while(rs.next()){
 
