@@ -445,20 +445,13 @@ public class Client {
 
             if (choice == 0) {
                 System.out.println("1 - Consultar detalhes de um projcto");
-<<<<<<< HEAD
                 System.out.println("2 - Enviar mensagem a um projecto");
                 System.out.println("3 - Voltar ao Menu de Conta");
                 System.out.println(">>>");
                 choice = sc.nextInt();
 
                 while ((choice != 1) && (choice != 2) && (choice !=3)) {
-=======
-                System.out.println("2 - Voltar ao Menu");
-                System.out.print(">>>");
-                choice = sc.nextInt();
 
-                while ((choice != 1) && (choice != 2) ) {
->>>>>>> 117d05784b7a19e1b52a4d3bb5109680c6dfd089
 
                     System.out.println("1 - Consultar detalhes de um projecto");
                     System.out.println("2 - Enviar mensagem a um projecto");
@@ -470,15 +463,12 @@ public class Client {
                     choice = sc.nextInt();
                     consultarDetalhesProjecto(choice, logged);
                 }
-<<<<<<< HEAD
                 if (choice == 2){
                     System.out.println("ID do projecto a enviar mensagem: ");
                     choice = sc.nextInt();
                     enviaMensagem (choice);
                 }
-=======
-                
->>>>>>> 117d05784b7a19e1b52a4d3bb5109680c6dfd089
+
                 if (logged == 0) {
                     mainMenu();
                 } else {
@@ -646,6 +636,7 @@ public class Client {
                 conta = sc.nextInt();
                 if (conta == 2){
                     //IMPLEMENTAR DOAR RECOMPENSA donateReward(id_projecto);
+                    donateReward(id);
                 }
             } else{
                 System.out.println("Não ganhou recompensas");
