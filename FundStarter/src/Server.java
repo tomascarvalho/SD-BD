@@ -262,21 +262,24 @@ class NewClient extends Thread {
                     myMail.setStage(4);
 
                 } else if (postCard.getRequest()[0].equals("seesal")) {
-
                     System.out.println("Vim consultar o meu saldo\n");
-
                     postCard.getRequest()[1] = myUserID;
                     postCard.setStage(1);
-
                     myMail = remoteConection.getUserSaldo(postCard);
-
                     myMail.setStage(4);
+                    
+                }else if(postCard.getRequest()[0].equals("send_mess")){
+                    System.out.print("Enviar mensagem\n");
+                    postCard.getRequest()[0] = myUserID;
+                    postCard.setStage(1);
+                    myMail = remoteConection.enviaMensagem(postCard);
+                    myMail.setStage(4);
+                    
+                
                 }else if (postCard.getRequest()[0].equals("delete_project")){
                     System.out.println("Apagar um projecto\n");
                     postCard.getRequest()[0] = myUserID;
-                    
                     postCard.setStage(1);
-                    
                     myMail = remoteConection.apagaProjecto(postCard);
                     myMail.setStage(4);
                     

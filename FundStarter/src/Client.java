@@ -285,6 +285,21 @@ public class Client {
         }
 
     }
+    
+      public void enviaMensagem (int idProjecto){
+        System.out.println("Digite a sua mensagem:\n");
+        Scanner sc = new Scanner(System.in);
+        String mensagem = sc.nextLine();
+          
+          
+        postCard[0] = "send_mess";
+        postCard[1] = idProjecto;
+        postCard[2] = mensagem;
+        postCard = postOffice(postCard);
+        System.out.println(postCard[0]);
+        
+    }
+    
 
     public boolean consultaSaldo() {
 
@@ -377,6 +392,8 @@ public class Client {
             return false;
         }
     }
+    
+  
 
     public void listarProjectosActuais(int choice, int logged) throws IOException, ClassNotFoundException { // if choice 0 -> active projects
         // if choice 1 -> old projects
@@ -427,20 +444,27 @@ public class Client {
 
             if (choice == 0) {
                 System.out.println("1 - Consultar detalhes de um projcto");
-                System.out.println("2 - Voltar ao Menu de Conta");
+                System.out.println("2 - Enviar mensagem a um projecto");
+                System.out.println("3 - Voltar ao Menu de Conta");
                 System.out.println(">>>");
                 choice = sc.nextInt();
 
-                while ((choice != 1) && (choice != 2)) {
+                while ((choice != 1) && (choice != 2) && (choice !=3)) {
 
-                    System.out.println("1 - Consultar detalhes de um projcto");
-                    System.out.println("2 - Voltar ao Menu");
+                    System.out.println("1 - Consultar detalhes de um projecto");
+                    System.out.println("2 - Enviar mensagem a um projecto");
+                    System.out.println("3 - Voltar ao Menu");
                     choice = sc.nextInt();
                 }
                 if (choice == 1) {
                     System.out.println("ID do projecto a consultar: ");
                     choice = sc.nextInt();
                     consultarDetalhesProjecto(choice, logged);
+                }
+                if (choice == 2){
+                    System.out.println("ID do projecto a enviar mensagem: ");
+                    choice = sc.nextInt();
+                    enviaMensagem (choice);
                 }
                 if (logged == 0) {
                     mainMenu();
