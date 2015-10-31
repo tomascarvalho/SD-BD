@@ -84,6 +84,12 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
     public ClientRequest novoUtilizador(ClientRequest clrqst) throws RemoteException {
 
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
+        
         String[] userInfo = (String[]) clrqst.getRequest()[1];
 
         clrqst.setStage(2);
@@ -155,7 +161,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     public ClientRequest novoProjecto(ClientRequest clrqst) throws RemoteException { //Verificar Erro
 
         System.out.println("[RMI Server] Função <novoProjecto> chamada!");
-
+        
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
+        
         String[] projectInfo = (String[]) clrqst.getRequest()[1];
         int id_niveis_extra = 0, id = 0, i, j, k;
         clrqst.setStage(2);
@@ -271,6 +283,12 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
     public ClientRequest donateReward(ClientRequest clrqst) throws RemoteException{
         
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
+        
         clrqst.setStage(2);
         myRequests.add(clrqst);
         int id_projecto = (int)clrqst.getRequest()[1];
@@ -333,6 +351,11 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
    
     public ClientRequest getUserProjects(ClientRequest clrqst) throws RemoteException{
         
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
 
         System.out.println("[RMI Server] Função <getUserProjects> chamada!");
         ArrayList<Integer> lista_ids = new ArrayList<Integer>();
@@ -388,6 +411,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         ArrayList <ArrayList<Integer> > listaPerguntas = new ArrayList<ArrayList<Integer>>();
         ArrayList <Integer> lista_projectos = new ArrayList<Integer>(0);
         ArrayList <String> lista_perguntas = new ArrayList <String>(0);
+        
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
+        
         int userID = (int) clrqst.getRequest()[0];
         
         clrqst.setStage(2);
@@ -455,6 +485,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     
     public ClientRequest respMensagem(ClientRequest clrqst) throws RemoteException{
         System.out.println("[RMI Server] Função <respMensagem> chamada!");
+        
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
+        
         //int userID = (int) clrqst.getRequest()[0];
         int questionID = (int) clrqst.getRequest()[1];
         String mensagem = (String) clrqst.getRequest()[2];
@@ -483,6 +520,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
     public ClientRequest enviaMensagem(ClientRequest clrqst) throws RemoteException{
         System.out.println("[RMI Server] Função <enviaMensagem> chamada!");
+        
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
+        
         int userID = (int) clrqst.getRequest()[0];
         int projectID = (int) clrqst.getRequest()[1];
         String mensagem = (String) clrqst.getRequest()[2];
@@ -510,6 +554,12 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         
 
         System.out.println("[RMI Server] Função <apagaProjecto> chamada!");
+        
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
         
         int valor_a_devolver = 0;
         int userID = 0;
@@ -642,7 +692,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     public ClientRequest getUserSaldo(ClientRequest clrqst) throws RemoteException {
 
         System.out.println("[RMI Server] Função <getUserSaldo> chamada!");
-
+        
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
+        
         int userID = (int) clrqst.getRequest()[1];
 
         clrqst.setStage(2);
@@ -677,6 +733,12 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     }
 
     public ClientRequest voteForProduct(ClientRequest clrqst) throws RemoteException {
+        
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
 
         myRequests.add(clrqst);
         String product_type = (String) clrqst.getRequest()[1];
@@ -694,6 +756,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     }
 
     public void terminaProjecto() throws RemoteException {
+        
         Date date = new Date();
 
 
@@ -730,6 +793,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
         int i;
         System.out.println("[RMI Server] Função <getActualProjects> chamada!");
+        
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
+        
         String[] actual_projects = new String[2000];
         Object[] objecto = clrqst.getRequest();
         int choice = (int) objecto[1];
@@ -813,7 +883,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     }
 
     public ClientRequest getProjectDetails(ClientRequest clrqst) throws RemoteException {
-        System.out.println("[RMI Server] Função <getProjectDetails chamada!");
+        System.out.println("[RMI Server] Função <getProjectDetails> chamada!");
+        
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
 
         int i = 0, j = 0, pointer = 0;
         String[] project_details = new String[2000];
@@ -923,6 +999,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
     public ClientRequest pledgeToProject(ClientRequest clrqst) throws RemoteException {
         System.out.println("[RMI Server] Função <pledgeToProject> chamada!");
+        
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
+        
         Object[] objecto = clrqst.getRequest();
         int[] how_much__to_who = (int[]) (objecto[1]);
         int how_much = how_much__to_who[0];
@@ -1064,6 +1147,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     public ClientRequest addAdminToProject(ClientRequest clrqst) throws RemoteException {
 
         System.out.println("[RMI Server] Função <addAdminToProject> chamada!");
+        
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
+        
         Object[] objecto = clrqst.getRequest();
         String user = (String) (objecto[1]);
         int id_projecto = (int) (objecto[2]);

@@ -2,6 +2,8 @@
 import java.net.*;
 import java.util.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * FundStart
@@ -79,8 +81,6 @@ public class Client {
                 if (reconnect) {
                     System.out.println("[Cliente]Vou fazer o login de novo");//apagar depois
                     reLog();
-                    // System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");//apagar depois
-                    // checkRequest();
                 }
 
                 return;
@@ -109,8 +109,6 @@ public class Client {
                         if (reconnect) {
                             System.out.println("[Cliente]Vou fazer o login de novo");//apagar depois
                             reLog();
-                            //System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");//apagar depois
-                            //checkRequest();
                         }
 
                         return;
@@ -137,23 +135,24 @@ public class Client {
 
         while (true) {
             System.out.println("[reLog]Passei aqui");
-            ClientRequest remenberMe;
+            ClientRequest rememberMe;
             Object[] tempCard = new Object[2];
             tempCard[0] = "log";
             tempCard[1] = myCredentials;
 
-            remenberMe = new ClientRequest("", tempCard, "");
-
-            sender.writeUnshared(remenberMe);
+            rememberMe = new ClientRequest("", tempCard, "");
+            
+            sender.reset();
+            sender.writeUnshared(rememberMe);
 
             try {
-                remenberMe = (ClientRequest) reciver.readUnshared();
+                rememberMe = (ClientRequest) reciver.readUnshared();
             } catch (ClassNotFoundException ex) {
                 System.out.println("Deu bode");
             }
 
             System.out.println("Fiz o login....");
-            if (remenberMe.getResponse()[0].equals("log_in_correcto")) {
+            if (rememberMe.getResponse()[0].equals("log_in_correcto")) {
                 System.out.println("I'm Back Bitches...");
                 break;
             }
@@ -163,10 +162,13 @@ public class Client {
     public Object[] checkRequest() throws IOException {
 
         int lastRequestIndex = myRequest.size() - 1;
+        Object[] cenas;
 
-        System.out.println("Last Request->" + myRequest.get(lastRequestIndex).getRequest()[0]);//procurar o ultimo request bão terminado na base de dados
-
-        return postOffice(myRequest.get(lastRequestIndex).getRequest());
+        System.out.println("Last Request->" + myRequest.get(lastRequestIndex).getRequest()[0]);//procurar o ultimo request não terminado
+        
+        cenas= postOffice(myRequest.get(lastRequestIndex).getRequest());
+        System.out.println("Pintou");
+        return cenas;
 
     }
 
@@ -191,19 +193,24 @@ public class Client {
             newRequest = new ClientRequest(requestID, postCard, requestDate.toString());
             myRequest.add(newRequest);
             newRequest.setStage(0);
-            System.out.println("Vou enviar cenas");
+            
             sender.reset();
             sender.writeUnshared(newRequest);
-
+            
             newResponse = (ClientRequest) reciver.readObject();
 
             newResponse.setStage(5);
             updateRequest(newRequest, newResponse);
-            System.out.println("Chegeui aqui");
+            System.out.println("Response->"+newResponse.getResponse()[0]);
             return newResponse.getResponse();
 
         } catch (IOException ex) {
             connectionFunction(true);
+            try {
+                return checkRequest();
+            } catch (IOException ex1) {
+                System.out.println("Não consegui replicar o seu request!");
+            }
         } catch (ClassNotFoundException ex) {
             System.out.println("Classe não encontrada!");
         }
@@ -250,7 +257,7 @@ public class Client {
         postCard[0] = "log";
         postCard[1] = person;
 
-        postCard = postOffice(postCard);//AQUI
+        postCard = postOffice(postCard);
 
         if (postCard[0].equals("log_in_correcto")) {
             myId = (int) postCard[1];
@@ -276,7 +283,7 @@ public class Client {
         postCard[0] = "new";
         postCard[1] = newUserData;
 
-        postCard = postOffice(postCard);//AQUI
+        postCard = postOffice(postCard);
 
         if (postCard[0].equals("infosave")) {
             myId = (int) postCard[1];
@@ -353,15 +360,6 @@ public class Client {
         postCard[1] = myId;
 
         postCard = postOffice(postCard);
-
-        while (postCard == null) {
-
-            try {
-                postCard = checkRequest();
-            } catch (IOException ex) {
-
-            }
-        }
 
         System.out.println("\t\tO seu saldo é de " + postCard[0] + " euros.");
 
@@ -441,15 +439,6 @@ public class Client {
         postCard[1] = newProjectData;
 
         postCard = postOffice(postCard);
-
-        while (postCard == null) {
-            try {
-                postCard = checkRequest();
-            } catch (IOException ex) {
-                connectionFunction(true);
-            }
-
-        }
 
         if (postCard[0].equals("infosave")) {
             return true;

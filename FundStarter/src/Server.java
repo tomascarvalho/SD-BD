@@ -11,6 +11,7 @@ import java.rmi.*;
  *  Diana Umbelino 2012169525
  *  Tomás Carvalho 2012138578
  */
+
 /**
  *
  * @author gabrieloliveira
@@ -207,9 +208,7 @@ class NewClient extends Thread {
         while (true) {
             try {
 
-                //if (postCard == null) {
-                    postCard = (ClientRequest) reciver.readUnshared();
-               // }
+                postCard = (ClientRequest) reciver.readUnshared();
                 System.out.println(postCard.getRequest()[0]);
 
                 System.out.println("[Server] Li a mensagem do cliente na boa.");
@@ -268,50 +267,46 @@ class NewClient extends Thread {
                     postCard.setStage(1);
                     myMail = remoteConection.getUserSaldo(postCard);
                     myMail.setStage(4);
-                    
-                   
-                }else if(postCard.getRequest()[0].equals("mailbox")){
-                    
+
+                } else if (postCard.getRequest()[0].equals("mailbox")) {
+
                     System.out.println("Caixa de Correio\n");
                     postCard.getRequest()[0] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.caixaCorreio(postCard);
-                    
+
                     myMail.setStage(4);
-                }else if(postCard.getRequest()[0].equals("resp_mess")){
+                } else if (postCard.getRequest()[0].equals("resp_mess")) {
                     System.out.print("Responder mensagem\n");
                     postCard.getRequest()[0] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.respMensagem(postCard);
                     myMail.setStage(4);
-                
-                    
-                }else if(postCard.getRequest()[0].equals("send_mess")){
+
+                } else if (postCard.getRequest()[0].equals("send_mess")) {
                     System.out.print("Enviar mensagem\n");
                     postCard.getRequest()[0] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.enviaMensagem(postCard);
                     myMail.setStage(4);
-                    
-                
-                }else if (postCard.getRequest()[0].equals("delete_project")){
+
+                } else if (postCard.getRequest()[0].equals("delete_project")) {
                     System.out.println("Apagar um projecto\n");
                     postCard.getRequest()[0] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.apagaProjecto(postCard);
                     myMail.setStage(4);
-                    
-                }else if (postCard.getRequest()[0].equals("list_my_projects")){
+
+                } else if (postCard.getRequest()[0].equals("list_my_projects")) {
                     System.out.println("Vim consultar os meus projectos!\n");
-                    
+
                     postCard.getRequest()[1] = myUserID;
                     postCard.setStage(1);
-                    
+
                     myMail = remoteConection.getUserProjects(postCard);
                     myMail.setStage(4);
-                    
-                
-                }else if ((postCard.getRequest()[0].equals("list_actual_projects")) || (postCard.getRequest()[0].equals("list_old_projects"))) {
+
+                } else if ((postCard.getRequest()[0].equals("list_actual_projects")) || (postCard.getRequest()[0].equals("list_old_projects"))) {
                     System.out.print("Vim consultar os projectos!\n");
                     postCard.setStage(1);
 
@@ -330,29 +325,30 @@ class NewClient extends Thread {
                     postCard.getRequest()[0] = myUserID;
                     myMail = remoteConection.pledgeToProject(postCard);
                     myMail.setStage(4);
-                    
+
                 } else if (postCard.getRequest()[0].equals("add_Admin")) {
                     System.out.println("[Server] Add Admin");
                     postCard.setStage(1);
                     myMail = remoteConection.addAdminToProject(postCard);
                     myMail.setStage(4);
-                    
-                } else if (postCard.getRequest()[0].equals("vote_for_product")){
+
+                } else if (postCard.getRequest()[0].equals("vote_for_product")) {
                     System.out.println("[Server] Vote For Product");
                     postCard.setStage(1);
                     myMail = remoteConection.voteForProduct(postCard);
                     myMail.setStage(4);
-                    
-                } else if (postCard.getRequest()[0].equals("donate_reward_take_mine_away")){
+
+                } else if (postCard.getRequest()[0].equals("donate_reward_take_mine_away")) {
                     System.out.println("[Server] Donating Reward");
-  
+
                     postCard.setStage(1);
                     myMail = remoteConection.donateReward(postCard);
                     myMail.setStage(4);
-                    
-                }
-                 
 
+                }
+
+                System.out.println("Vou mandar qualquer coisa");
+                System.out.println("My Mail->" + myMail.getResponse()[0]);
                 sender.writeUnshared(myMail);
                 postCard = null;
 
