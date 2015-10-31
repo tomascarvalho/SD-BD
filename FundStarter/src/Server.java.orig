@@ -269,23 +269,6 @@ class NewClient extends Thread {
                     myMail = remoteConection.getUserSaldo(postCard);
                     myMail.setStage(4);
                     
-                   
-                }else if(postCard.getRequest()[0].equals("mailbox")){
-                    
-                    System.out.println("Caixa de Correio\n");
-                    postCard.getRequest()[0] = myUserID;
-                    postCard.setStage(1);
-                    myMail = remoteConection.caixaCorreio(postCard);
-                    
-                    myMail.setStage(4);
-                }else if(postCard.getRequest()[0].equals("resp_mess")){
-                    System.out.print("Responder mensagem\n");
-                    postCard.getRequest()[0] = myUserID;
-                    postCard.setStage(1);
-                    myMail = remoteConection.respMensagem(postCard);
-                    myMail.setStage(4);
-                
-                    
                 }else if(postCard.getRequest()[0].equals("send_mess")){
                     System.out.print("Enviar mensagem\n");
                     postCard.getRequest()[0] = myUserID;
