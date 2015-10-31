@@ -26,6 +26,10 @@ public interface RMIServerInterface extends Remote {
     
     public ClientRequest enviaMensagem(ClientRequest clrqst) throws RemoteException;
     
+    public ClientRequest respMensagem (ClientRequest clrqst) throws RemoteException;
+    
+    public ClientRequest caixaCorreio(ClientRequest clrqst) throws RemoteException;
+    
     public ClientRequest apagaProjecto(ClientRequest clrqst) throws RemoteException;
     
     public void terminaProjecto() throws RemoteException;

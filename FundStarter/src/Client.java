@@ -300,6 +300,49 @@ public class Client {
         System.out.println(postCard[0]);
         
     }
+      
+      public void respondeMensagem(int idResposta){
+        System.out.println("Digite a sua mensagem:\n");
+        Scanner sc = new Scanner(System.in);
+        String resposta = sc.nextLine();
+
+        postCard[0] = "resp_mess";
+        postCard[1] = idResposta;
+        postCard[2] = resposta;
+        postCard = postOffice(postCard);
+        System.out.println(postCard[0]);
+      }
+      
+      public void caixaCorreio(){
+          System.out.println("Caixa de Correio:");
+          
+          postCard[0] = "mailbox";
+          postCard = postOffice(postCard);
+          
+          Object[] objecto = postCard;
+          ArrayList<ArrayList<Integer>>  listaPerguntas= (ArrayList<ArrayList<Integer>>)postCard[0];
+          ArrayList <String> perguntas = (ArrayList<String>) postCard[1];
+          int tamanho = listaPerguntas.size();
+          int i,j;
+          
+          for(i=0; i<tamanho; i++){
+              if(listaPerguntas.get(i).isEmpty()==false){
+                System.out.println("ID do Projecto:  " + listaPerguntas.get(i).get(0));
+                int novotam = listaPerguntas.get(i).size();
+                System.out.println("Perguntas associadas:");
+                for(j=1; j<novotam; j++){
+                    System.out.print(listaPerguntas.get(i).get(j) + ":\t" + perguntas.get(j) + "\n");
+                }
+            }
+          }
+          
+          
+          System.out.print("ID da mensagem a responder: ");
+          int idResposta = sc.nextInt();
+          
+          respondeMensagem(idResposta);
+             
+      }
     
 
     public boolean consultaSaldo() {
@@ -445,20 +488,13 @@ public class Client {
 
             if (choice == 0) {
                 System.out.println("1 - Consultar detalhes de um projcto");
-<<<<<<< HEAD
-                System.out.println("2 - Enviar mensagem a um projecto");
-                System.out.println("3 - Voltar ao Menu de Conta");
-                System.out.println(">>>");
-                choice = sc.nextInt();
 
-                while ((choice != 1) && (choice != 2) && (choice !=3)) {
-=======
                 System.out.println("2 - Voltar ao Menu");
                 System.out.print(">>>");
                 choice = sc.nextInt();
 
                 while ((choice != 1) && (choice != 2) ) {
->>>>>>> 117d05784b7a19e1b52a4d3bb5109680c6dfd089
+
 
                     System.out.println("1 - Consultar detalhes de um projecto");
                     System.out.println("2 - Enviar mensagem a um projecto");
@@ -470,15 +506,7 @@ public class Client {
                     choice = sc.nextInt();
                     consultarDetalhesProjecto(choice, logged);
                 }
-<<<<<<< HEAD
-                if (choice == 2){
-                    System.out.println("ID do projecto a enviar mensagem: ");
-                    choice = sc.nextInt();
-                    enviaMensagem (choice);
-                }
-=======
-                
->>>>>>> 117d05784b7a19e1b52a4d3bb5109680c6dfd089
+
                 if (logged == 0) {
                     mainMenu();
                 } else {
@@ -587,7 +615,7 @@ public class Client {
 
             }
             if (logged == 1){
-                System.out.println("\n 1 - Doar ao Projecto"
+                System.out.println("\n1 - Doar ao Projecto"
                     + "\n2 - Enviar Mensagem ao Projecto"
                     + "\n3 - Voltar ao Menu");
                 System.out.print(">>");
@@ -605,7 +633,7 @@ public class Client {
                     
                 }
                 else if(choice == 2){
-                    //CHAMAR ENVIAR MENSAGEM PROJECTO (ID)
+                    enviaMensagem(id);
                 }
                 menuConta();
             }
@@ -835,13 +863,13 @@ public class Client {
         int userPick;
 
         System.out.println("\t\t\tMenu Inicial\n\n");
-        System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\n\n\t\t>>");
+        System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\n\n\t\t>>");
         userPick = sc.nextInt();
 
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
-        while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5)) {
+        while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5) && (userPick!=6)) {
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
-            System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\n\n\t\t>>");
+            System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\n\n\t\t>>");
             userPick = sc.nextInt();
 
         }
@@ -856,6 +884,8 @@ public class Client {
         } else if (userPick == 5){
             consultarProjectosUser();
             listarProjectosActuais(1, 1);
+        }else if (userPick == 6){
+            caixaCorreio();
         }
 
         menuConta();
