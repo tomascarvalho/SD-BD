@@ -330,6 +330,14 @@ class NewClient extends Thread {
                     postCard.setStage(1);
                     myMail = remoteConection.voteForProduct(postCard);
                     myMail.setStage(4);
+                    
+                } else if (postCard.getRequest()[0].equals("donate_reward_take_mine_away")){
+                    System.out.println("[Server] Donating Reward");
+  
+                    postCard.setStage(1);
+                    myMail = remoteConection.donateReward(postCard);
+                    myMail.setStage(4);
+                    
                 }
                  
 

@@ -316,6 +316,7 @@ public class Client {
 
     public boolean criaProjecto() {
 
+        sc.nextLine();
         String[] newProjectData = new String[2000];
         String constroi_data_limite;
         int num_recompensas = 0;
@@ -635,8 +636,10 @@ public class Client {
                 System.out.print("Se desejar manter a sua recompensa seleccione 1. Caso a deseje oferecer a outro utilizador seleccione 2\n>>");
                 conta = sc.nextInt();
                 if (conta == 2){
-                    //IMPLEMENTAR DOAR RECOMPENSA donateReward(id_projecto);
-                    donateReward(id);
+  
+                    while(!donateReward(id, recompensa)){
+                        System.out.println("Erro ao doar recompensa");
+                    }
                 }
             } else{
                 System.out.println("Não ganhou recompensas");
@@ -665,6 +668,35 @@ public class Client {
         }
     }
     
+    public boolean donateReward(int id_projecto, String recompensa){ //already mine: 0- If I don't have the reward yet
+                                                                                    //              1- If I already have the reward
+        
+        
+        sc.nextLine();
+        String username;
+       
+        postCard[0] = "donate_reward_take_mine_away";
+        
+        System.out.println("A que utilizador deseja doar a sua recompensa: ");
+        username = sc.nextLine();
+        postCard[1] = id_projecto;
+        postCard[2] = username;
+        postCard[3] = recompensa;
+        postCard = postOffice(postCard);
+        String resposta = (String)postCard[0];
+        
+        if (resposta.equals("success")){
+            System.out.println("Recompensa doada com sucesso");
+            return true;
+        }
+        else if(resposta.equals("no_user")){
+            System.out.println("Esse utilizador não existe");
+            return false;
+        }
+        return false;
+        
+    }
+    
     public void voteForProduct(String produto_votado){
         
         postCard[0] = "vote_for_product";
@@ -678,7 +710,7 @@ public class Client {
         
         postCard = postOffice(postCard);
         
-        String userPick;
+        int userPick;
         int id_projecto_pick;
         int i;
         Object[] objecto = postCard;
@@ -698,14 +730,14 @@ public class Client {
             }
             System.out.println("\t\t\tMenu Admin\n\n");
             System.out.print("\t\t1 - Adicionar Administrador ao Projecto\n\t\t2 - Cancelar Projectos\n\t\t3 - Consultar Mensagens de um Projecto\n\t\t4 -Voltar ao Menu\n\n\n\t\t>>");
-            userPick = sc.nextLine();
+            userPick = sc.nextInt();
             //Verificar Escolhas
-            while ((userPick.equals("1") == false) && (userPick.equals("2") == false) && (userPick.equals("3") == false) && (userPick.equals("4") == false)) {
+            while ((userPick != 1) && (userPick != 2) && (userPick != 3) && (userPick != 4)){
                 System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
                 System.out.print("\t\t1 - Adicionar Administrador ao Projecto\n\t\t2 - Cancelar Projectos\n\t\t3 - Consultar Mensagens de um Projecto\n\t\t4 -Voltar ao Menu\n\n\n\t\t>>");
-                userPick = sc.nextLine();
+                userPick = sc.nextInt();
             }
-            if (userPick.equals("1")) {
+            if (userPick == 1) {
                 System.out.println("ID do projecto ao qual quer adicionar um administrador: ");
                 id_projecto_pick = sc.nextInt();
                 while(!id_projecto.contains(id_projecto_pick)){
@@ -717,7 +749,7 @@ public class Client {
                 addAdminToProject(id_projecto_pick);
 
             }
-            else if (userPick.equals("2")) {
+            else if (userPick == 2) {
                 System.out.println("ID do projecto a cancelar: ");
                 id_projecto_pick = sc.nextInt();
              
@@ -782,7 +814,6 @@ public class Client {
         int userPick;
 
         conectionError = 0;
-
         System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
         userPick = sc.nextInt();

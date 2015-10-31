@@ -262,6 +262,66 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         return clrqst;
     }
     
+    public ClientRequest donateReward(ClientRequest clrqst) throws RemoteException{
+        
+        clrqst.setStage(2);
+        myRequests.add(clrqst);
+        int id_projecto = (int)clrqst.getRequest()[1];
+        String username = (String)clrqst.getRequest()[2];
+        String recompensa = (String)clrqst.getRequest()[3];
+        int id_recompensa = 0;
+        int id_user = 0;
+        try{
+            query = "SELECT id FROM utilizador WHERE username = '"+username+"'";
+            request = connection.createStatement();
+            rs = request.executeQuery(query);
+            if (rs.next()){
+                id_user = rs.getInt("id");
+                try{
+                    query = "SELECT id FROM recompensas WHERE titulo = '"+recompensa+"'";
+                    request = connection.createStatement();
+                    rs = request.executeQuery(query);
+                    if (rs.next()){
+                        id_recompensa = rs.getInt("id");
+                        
+                        try{
+                            
+                            query = "UPDATE recompensa_user SET id_user= "+id_user+" WHERE id_recompensa= "+id_recompensa;
+                            preparedstatement = connection.prepareStatement(query);
+                            preparedstatement.executeUpdate();
+                        
+                            
+                            resposta[0] = "success";
+                        } catch(SQLException ex){
+                            System.err.print("SQLException 289: "+ex);
+                        }
+                    
+                    }
+                    else{
+                        resposta[0] = "no_reward";
+                    }
+                    
+                } catch(SQLException ex)
+                {
+                    System.err.print("SQLException 290: "+ex);
+                }
+                
+            }
+            else{
+                resposta[0] = "no_user_found";
+            }
+            
+            
+        } catch(SQLException ex){
+            System.err.print("SQLException 283: "+ ex);
+        }
+        
+        clrqst.setResponse(resposta);
+        clrqst.setStage(3);
+        updateRequest(clrqst);
+        return clrqst;
+    }
+    
     
    
     public ClientRequest getUserProjects(ClientRequest clrqst) throws RemoteException{
@@ -340,28 +400,127 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     }
     
     public ClientRequest apagaProjecto(ClientRequest clrqst) throws RemoteException{
+        
         System.out.println("[RMI Server] Função <apagaProjecto> chamada!");
-        int userID = (int) clrqst.getRequest()[0];
+        
+        int valor_a_devolver = 0;
+        int userID = 0;
         int projectID = (int) clrqst.getRequest()[1];
+        int rewardID = 0;
         clrqst.setStage(2);
         myRequests.add(clrqst);
-         try{
-            query = "DELETE FROM projecto WHERE id =" + projectID;
+        
+        try {
+            query = "SELECT valor, id_user from pledge_user WHERE id_projecto = "+projectID;
             request = connection.createStatement();
             rs = request.executeQuery(query);
-            rs.next();
+            while (rs.next()){
+                valor_a_devolver = rs.getInt("valor");
+                userID = rs.getInt("id_user");
+                
+                try{
+                    query = "UPDATE utilizador SET saldo = saldo+"+valor_a_devolver+" WHERE id = "+userID;
+                    request = connection.createStatement();
+                    request.executeUpdate(query);
+                } catch(SQLException ex){
+                    System.out.println("SQLException 475: "+ex);
+                }
+                
+            }
             
-        }catch (SQLException ex) {
-            System.err.println("Erro:" + ex);
+        } catch (SQLException ex) {
+            System.err.println("SQLException 489: " + ex);
         }
         try{
-            query = "DELETE FROM projecto_user WHERE id_user=" + userID + "AND id_projecto =" + projectID;
+            query = "DELETE FROM pledge_user WHERE id_projecto = "+projectID;
             request = connection.createStatement();
-            rs = request.executeQuery(query);
-            rs.next();
+            request.executeUpdate(query);
+            
         } catch (SQLException ex) {
             System.err.println("Erro:" + ex);
         }
+        
+        try{
+            query = "DELETE FROM projecto WHERE id =" + projectID;
+            request = connection.createStatement();
+            request.executeUpdate(query);
+            
+        }catch (SQLException ex) {
+            System.err.println("SQLException 418:" + ex);
+        }
+        try{
+            query = "DELETE FROM projecto_user WHERE id_projecto =" + projectID;
+            request = connection.createStatement();
+            request.executeUpdate(query);
+        } catch (SQLException ex) {
+            System.err.println("SQLException 426:" + ex);
+        }
+        try{
+            query = "DELETE FROM product_type WHERE id_projecto= "+projectID;
+            request = connection.createStatement();
+            request.executeUpdate(query);
+            
+        } catch (SQLException ex) {
+            System.err.println("SQLException 434:" + ex);
+        }
+        try{
+            query = "DELETE FROM niveis_extra WHERE id_projecto = "+projectID;
+            request = connection.createStatement();
+            request.executeUpdate(query);
+            
+        } catch (SQLException ex) {
+            System.err.println("SQLException 442:" + ex);
+        }
+        try{
+            query = "DELETE FROM mensagem WHERE id_projecto = "+projectID;
+            request = connection.createStatement();
+            request.executeUpdate(query);
+            
+        } catch (SQLException ex) {
+            System.err.println("SQLException 450:" + ex);
+        }
+        
+        try{
+            query = "DELETE FROM niveis_extra WHERE id_projecto = "+projectID;
+            request = connection.createStatement();
+            request.executeUpdate(query);
+            
+        } catch (SQLException ex) {
+            System.err.println("SQLException 459:" + ex);
+        }
+        
+        
+        try{
+            query = "SELECT id FROM recompensas WHERE id_projecto = "+projectID;
+            request = connection.createStatement();
+            rs = request.executeQuery(query);
+            while (rs.next()){
+                rewardID = rs.getInt("id");
+                try{
+                    query = "DELETE FROM recompensa_user WHERE id_recompensa= "+rewardID;
+                    request = connection.createStatement();
+                    request.executeUpdate(query);
+                } catch(SQLException ex){
+                    System.err.print("SQLException 503: "+ex);
+                }
+                
+            }
+            query = "DELETE FROM recompensas WHERE id_projecto ="+projectID;
+            request = connection.createStatement();
+            request.executeUpdate(query);
+        } catch(SQLException ex){
+            System.err.print("SQLException 511: "+ex);
+        }
+        
+        try{
+            query = "DELETE FROM niveis_extra WHERE id_projecto = "+projectID;
+            request = connection.createStatement();
+            request.executeUpdate(query);
+            
+        } catch (SQLException ex) {
+            System.err.println("Erro:" + ex);
+        }
+        
         
         resposta[0] = "projecto apagado";
         clrqst.setResponse(resposta);
@@ -427,13 +586,12 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     public void terminaProjecto() throws RemoteException {
         Date date = new Date();
         System.out.println(date.toString());
-        System.out.println("OLA AMIGOS!");
-        //ArrayList<Date> lista_datas = new ArrayList <Date>();
+
 
         Date dataLimite;
         int projectID;
         try {
-            System.out.println("ola tomas, estou aqui!");
+
             query = "SELECT id,data_limite, status FROM projecto";
             request = connection.createStatement();
             rs = request.executeQuery(query);
@@ -769,8 +927,19 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                     request.executeUpdate(query);
                     
                 } catch (SQLException ex) {
-                System.err.println("SQLException 640 :" + ex);
+                    System.err.println("SQLException 640 :" + ex);
                 }
+                
+                
+                try{
+                    query = "INSERT INTO pledge_user (id_user, id_projecto, valor) VALUES ("+user_id+", "+to_who+", "+how_much+")";
+                    request = connection.createStatement();
+                    request.executeUpdate(query);
+                    
+                }catch (SQLException ex) {
+                    System.err.println("SQLException 650 :" + ex);
+                }
+                
                 
                 try{
                     query = "SELECT * "
