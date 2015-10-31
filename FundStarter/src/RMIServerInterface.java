@@ -23,6 +23,9 @@ public interface RMIServerInterface extends Remote {
     public ClientRequest novoUtilizador(ClientRequest userInfo) throws RemoteException;
 
     public ClientRequest getUserSaldo(ClientRequest clrqst) throws RemoteException;
+    
+    public ClientRequest enviaMensagem(ClientRequest clrqst) throws RemoteException;
+    
     public ClientRequest apagaProjecto(ClientRequest clrqst) throws RemoteException;
     
     public void terminaProjecto() throws RemoteException;
@@ -42,6 +45,8 @@ public interface RMIServerInterface extends Remote {
     public ClientRequest addAdminToProject(ClientRequest clrqst) throws RemoteException;
     
     public ClientRequest voteForProduct(ClientRequest clrqst) throws RemoteException;
+    
+    public ClientRequest donateReward(ClientRequest clrqst) throws RemoteException;
 
 
 }

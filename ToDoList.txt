@@ -12,7 +12,7 @@
 ———————> Enviar mensagens para o projecto
 ———————> Criar um projecto (FEITO)
 ———————> Adicionar e Renovar recompensas ao projecto
-———————> Cancelar Projecto
+———————> Cancelar Projecto (FEITO)
 ———————> Fim do projecto
 
 :::::::::::::::::::::::::: Para a BD                 ::::::::::::::::::::::::::::::::
