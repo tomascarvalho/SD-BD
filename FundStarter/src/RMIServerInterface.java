@@ -33,7 +33,7 @@ public interface RMIServerInterface extends Remote {
 
     public ClientRequest novoProjecto(ClientRequest clrqst) throws RemoteException;
     
-    public ClientRequest seeLastRequest(ClientRequest clrqst) throws RemoteException;
+    public ClientRequest checkRequest(ClientRequest clrqst) throws RemoteException;
     
     public ClientRequest pledgeToProject(ClientRequest clrqst) throws RemoteException;
 

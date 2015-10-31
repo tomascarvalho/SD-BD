@@ -265,7 +265,7 @@ class NewClient extends Thread {
 
                     System.out.println("Vim consultar o meu saldo\n");
 
-                    postCard.getRequest()[1] = myUserID;
+                    //postCard.getRequest()[1] = myUserID;
                     postCard.setStage(1);
 
                     myMail = remoteConection.getUserSaldo(postCard);
@@ -304,12 +304,6 @@ class NewClient extends Thread {
                     myMail = remoteConection.getProjectDetails(postCard);
                     myMail.setStage(4);
 
-                } else if (postCard.getRequest()[0].equals("see_last_request")) {
-
-                    System.out.println("Vim consultar ultimo request");
-
-                    myMail = remoteConection.seeLastRequest(postCard);
-                    
                 } else if (postCard.getRequest()[0].equals("pledge")) {
                     System.out.println("[Server] Pledge");
                     postCard.getRequest()[0] = myUserID;

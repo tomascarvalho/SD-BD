@@ -33,6 +33,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     ResultSet rs = null;
     String query;
     ResultSet returnBD = null;
+    ClientRequest requestCheck=null;
 
     protected RMIServer() throws RemoteException {
         super();
@@ -46,6 +47,12 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         System.out.println(user);
         String password = person[1];
         int id = -1;
+        
+        requestCheck=checkRequest(clrqst);
+        
+        if(requestCheck!=null){
+            return requestCheck;
+        }
 
         try {
             query = "SELECT id, username, pass FROM utilizador WHERE username = ? AND pass = ?";
@@ -261,76 +268,74 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
         return clrqst;
     }
-    
-    
-   
-    public ClientRequest getUserProjects(ClientRequest clrqst) throws RemoteException{
-        
+
+    public ClientRequest getUserProjects(ClientRequest clrqst) throws RemoteException {
+
         System.out.println("[RMI Server] Função <getUserProjects> chamada!");
-        ArrayList <Integer> lista_ids = new ArrayList<Integer>();
-        ArrayList <String> lista_projectos = new ArrayList<String>();
-        
-        int project_id =0;
+        ArrayList<Integer> lista_ids = new ArrayList<Integer>();
+        ArrayList<String> lista_projectos = new ArrayList<String>();
+
+        int project_id = 0;
         int userID = (int) clrqst.getRequest()[1];
-        
+
         clrqst.setStage(2);
         myRequests.add(clrqst);
-        
-        try{
-            query = "SELECT id_projecto FROM projecto_user WHERE id_user ="+userID;
+
+        try {
+            query = "SELECT id_projecto FROM projecto_user WHERE id_user =" + userID;
             request = connection.createStatement();
             //preparedstatement.setInt(1, userID);
             rs = request.executeQuery(query);
-            while(rs.next()){
+            while (rs.next()) {
 
                 lista_ids.add(rs.getInt("id_projecto"));
             }
             resposta[0] = lista_ids;
-        }catch (SQLException ex) {
+        } catch (SQLException ex) {
             System.err.println("Erro 1:" + ex);
         }
-            
-        try{
-            Iterator <Integer> it = lista_ids.iterator();
-            while (it.hasNext()){
+
+        try {
+            Iterator<Integer> it = lista_ids.iterator();
+            while (it.hasNext()) {
                 project_id = it.next();
-                query = "SELECT titulo FROM projecto WHERE id="+ project_id ;
+                query = "SELECT titulo FROM projecto WHERE id=" + project_id;
                 request = connection.createStatement();
                 rs = request.executeQuery(query);
-                if(rs.next()){
+                if (rs.next()) {
                     lista_projectos.add(rs.getString("titulo"));
                 }
             }
-            
+
             resposta[1] = lista_projectos;
-        }catch (SQLException ex) {
+        } catch (SQLException ex) {
             System.err.println("Erro 2:" + ex);
         }
-            clrqst.setResponse(resposta);
-            clrqst.setStage(3);
-            
-            updateRequest(clrqst);
+        clrqst.setResponse(resposta);
+        clrqst.setStage(3);
+
+        updateRequest(clrqst);
 
         return clrqst;
-        
+
     }
-    
-    public ClientRequest apagaProjecto(ClientRequest clrqst) throws RemoteException{
+
+    public ClientRequest apagaProjecto(ClientRequest clrqst) throws RemoteException {
         System.out.println("[RMI Server] Função <apagaProjecto> chamada!");
         int userID = (int) clrqst.getRequest()[0];
         int projectID = (int) clrqst.getRequest()[1];
         clrqst.setStage(2);
         myRequests.add(clrqst);
-         try{
+        try {
             query = "DELETE FROM projecto WHERE id =" + projectID;
             request = connection.createStatement();
             rs = request.executeQuery(query);
             rs.next();
-            
-        }catch (SQLException ex) {
+
+        } catch (SQLException ex) {
             System.err.println("Erro:" + ex);
         }
-        try{
+        try {
             query = "DELETE FROM projecto_user WHERE id_user=" + userID + "AND id_projecto =" + projectID;
             request = connection.createStatement();
             rs = request.executeQuery(query);
@@ -338,14 +343,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         } catch (SQLException ex) {
             System.err.println("Erro:" + ex);
         }
-        
+
         resposta[0] = "projecto apagado";
         clrqst.setResponse(resposta);
         clrqst.setStage(3);
         return clrqst;
     }
-    
-    
+
     public ClientRequest getUserSaldo(ClientRequest clrqst) throws RemoteException {
 
         System.out.println("[RMI Server] Função <getUserSaldo> chamada!");
@@ -382,18 +386,18 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
         return clrqst;
     }
-    
-    public ClientRequest voteForProduct(ClientRequest clrqst) throws RemoteException{
-        
+
+    public ClientRequest voteForProduct(ClientRequest clrqst) throws RemoteException {
+
         myRequests.add(clrqst);
-        String product_type = (String)clrqst.getRequest()[1];
-        
-        try{
-            query = "UPDATE product_type SET contador = contador +1 WHERE descricao = '"+product_type+"'";
+        String product_type = (String) clrqst.getRequest()[1];
+
+        try {
+            query = "UPDATE product_type SET contador = contador +1 WHERE descricao = '" + product_type + "'";
             preparedstatement = connection.prepareStatement(query);
             preparedstatement.executeUpdate();
-        } catch(SQLException ex){
-            System.err.print("SQLException 395: "+ex);
+        } catch (SQLException ex) {
+            System.err.print("SQLException 395: " + ex);
         }
         clrqst.setResponse(resposta);
         updateRequest(clrqst);
@@ -402,23 +406,18 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
     public void terminaProjecto() throws RemoteException {
         Date date = new Date();
-        System.out.println(date.toString());
-        System.out.println("OLA AMIGOS!");
-        //ArrayList<Date> lista_datas = new ArrayList <Date>();
 
         Date dataLimite;
         int projectID;
         try {
-            System.out.println("ola tomas, estou aqui!");
             query = "SELECT id,data_limite, status FROM projecto";
             request = connection.createStatement();
             rs = request.executeQuery(query);
 
-           while (rs.next()) {
+            while (rs.next()) {
                 dataLimite = rs.getDate("data_limite");
                 if (dataLimite.before(date) && rs.getBoolean("status")) {
-                    projectID=rs.getInt("id");
-                    System.out.println("Vou alterar no projecto com id "+projectID);
+                    projectID = rs.getInt("id");
                     query = "UPDATE projecto SET status=? WHERE id=?";
                     preparedstatement = connection.prepareStatement(query);
                     preparedstatement.setBoolean(1, false);
@@ -509,71 +508,17 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         return clrqst;
     }
 
-    public ClientRequest seeLastRequest(ClientRequest clrqst) throws RemoteException {
-        System.out.println("Funçao <seeLastRequest> chamada!");
-        ClientRequest auxRequest = null;
-
-        for (int i = 0; i < myRequests.size(); i++) {
-            if (myRequests.get(i).getRequestID().equals(clrqst.getRequestID())) {
-                if (myRequests.get(i).getTimestamp().equals(clrqst.getTimestamp())) {
-                    auxRequest = myRequests.get(i);
-                    break;
+    public ClientRequest checkRequest(ClientRequest clrqst) throws RemoteException {
+        
+        for(int i=0;i<myRequests.size();i++){
+            if(clrqst.getRequestID().equals(myRequests.get(i).getRequestID()) && clrqst.getTimestamp().equals(myRequests.get(i).getTimestamp())){
+                if(myRequests.get(i).getStage().equals("rmiout")){
+                    return myRequests.get(i);
                 }
             }
         }
-
-        if (auxRequest == null) {
-            //não entra na puta do switch
-            switch ((String) clrqst.getRequest()[0]) {
-                case "log":
-                    clrqst = verificaLogIn(auxRequest);
-                    break;
-                case "new":
-                    clrqst = novoUtilizador(auxRequest);
-                    break;
-                case "new_project":
-                    clrqst = novoProjecto(auxRequest);
-                    break;
-                case "seesal":
-                    clrqst = getUserSaldo(auxRequest);
-                    System.out.println("CARALHO!");
-                    break;
-                case "list_actual_projects":
-                    clrqst = getActualProjects(auxRequest);
-                    break;
-                case "list_old_projects":
-                    clrqst = getActualProjects(auxRequest);
-                    break;
-            }
-        } else if (auxRequest.getStage().equals("rmiout")) {
-            clrqst = auxRequest;
-        } else {
-            //acho que não chega aqui
-            System.out.println("Entrei dentro do else");
-            switch ((String) auxRequest.getRequest()[0]) {
-                case "log":
-                    clrqst = verificaLogIn(auxRequest);
-                    break;
-                case "new":
-                    clrqst = novoUtilizador(auxRequest);
-                    break;
-                case "new_project":
-                    clrqst = novoProjecto(auxRequest);
-                    break;
-                case "seesal":
-                    clrqst = getUserSaldo(auxRequest);
-                    break;
-                case "list_actual_projects":
-                    clrqst = getActualProjects(auxRequest);
-                    break;
-                case "list_old_projects":
-                    clrqst = getActualProjects(auxRequest);
-                    break;
-            }
-
-        }
-        System.out.println("resposta->" + clrqst);
-        return clrqst;
+        
+        return null;
     }
 
     public ClientRequest getProjectDetails(ClientRequest clrqst) throws RemoteException {
@@ -684,129 +629,125 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         clrqst.setStage(3);
         return clrqst;
     }
-    
-    public ClientRequest pledgeToProject(ClientRequest clrqst) throws RemoteException{
+
+    public ClientRequest pledgeToProject(ClientRequest clrqst) throws RemoteException {
         System.out.println("[RMI Server] Função <pledgeToProject> chamada!");
         Object[] objecto = clrqst.getRequest();
-        int[] how_much__to_who = (int[])(objecto[1]);
+        int[] how_much__to_who = (int[]) (objecto[1]);
         int how_much = how_much__to_who[0];
         int to_who = how_much__to_who[1];
-        
-        int user_id = (int)objecto[0];
+
+        int user_id = (int) objecto[0];
         int novo_valor_actual = 0, novo_saldo = 0;
-        ArrayList <String> product_type = new ArrayList();
+        ArrayList<String> product_type = new ArrayList();
         int saldo = 0, i = 0;
         String recompensas = new String();
         int id_recompensa = 0;
-        
-        try{
+
+        try {
             query = "SELECT saldo "
                     + "FROM utilizador "
-                    + "WHERE id ="+user_id;
+                    + "WHERE id =" + user_id;
             request = connection.createStatement();
             rs = request.executeQuery(query);
-            if(rs.next()){
+            if (rs.next()) {
                 saldo = rs.getInt("saldo");
             }
-            if(saldo >= how_much){
-                
-                try{
+            if (saldo >= how_much) {
+
+                try {
                     System.out.println(to_who);
-                    query = "SELECT valoractual FROM projecto WHERE id = "+to_who;
+                    query = "SELECT valoractual FROM projecto WHERE id = " + to_who;
                     request = connection.createStatement();
                     rs = request.executeQuery(query);
                     rs.next();
                     novo_valor_actual = rs.getInt("valoractual");
                     novo_valor_actual = novo_valor_actual + how_much;
-                } catch(SQLException ex) {
-                    System.err.println("SQLException 622: "+ex);
+                } catch (SQLException ex) {
+                    System.err.println("SQLException 622: " + ex);
                 }
-                try{
-                    query = "UPDATE projecto SET valoractual = "+novo_valor_actual+" WHERE id = "+to_who;
+                try {
+                    query = "UPDATE projecto SET valoractual = " + novo_valor_actual + " WHERE id = " + to_who;
                     request = connection.createStatement();
                     request.executeUpdate(query);
-                    
+
                 } catch (SQLException ex) {
-                System.err.println("SQLException: How much " + ex);
+                    System.err.println("SQLException: How much " + ex);
                 }
-                
-                try{
-                    query = "SELECT saldo FROM utilizador WHERE id = "+user_id;
+
+                try {
+                    query = "SELECT saldo FROM utilizador WHERE id = " + user_id;
                     request = connection.createStatement();
                     rs = request.executeQuery(query);
                     rs.next();
-                    novo_saldo = rs.getInt("saldo")-how_much;
-                } catch (SQLException ex){
-                    System.out.println("SQLException 630: "+ex);
+                    novo_saldo = rs.getInt("saldo") - how_much;
+                } catch (SQLException ex) {
+                    System.out.println("SQLException 630: " + ex);
                 }
-                try{
-                    query = "UPDATE utilizador SET saldo = "+novo_saldo+" WHERE id = "+user_id;
+                try {
+                    query = "UPDATE utilizador SET saldo = " + novo_saldo + " WHERE id = " + user_id;
                     request = connection.createStatement();
                     request.executeUpdate(query);
-                    
+
                 } catch (SQLException ex) {
-                System.err.println("SQLException 640 :" + ex);
+                    System.err.println("SQLException 640 :" + ex);
                 }
-                
-                try{
+
+                try {
                     query = "SELECT * "
                             + "FROM recompensas "
-                            + "WHERE id_projecto ="+to_who+" "
-                            + "AND valor <="+how_much+" "
+                            + "WHERE id_projecto =" + to_who + " "
+                            + "AND valor <=" + how_much + " "
                             + "ORDER BY valor DESC";
                     request = connection.createStatement();
                     rs = request.executeQuery(query);
-                    if (rs.next()){
+                    if (rs.next()) {
                         i++;
                         recompensas = rs.getString("titulo");
                         id_recompensa = rs.getInt("id");
                         resposta[2] = i;
                         resposta[3] = recompensas;
-                        
-                        try{
-                           
+
+                        try {
+
                             query = "INSERT INTO recompensa_user (id_recompensa, id_user) VALUES (CAST(? AS integer),CAST(? AS integer))";
                             preparedstatement = connection.prepareStatement(query);
-                            preparedstatement.setInt(1, (int)(id_recompensa));
-                            preparedstatement.setInt(2, (int)(user_id));
+                            preparedstatement.setInt(1, (int) (id_recompensa));
+                            preparedstatement.setInt(2, (int) (user_id));
                             preparedstatement.executeUpdate();
-                            
-                        } catch (SQLException ex){
-                            System.out.println("SQLException: 665 "+ex);
+
+                        } catch (SQLException ex) {
+                            System.out.println("SQLException: 665 " + ex);
                         }
-    
-                    }
-                    else{
+
+                    } else {
                         resposta[2] = i;
                         resposta[3] = "No reward";
                     }
-               
+
                 } catch (SQLException ex) {
                     System.err.println("SQLException:" + ex);
                 }
-                
-                
-                
+
                 try {
-                    query = "SELECT descricao FROM product_type WHERE id_projecto ="+to_who;
+                    query = "SELECT descricao FROM product_type WHERE id_projecto =" + to_who;
                     request = connection.createStatement();
                     rs = request.executeQuery(query);
-                    while(rs.next()){
+                    while (rs.next()) {
                         product_type.add(rs.getString("descricao"));
                     }
-                    
+
                 } catch (SQLException ex) {
-                     System.err.println("SQLException 784:" + ex);
+                    System.err.println("SQLException 784:" + ex);
                 }
-                
+
                 resposta[0] = "pledged";
-                resposta[1] = saldo-how_much;
+                resposta[1] = saldo - how_much;
                 resposta[4] = product_type;
-            }
-            else{
+            } else {
                 System.out.println("sem saldo");
                 resposta[0] = "Sem saldo";
-                resposta[1]= saldo;
+                resposta[1] = saldo;
                 resposta[4] = product_type;
             }
         } catch (SQLException ex) {
@@ -816,38 +757,41 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         clrqst.setStage(3);
         return clrqst;
     }
-    
-    public ClientRequest addAdminToProject(ClientRequest clrqst) throws RemoteException{
-        
+
+    public ClientRequest addAdminToProject(ClientRequest clrqst) throws RemoteException {
+
         System.out.println("[RMI Server] Função <addAdminToProject> chamada!");
         Object[] objecto = clrqst.getRequest();
-        String user = (String)(objecto[1]);
-        int id_projecto = (int)(objecto[2]);
+        String user = (String) (objecto[1]);
+        int id_projecto = (int) (objecto[2]);
         int id_user = 0;
-        
-        try{
-            query = "SELECT id FROM utilizador WHERE username= '"+user+"'";
+
+        try {
+            query = "SELECT id FROM utilizador WHERE username= '" + user + "'";
             request = connection.createStatement();
             rs = request.executeQuery(query);
-            if (rs.next()){
+            if (rs.next()) {
                 id_user = rs.getInt("id");
-                try{
-                    query = "INSERT INTO projecto_user (id_projecto, id_user) VALUES ("+id_projecto+","+id_user+")";
+                try {
+                    query = "INSERT INTO projecto_user (id_projecto, id_user) VALUES (" + id_projecto + "," + id_user + ")";
                     preparedstatement = connection.prepareStatement(query);
- 
+
                     preparedstatement.executeUpdate();
-                    resposta[2] ="done";
-                    
+                    resposta[2] = "done";
+
                 } catch (SQLException ex) {
                     System.err.println("SQLException:" + ex);
                 }
-            } else resposta[2] ="no_user";
-            
-            
+            } else {
+                resposta[2] = "no_user";
+            }
+
         } catch (SQLException ex) {
             System.err.println("SQLException:" + ex);
         }
-        if (resposta[2] == null) resposta[2] = "bode";
+        if (resposta[2] == null) {
+            resposta[2] = "bode";
+        }
         clrqst.setResponse(resposta);
         clrqst.setStage(3);
         return clrqst;
