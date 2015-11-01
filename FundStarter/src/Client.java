@@ -277,7 +277,7 @@ public class Client {
     }
 
     public boolean criaConta() {
-
+        sc.nextLine();
         String[] newUserData = new String[2];
 
         System.out.print("\t\tUsername:");
