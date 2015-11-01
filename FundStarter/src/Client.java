@@ -327,7 +327,6 @@ public class Client {
       
       public void haResposta(){
           postCard[0] = "answer";
-          postCard[1] = myId;
           postCard = postOffice(postCard);
           Object[] objecto = postCard;
           ArrayList<ArrayList<String>>  pr= (ArrayList<ArrayList<String>>)postCard[0];
@@ -337,12 +336,12 @@ public class Client {
           
               if(pr.isEmpty()==false){
                 for(i=0; i<tamanho; i++){
-                      System.out.println("ID do Projecto:  " + pr.get(i).get(0));
+                      System.out.println("\nID do Projecto:  " + pr.get(i).get(0));
                       System.out.print("Pergunta:\t" + pr.get(i).get(1));
                       System.out.print("\nResposta:\t" + pr.get(i).get(2));
                       }
               }else{
-                  System.out.println("Sem mensagens.");
+                  System.out.println("\nSem mensagens.");
               }
           
       }
@@ -361,16 +360,16 @@ public class Client {
           
           
           //imprime primeiro respostas a perguntas feitas
-          System.out.print("Correio Respondido:");
+          System.out.print("\nCorreio Respondido:");
           haResposta();
 
           //imprime perguntas feita a algum projecto
           if(listaPerguntas.isEmpty() == false){
           
-            System.out.print("\n\nQuestões sobre Projectos:");
+            System.out.print("\n\nQuestões sobre Projectos:\n");
             for(i=0; i<tamanho; i++){
                 if(listaPerguntas.get(i).isEmpty()==false){
-                  System.out.println("ID do Projecto:  " + listaPerguntas.get(i).get(0));
+                  System.out.println("\nID do Projecto:  " + listaPerguntas.get(i).get(0));
                   int novotam = listaPerguntas.get(i).size();
                   System.out.println("Perguntas associadas:");
                   for(j=1; j<novotam; j++){
@@ -378,17 +377,13 @@ public class Client {
                   }
               }
             }
-            System.out.print("ID da mensagem a responder: ");
+            System.out.println("ID da mensagem a responder: ");
             int idResposta = sc.nextInt();
           
             respondeMensagem(idResposta);
-            }else{
-                  System.out.println("Não tem questões sobre Projectos.");
-            }
-          
-          
-
-             
+        }else{
+              System.out.println("\n\nNão tem questões sobre Projectos.");
+        }
       }
     
 
@@ -959,7 +954,7 @@ public class Client {
         System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t0 - Sair\n\n\t\t>>");
         userPick = sc.nextInt();
         //Verificar Escolhas
-        while ((userPick == 1) && (userPick == 2) && (userPick == 3) && (userPick == 4)) {
+        while ((userPick != 1) && (userPick != 2) && (userPick != 3) && (userPick != 4) && (userPick!= 0)) {
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
             System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t0 - Sair\n\n\t\t>>");
             userPick = sc.nextInt();
@@ -1002,7 +997,7 @@ public class Client {
 
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
 
-        while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5) && (userPick!=6) && (userPick != 7)) {
+        while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5) && (userPick!=6) && (userPick != 7) && (userPick!= 0)) {
 
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
             System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\t\t7 - As minhas recompensas\n\t\t0 - Sair\n\n\t\t>>");
