@@ -1043,6 +1043,10 @@ public class Client {
 
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dda644374cc7afa218dbb6c9762569d4ff431b59
         while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5) && (userPick!=6) && (userPick != 7) && (userPick != 0)) {
 
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
