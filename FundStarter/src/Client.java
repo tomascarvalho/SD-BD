@@ -2,8 +2,6 @@
 import java.net.*;
 import java.util.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * FundStart
@@ -132,6 +130,10 @@ public class Client {
 
         ClientRequest newRequest;
         System.out.println("[reLog]Fui chamdo");
+        
+        if(myCredentials[0]==null && myCredentials[1]==null){
+            return;
+        }
 
         while (true) {
             System.out.println("[reLog]Passei aqui");
@@ -204,14 +206,17 @@ public class Client {
             System.out.println("Response->"+newResponse.getResponse()[0]);
             return newResponse.getResponse();
 
-        } catch (IOException ex) {
+        }catch (IOException ex) {
+            
+            
             connectionFunction(true);
             try {
                 return checkRequest();
             } catch (IOException ex1) {
                 System.out.println("Não consegui replicar o seu request!");
             }
-        } catch (ClassNotFoundException ex) {
+            
+        }catch (ClassNotFoundException ex) {
             System.out.println("Classe não encontrada!");
         }
 

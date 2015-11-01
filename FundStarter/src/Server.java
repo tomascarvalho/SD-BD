@@ -3,6 +3,8 @@ import java.net.*;
 import java.io.*;
 import static java.lang.Thread.sleep;
 import java.rmi.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /*
  * FundStart
  *  Projecto para a cadeira de Sistemas Distribuidos
@@ -172,7 +174,7 @@ class NewClient extends Thread {
     String alterRequest;
     String rmiLocation;
 
-    NewClient(Socket cliente, RMIServerInterface rmiConection, String ipRMI) {
+    NewClient(Socket cliente, RMIServerInterface rmiConection, String ipRMI) throws RemoteException{
 
         try {
             /**
@@ -352,27 +354,15 @@ class NewClient extends Thread {
                 sender.writeUnshared(myMail);
                 postCard = null;
 
-            } catch (EOFException e) {
-                System.out.println("Cliente desligou-se!");
+            } catch (EOFException ex) {
+                System.out.println("[EOFException]Cliente desligou-se!");
+                System.out.println("Exception->"+ex.getMessage());
                 return;
-            } catch (RemoteException e) {
-                System.out.println("[Server]Erro no RMI!");
-                while (true) {
-                    try {
-                        System.out.println("[Server]Vou tentar ligar ao RMI!");
-                        remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
-                        System.out.println("[Server]Voltei a ligar ao RMI!");
-                        break;
-                    } catch (NotBoundException ex) {
-                        System.out.println("[Server]Não me consigo ligar ao RMI!");
-                    } catch (MalformedURLException ex) {
-                        System.out.println("[Server]MalformedRLException");
-                    } catch (RemoteException ex) {
-                        System.out.println("[Server]RMI morreu para a vida!");
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (IOException ex) {
+                System.out.println("[IOException]Cliente desligou-se!");
+                System.out.println("Exception->"+ex.getMessage());
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
             }
         }
     }
