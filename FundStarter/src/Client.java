@@ -160,15 +160,10 @@ public class Client {
     }
 
     public Object[] checkRequest() throws IOException {
-
+        System.out.println("Fui chamado");
         int lastRequestIndex = myRequest.size() - 1;
-        Object[] cenas;
-
-        System.out.println("Last Request->" + myRequest.get(lastRequestIndex).getRequest()[0]);//procurar o ultimo request não terminado
-        
-        cenas= postOffice(myRequest.get(lastRequestIndex).getRequest());
-        System.out.println("Pintou");
-        return cenas;
+        System.out.println("LastRequest->"+myRequest.get(lastRequestIndex).getRequest()[0]);
+        return postOffice(myRequest.get(lastRequestIndex).getRequest());
 
     }
 
@@ -198,6 +193,10 @@ public class Client {
             sender.writeUnshared(newRequest);
             
             newResponse = (ClientRequest) reciver.readObject();
+            
+            if(newResponse.getRequest()[0].equals("rmidown")){
+                return checkRequest();
+            }
 
             newResponse.setStage(5);
             updateRequest(newRequest, newResponse);
@@ -1002,7 +1001,7 @@ public class Client {
 
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
 
-        while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5) && (userPick!=6) && (userPick != 7)) {
+        while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5) && (userPick!=6) && (userPick != 7) && (userPick != 0)) {
 
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
             System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\t\t7 - As minhas recompensas\n\t\t0 - Sair\n\n\t\t>>");

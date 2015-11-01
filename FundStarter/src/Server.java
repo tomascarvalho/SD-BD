@@ -3,6 +3,7 @@ import java.net.*;
 import java.io.*;
 import static java.lang.Thread.sleep;
 import java.rmi.*;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /*
@@ -129,28 +130,36 @@ class cronoThread extends Thread {
     }
 
     public void run() {
+
+        Date time = new Date();
+
         while (true) {
-            try {
-                remoteConection.terminaProjecto();
-                sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (RemoteException ex) {
-                System.out.println("Houve um erro com o RMI.");
-                while (true) {
-                    try {
-                        System.out.println("[CronoThread]Vou tentar ligar ao RMI!");
-                        remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
-                        System.out.println("[CronoThread]Voltei a ligar ao RMI!");
-                        break;
-                    } catch (NotBoundException e) {
-                        System.out.println("[CronoThread]Não me consigo ligar ao RMI!");
-                    } catch (MalformedURLException e) {
-                        System.out.println("[CronoThread]MalformedRLException");
-                    } catch (RemoteException e) {
-                        System.out.println("[CronoThread]RemoteException");
+            if (time.getHours() == 0) {
+                try {
+                    System.out.println("Estou a correr");
+                    remoteConection.terminaProjecto();
+                } catch (RemoteException ex) {
+                    System.out.println("Houve um erro com o RMI.");
+                    while (true) {
+                        try {
+                            System.out.println("[CronoThread]Vou tentar ligar ao RMI!");
+                            remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
+                            System.out.println("[CronoThread]Voltei a ligar ao RMI!");
+                            break;
+                        } catch (NotBoundException e) {
+                            System.out.println("[CronoThread]Não me consigo ligar ao RMI!");
+                        } catch (MalformedURLException e) {
+                            System.out.println("[CronoThread]MalformedRLException");
+                        } catch (RemoteException e) {
+                            System.out.println("[CronoThread]RemoteException");
+                        }
                     }
                 }
+            }
+            try {
+                Thread.sleep(3600000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
             }
         }
     }
@@ -170,7 +179,7 @@ class NewClient extends Thread {
     String alterRequest;
     String rmiLocation;
 
-    NewClient(Socket cliente, RMIServerInterface rmiConection, String ipRMI) throws RemoteException{
+    NewClient(Socket cliente, RMIServerInterface rmiConection, String ipRMI) {
 
         try {
             /**
@@ -207,9 +216,6 @@ class NewClient extends Thread {
             try {
 
                 postCard = (ClientRequest) reciver.readUnshared();
-                System.out.println(postCard.getRequest()[0]);
-
-               
 
                 if (postCard.getRequest()[0].equals("log")) {
 
@@ -274,7 +280,7 @@ class NewClient extends Thread {
 
                     myMail.setStage(4);
 
-                }else if (postCard.getRequest()[0].equals("answer")){
+                } else if (postCard.getRequest()[0].equals("answer")) {
                     postCard.getRequest()[1] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.veResposta(postCard);
@@ -303,7 +309,6 @@ class NewClient extends Thread {
                     postCard.setStage(1);
                     myMail = remoteConection.apagaProjecto(postCard);
                     myMail.setStage(4);
-
 
                 } else if (postCard.getRequest()[0].equals("list_my_projects")) {
                     System.out.println("Vim consultar os meus projectos!\n");
@@ -336,7 +341,6 @@ class NewClient extends Thread {
                     myMail = remoteConection.addAdminToProject(postCard);
                     myMail.setStage(4);
 
-
                 } else if (postCard.getRequest()[0].equals("vote_for_product")) {
                     System.out.println("[Server] Vote For Product");
                     postCard.setStage(1);
@@ -349,29 +353,48 @@ class NewClient extends Thread {
                     postCard.setStage(1);
                     myMail = remoteConection.donateReward(postCard);
                     myMail.setStage(4);
-      
-                } else if (postCard.getRequest()[0].equals("listar_recompensas")){
+
+                } else if (postCard.getRequest()[0].equals("listar_recompensas")) {
                     System.out.println("[Server] Listar Rewards");
                     postCard.getRequest()[1] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.listarRecompensas(postCard);
                     myMail.setStage(4);
-                            
+
                 }
 
-                System.out.println("Vou mandar qualquer coisa");
-                System.out.println("My Mail->" + myMail.getResponse()[0]);
+                sender.reset();
                 sender.writeUnshared(myMail);
                 postCard = null;
 
+            } catch (RemoteException ex) {
+
+                while (true) {
+                    try {
+                        System.out.println("[Server]RMI está down.");
+                        postCard = null;
+                        remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
+                        Object[] rmiDown = {"rmidown"};
+                        ClientRequest temp = new ClientRequest("", rmiDown, "");
+                        sender.reset();
+                        sender.writeUnshared(temp);
+                        break;
+                    } catch (NotBoundException e) {
+                        e.printStackTrace();
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (RemoteException e) {
+                        System.out.println("[Server]RemoteException");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             } catch (EOFException ex) {
-                System.out.println("[EOFException]Cliente desligou-se!");
-                System.out.println("Exception->"+ex.getMessage());
+                System.out.println("Cliente desligou-se!");
                 return;
 
             } catch (IOException ex) {
-                System.out.println("[IOException]Cliente desligou-se!");
-                System.out.println("Exception->"+ex.getMessage());
+                System.out.println("Cliente desligou-se!");
                 return;
             } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
