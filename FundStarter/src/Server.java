@@ -346,6 +346,14 @@ class NewClient extends Thread {
                     postCard.setStage(1);
                     myMail = remoteConection.donateReward(postCard);
                     myMail.setStage(4);
+      
+                } else if (postCard.getRequest()[0].equals("listar_recompensas")){
+                    System.out.println("[Server] Listar Rewards");
+                    postCard.getRequest()[1] = myUserID;
+                    postCard.setStage(1);
+                    myMail = remoteConection.listarRecompensas(postCard);
+                    myMail.setStage(4);
+                            
 
                 }
 
