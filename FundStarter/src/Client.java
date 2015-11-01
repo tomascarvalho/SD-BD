@@ -870,12 +870,16 @@ public class Client {
                         choice = sc.nextInt(); 
                     }
                     if (choice == 1){
+                        addReward(0);
                         
                     }
                     else if (choice == 2){
+                        deleteReward(0);
                         
                     }
                     else if (choice == 3){
+                        
+                        addReward(0);
                         
                     }
                     
@@ -889,6 +893,47 @@ public class Client {
             System.out.println("Não é Administrador de nenhum projecto...");
         }
         menuConta();
+    }
+    
+    public void addReward(int flag) {
+        
+        int projectID;
+        String titulo = new String();
+        int valor;
+        if (flag == 0){
+            System.out.println("\nAdicionar Recompensa a um Projecto");
+            System.out.println("ID do Projecto ao qual quer adicionar uma recompensa: ");
+            projectID = sc.nextInt();
+            System.out.println("Descrição da Recompensa a acrescentar: ");
+            sc.nextLine();
+            titulo = sc.nextLine();
+            System.out.println("Montante a doar para ganhar a recompensa: ");
+            valor = sc.nextInt();
+        }
+        else{
+            System.out.println("\nAdicionar Nivel Extra a um Projecto");
+            System.out.println("ID do Projecto ao qual quer adicionar um Nivel Extra: ");
+            projectID = sc.nextInt();
+            System.out.println("Descrição do Nivel Extra a acrescentar: ");
+            sc.nextLine();
+            titulo = sc.nextLine();
+            System.out.println("Montante a que o projecto tem que chegar para desbloquear esse nivel: ");
+            valor = sc.nextInt();
+            
+        }
+        postCard[0] = "new_reward";
+        postCard[1] = projectID;
+        postCard[2] = titulo;
+        postCard[3] = valor;
+        postCard[4] = flag;
+        postCard = postOffice(postCard);
+        
+        
+        
+    }
+    
+    public void removeReward(int flag) {
+        
     }
 
     public void addAdminToProject(int id_projecto) {

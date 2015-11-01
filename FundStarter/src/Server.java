@@ -356,6 +356,11 @@ class NewClient extends Thread {
                     myMail = remoteConection.listarRecompensas(postCard);
                     myMail.setStage(4);
                             
+                } else if (postCard.getRequest()[0].equals("add_reward")){
+                    System.out.println("[Server] Adicionar Recompensa");
+                    postCard.setStage(1);
+                    myMail = remoteConection.addReward(postCard);
+                    myMail.setStage(4);
                 }
                 System.out.println("My Mail->" + myMail.getResponse()[0]);
                 sender.writeUnshared(myMail);
