@@ -44,7 +44,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         Object[] objecto = clrqst.getRequest();
         String[] person = (String[]) objecto[1];
         String user = person[0];
-        System.out.println(user);
         String password = person[1];
         int id = -1;
         
@@ -382,12 +381,44 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
 
     }
 
+    public ClientRequest veResposta(ClientRequest clrqst) throws RemoteException{
+        int userID = (int) clrqst.getRequest()[1];
+        System.out.println("[RMI Server] Função <veResposta> chamada!");
+        ArrayList <ArrayList<String>> pr = new ArrayList<ArrayList<String>>(0);
+        ArrayList<String> temp1 = new ArrayList<String>(0);
+        
+        try{
+            
+            query = "SELECT id_projecto, pergunta, resposta FROM mensagem WHERE id_user_envia = " + userID + " AND resposta IS NOT NULL";
+            request = connection.createStatement();
+            rs = request.executeQuery(query);
+            
+           
+            while(rs.next()){
+                temp1 = new ArrayList<String>(0);
+                temp1.add(rs.getString("id_projecto"));
+                temp1.add(rs.getString("pergunta"));
+                temp1.add(rs.getString("resposta"));
+                pr.add(temp1);
+            }
+        }catch (SQLException ex) {
+            System.err.println("Erro:" + ex);
+        
+        }
+    
+        resposta[0] = pr;
+        clrqst.setResponse(resposta);
+        clrqst.setStage(3);
+        return clrqst;
+               
+    }
     
     public ClientRequest caixaCorreio(ClientRequest clrqst) throws RemoteException{
         System.out.println("[RMI Server] Função <caixaCorreio> chamada!");
         ArrayList <ArrayList<Integer> > listaPerguntas = new ArrayList<ArrayList<Integer>>();
         ArrayList <Integer> lista_projectos = new ArrayList<Integer>(0);
-        ArrayList <String> lista_perguntas = new ArrayList <String>(0);
+        ArrayList <ArrayList<String> > recolhePerguntas = new ArrayList<ArrayList<String>>();
+        
         int userID = (int) clrqst.getRequest()[0];
         
         clrqst.setStage(2);
@@ -396,8 +427,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             query = "SELECT id_projecto FROM projecto_user WHERE id_user ="+userID;
             request = connection.createStatement();
             rs = request.executeQuery(query);
+            ArrayList <String> lista_perguntas = new ArrayList <String>(0);
             while(rs.next()){
-
+                
                 lista_projectos.add(rs.getInt("id_projecto"));
             }
             
@@ -413,7 +445,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         try{          
             for(i=0; i<tamanho; i++){
                 ArrayList <Integer> temp = new ArrayList();
-                System.out.print("Vou tirar o id do projecto nº "+ lista_projectos.get(i));
+                ArrayList <String> lista_perguntas = new ArrayList <String>(0);
                 query = "SELECT id, id_projecto, pergunta FROM mensagem WHERE id_projecto = "+ lista_projectos.get(i) + " AND resposta IS NULL";
                 //adicionar o indice do projecto
                 request = connection.createStatement();
@@ -426,28 +458,19 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                         lista_perguntas.add(" ");
                         lista_perguntas.add(rs.getString("pergunta"));
                     }
-                
-                
-                
                 while(rs.next()){
                     temp.add(rs.getInt("id"));
-                    
-                        lista_perguntas.add(rs.getString("pergunta"));
+                    lista_perguntas.add(rs.getString("pergunta"));
                 }
-                
-                
+                recolhePerguntas.add(lista_perguntas);
                 listaPerguntas.add(temp);
-                
-            }
-            
-
-                       
+            }      
         }catch (SQLException ex) {
             System.err.println("Erro:" + ex);
         
     }
         resposta[0] = listaPerguntas; 
-        resposta[1] = lista_perguntas;
+        resposta[1] = recolhePerguntas;
         clrqst.setResponse(resposta);
         clrqst.setStage(3);
         return clrqst;
@@ -507,8 +530,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     }
     
     public ClientRequest apagaProjecto(ClientRequest clrqst) throws RemoteException{
-        
-
         System.out.println("[RMI Server] Função <apagaProjecto> chamada!");
         
         int valor_a_devolver = 0;
@@ -640,11 +661,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
     }
 
     public ClientRequest getUserSaldo(ClientRequest clrqst) throws RemoteException {
-
         System.out.println("[RMI Server] Função <getUserSaldo> chamada!");
 
         int userID = (int) clrqst.getRequest()[1];
-
         clrqst.setStage(2);
         myRequests.add(clrqst);
 
@@ -714,11 +733,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                     preparedstatement.setBoolean(1, false);
                     preparedstatement.setInt(2, projectID);
                     preparedstatement.executeUpdate();
-                    System.out.println("Executei a query");
                 }
-
             }
-
         } catch (SQLException e) {
 
             e.printStackTrace();
@@ -749,7 +765,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             i = 0;
             if (!rs.next()) {
                 if (choice == 0) {
-                    System.out.println("Nao ha projectos activos"); //Queremos mandar isto para o cliente?
+                    System.out.println("Não há projectos activos"); 
                     actual_projects[0] = "error_no_active_projects";
                     resposta[0] = actual_projects;
                 } else {
@@ -831,7 +847,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
             request = connection.createStatement();
             rs = request.executeQuery(query);
             if (rs.next()) {
-                System.out.println("Devia funcar");
                 project_details[j] = rs.getString("titulo");
                 j++;
                 project_details[j] = rs.getString("descricao");
