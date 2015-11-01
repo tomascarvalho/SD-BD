@@ -372,10 +372,36 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         int userID = (int)clrqst.getRequest()[1];
         boolean status;
         int rewardID;
+        int projectID = 0;
         ArrayList <String> definitivas = new ArrayList();
         ArrayList <String> temporarias = new ArrayList();
+        ArrayList <String> projecto = new ArrayList();
+        int flag = (int) clrqst.getRequest()[2];
         
-        try{
+        if (flag == 1){
+            try{
+                query = "SELECT id_projecto FROM projecto_user WHERE id_user = "+userID;
+                preparedstatement = connection.prepareStatement(query);
+                rs = preparedstatement.executeQuery();
+                while (rs.next()){
+                    projectID = rs.getInt("id_projecto");
+                    query = "SELECT titulo FROM recompensas WHERE id_projecto = "+projectID;
+                    preparedstatement = connection.prepareStatement(query);
+                    rs = preparedstatement.executeQuery();
+                    while (rs.next()){
+                        projecto.add("Titulo: "+ rs.getString("titulo")+ "\nPertencente ao Projecto ID: "+projectID);
+                    }
+                    
+                    
+                }
+                
+            } catch(SQLException ex){
+                System.err.print("SQLException 383: "+ex);
+            }
+        }
+        else {
+            
+            try{
             query = "SELECT id_recompensa, status FROM recompensa_user WHERE id_user = "+userID;
             preparedstatement = connection.prepareStatement(query);
             rs = preparedstatement.executeQuery();
@@ -410,11 +436,15 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                 }
             }
             
-        } catch(SQLException ex) {
-            System.err.print("SQLException 350: "+ex);
+            } catch(SQLException ex) {
+                System.err.print("SQLException 350: "+ex);
+            }
         }
+        
+        
         resposta[1] = definitivas;
         resposta[2] = temporarias;
+        resposta[3] = projecto;
         clrqst.setResponse(resposta);
         clrqst.setStage(3);
   
@@ -896,6 +926,20 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                             System.err.print("SQLException 732: "+ex);
                         }
                         try{
+                            query = "SELECT id_user FROM projecto_user WHERE id_projecto = "+projectID+" ORDER BY id";
+                            preparedstatement = connection.prepareStatement(query);
+                            rs = preparedstatement.executeQuery();
+                            if (rs.next()){
+                                query = "UPDATE utilizador SET saldo = saldo +"+valor_actual+" WHERE id= "+userID;
+                                preparedstatement = connection.prepareStatement(query);
+                                preparedstatement.executeUpdate();
+                            }
+                            
+                        } catch(SQLException ex){
+                            System.err.print("SQLException 909: "+ex);
+                        }
+                        
+                        try{
                             query = "SELECT id FROM recompensas WHERE id_projecto="+projectID;
                             preparedstatement = connection.prepareStatement(query);
                             rs = preparedstatement.executeQuery();
@@ -1083,8 +1127,20 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                 i++;
                 actual_projects[i] = "" + rs.getInt("valoractual");
                 i++;
-                actual_projects[i] = "" + rs.getInt("valorpretendido");
-                i++;
+                if (choice == 1){
+                    if (rs.getBoolean("over")){
+                        actual_projects[i] = "" + rs.getInt("valorpretendido")+" \tProjecto concluído";
+                        i++;
+                    }else{
+                        actual_projects[i] = "" + rs.getInt("valorpretendido")+" \tNão conseguiu angariar o dinheiro necessário";
+                        i++;
+                    }
+                }
+                else{
+                    actual_projects[i] = "" + rs.getInt("valorpretendido");
+                    i++;
+                }
+                
 
                 while (rs.next()) {
 

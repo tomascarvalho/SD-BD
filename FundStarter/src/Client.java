@@ -516,7 +516,7 @@ public class Client {
                         + "\tID\t\tTitulo\t\t\t\t\tProgresso:");
             } else {
                 System.out.println("\t\t\tProjectos Antigos\n\n"
-                        + "\tID\t\tTitulo");
+                        + "\tID\t\tTitulo\t\t\t\tConclusão:");
             }
            
 
@@ -530,11 +530,9 @@ public class Client {
                 j++;
                 valorpretendido = array_projectos[j];
                 j++;
-                if (choice == 0) {
-                    System.out.println("\t" + id + "\t\t" + titulo + "\t\t" + valoractual + " euros angariados / " + valorpretendido + " euros pretendidos");
-                } else {
-                    System.out.println("\t" + id + "\t\t" + titulo);
-                }
+            
+                System.out.println("\t" + id + "\t\t" + titulo + "\t\t" + valoractual + " euros angariados/ " + valorpretendido);
+                
             }
             
             if (choice == 0) {
@@ -581,7 +579,7 @@ public class Client {
 
     }
 
-    //public void consultarDetalhesProjecto(int id) {
+   
     public void consultarDetalhesProjecto(int id, int logged) throws IOException, ClassNotFoundException {
 
         // 0 - I am not logged
@@ -820,6 +818,7 @@ public class Client {
         int userPick;
         int id_projecto_pick;
         int i;
+        int choice = 0;
         Object[] objecto = postCard;
         ArrayList<Integer> id_projecto = (ArrayList) postCard[0];
         ArrayList<Integer> titulo_projecto = (ArrayList) postCard[1];
@@ -829,17 +828,17 @@ public class Client {
 
             System.out.println("Os meus projectos: ");
 
-            System.out.println("\t\tID\t\t\tTítulo");
+            System.out.println("ID\t\t\tTítulo");
             for (i = 0; i < tamanho; i++) {
                 System.out.println(id_projecto.get(i) + "\t\t" + titulo_projecto.get(i));
             }
             System.out.println("\t\t\tMenu Admin\n\n");
-            System.out.print("\t\t1 - Adicionar Administrador ao Projecto\n\t\t2 - Cancelar Projectos\n\t\t3 - Consultar Mensagens de um Projecto\n\t\t4 -Voltar ao Menu\n\n\n\t\t>>");
+            System.out.print("\t\t1 - Adicionar Administrador ao Projecto\n\t\t2 - Cancelar Projectos\n\t\t3 - Alterar Recompensas do Projecto\n\t\t4 - Voltar ao Menu\n\n\n\t\t>>");
             userPick = sc.nextInt();
             //Verificar Escolhas
             while ((userPick != 1) && (userPick != 2) && (userPick != 3) && (userPick != 4)){
                 System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
-                System.out.print("\t\t1 - Adicionar Administrador ao Projecto\n\t\t2 - Cancelar Projectos\n\t\t3 - Consultar Mensagens de um Projecto\n\t\t4 -Voltar ao Menu\n\n\n\t\t>>");
+                System.out.print("\t\t1 - Adicionar Administrador ao Projecto\n\t\t2 - Cancelar Projectos\n\t\t3 - Alterar Recompensas do Projecto\n\t\t4 -Voltar ao Menu\n\n\n\t\t>>");
                 userPick = sc.nextInt();
             }
             if (userPick == 1) {
@@ -866,8 +865,32 @@ public class Client {
                 }
                 cancelarProjecto(id_projecto_pick);
             }
+            else if (userPick == 3) {
+                
+                if (listarRecompensas(1)){
+                    System.out.println("1 - Adicionar Recompensa ao Projecto\n2 - Remover Recompensa ao Projecto\n3 - Voltar ao Menu");
+                    choice = sc.nextInt();
+                    while ((choice != 1) && (choice != 2) && (choice != 3)){
+                        System.out.println("1 - Adicionar Recompensa ao Projecto\n2 - Remover Recompensa ao Projecto\n3 - Voltar ao Menu");
+                        choice = sc.nextInt(); 
+                    }
+                    if (choice == 1){
+                        
+                    }
+                    else if (choice == 2){
+                        
+                    }
+                    else if (choice == 3){
+                        
+                    }
+                    
+                }
+                
+                
+            }
 
-        } else {
+        } 
+        else {
             System.out.println("Não é Administrador de nenhum projecto...");
         }
         menuConta();
@@ -906,45 +929,69 @@ public class Client {
 
     }
     
-    public void listarRecompensas(){
+    public boolean listarRecompensas(int flag){
         
+        //FLAG 0 - Listar Recompensas ganhas pelo user
+        //FLAG 1 - Listar Recompensas pertencentes ao projecto criado pelo user
         postCard[0] = "listar_recompensas";
+        postCard[2] = flag;
+        
         postCard = postOffice(postCard);
         ArrayList <String> definitivas =(ArrayList <String>) postCard[1];
         ArrayList <String> temporarias = (ArrayList <String>) postCard[2];
+        ArrayList <String> projecto = (ArrayList <String>) postCard[3];
         int choice = 0;
-        
-        if (definitivas.size()>=0){
-            Iterator <String> it = definitivas.iterator();
-            System.out.println("Recompensas Ganhas\n");
-            while (it.hasNext()){
-                System.out.println("ID: "+it.next());
+        if (flag == 0){
+            if (definitivas.size()>=0){
+                Iterator <String> it = definitivas.iterator();
+                System.out.println("Recompensas Ganhas\n");
+                while (it.hasNext()){
+                    System.out.println("ID: "+it.next());
+                }
+                System.out.println("\n");
+            } 
+            if (temporarias.size() >=0){
+                Iterator <String> it = temporarias.iterator();
+                System.out.println("Recompensas que vai ganhar caso o projecto seja financiado\n");
+                while (it.hasNext()){
+                    System.out.println("ID: "+it.next());
+                }
+                System.out.println("\n");
             }
-            System.out.println("\n");
-        } 
-        if (temporarias.size() >=0){
-            Iterator <String> it = temporarias.iterator();
-            System.out.println("Recompensas que vai ganhar caso o projecto seja financiado\n");
-            while (it.hasNext()){
-                System.out.println("ID: "+it.next());
+            if (temporarias.size() <=0 && definitivas.size() <= 0){
+                System.out.println("Não tem recompensas ganhas");
             }
-            System.out.println("\n");
-        }
-        if (temporarias.size() <=0 && definitivas.size() <= 0){
-            System.out.println("Não tem recompensas ganhas");
-        }
-        
-        if (temporarias.size()>0 || definitivas.size() >0){
-            System.out.println("1 - Doar Recompensas\n2 - Voltar ao Menu");
-            choice = sc.nextInt();
-            if (choice == 1){
-                System.out.println("ID da recompensa a doar: ");
+
+            if (temporarias.size()>0 || definitivas.size() >0){
+                System.out.println("1 - Doar Recompensas\n2 - Voltar ao Menu");
                 choice = sc.nextInt();
-                donateReward(choice, "listar_rec_flag");
-                
-            }
+                if (choice == 1){
+                    System.out.println("ID da recompensa a doar: ");
+                    choice = sc.nextInt();
+                    donateReward(choice, "listar_rec_flag");
+
+                }
             
+            }
         }
+        else{
+            if (projecto.size() >0){
+                System.out.println("Recompensas dos seus projectos: ");
+                Iterator <String> it = projecto.iterator();
+                while (it.hasNext()){
+                    System.out.println(it.next());
+                }
+                return true;
+
+            }
+            else{
+                System.out.println("Não tem recompensas associadas aos seus projectos");
+                return false;
+            }
+
+        }
+        return true;
+  
     }
 
     public void mainMenu() throws IOException, ClassNotFoundException {
@@ -1002,7 +1049,7 @@ public class Client {
 
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
 
-        while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5) && (userPick!=6) && (userPick != 7)) {
+        while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5) && (userPick!=6) && (userPick != 7) && (userPick != 0)) {
 
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
             System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\t\t7 - As minhas recompensas\n\t\t0 - Sair\n\n\t\t>>");
@@ -1023,7 +1070,7 @@ public class Client {
         } else if (userPick == 6) {
             caixaCorreio();
         } else if (userPick == 7) {
-            listarRecompensas();
+            listarRecompensas(0);
         } else if (userPick == 0) {
             mainMenu();
         }
