@@ -48,7 +48,6 @@ public class Server {
             userIDCounter = 0;
 
             try {
-                System.out.println("conection test");
                 tryConnectToServer = new Socket(serverIP, serverPort);
 
             } catch (IOException e) {
@@ -103,9 +102,7 @@ public class Server {
              *
              * } else { e.printStackTrace(); }
              */
-            System.out.println("Alguém fechou o socket!");
         } catch (Exception e) {
-            System.out.print("[Server]");
             e.printStackTrace();
         }
 
@@ -135,7 +132,6 @@ class cronoThread extends Thread {
         while (true) {
             try {
                 remoteConection.terminaProjecto();
-                System.out.println("Estou a correr, amigos!");
                 sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -152,7 +148,7 @@ class cronoThread extends Thread {
                     } catch (MalformedURLException e) {
                         System.out.println("[CronoThread]MalformedRLException");
                     } catch (RemoteException e) {
-                        System.out.println("[CronoThread]RMI morreu para a vida!");
+                        System.out.println("[CronoThread]RemoteException");
                     }
                 }
             }
@@ -213,7 +209,7 @@ class NewClient extends Thread {
                 postCard = (ClientRequest) reciver.readUnshared();
                 System.out.println(postCard.getRequest()[0]);
 
-                System.out.println("[Server] Li a mensagem do cliente na boa.");
+               
 
                 if (postCard.getRequest()[0].equals("log")) {
 
@@ -231,7 +227,6 @@ class NewClient extends Thread {
                     myMail.setStage(4);
 
                 } else if (postCard.getRequest()[0].equals("new")) {
-                    System.out.println("Fui chamado!");
 
                     postCard.setStage(1);
 
@@ -263,7 +258,6 @@ class NewClient extends Thread {
                     myMail.setStage(4);
 
                 } else if (postCard.getRequest()[0].equals("seesal")) {
-                    System.out.println("Vim consultar o meu saldo\n");
 
                     postCard.getRequest()[1] = myUserID;
                     postCard.setStage(1);
@@ -273,13 +267,22 @@ class NewClient extends Thread {
                 } else if (postCard.getRequest()[0].equals("mailbox")) {
 
                     System.out.println("Caixa de Correio\n");
+
                     postCard.getRequest()[0] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.caixaCorreio(postCard);
 
                     myMail.setStage(4);
+
+                }else if (postCard.getRequest()[0].equals("answer")){
+                    postCard.getRequest()[1] = myUserID;
+                    postCard.setStage(1);
+                    myMail = remoteConection.veResposta(postCard);
+                    myMail.setStage(4);
+
                 } else if (postCard.getRequest()[0].equals("resp_mess")) {
                     System.out.print("Responder mensagem\n");
+
                     postCard.getRequest()[0] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.respMensagem(postCard);
@@ -287,6 +290,7 @@ class NewClient extends Thread {
 
                 } else if (postCard.getRequest()[0].equals("send_mess")) {
                     System.out.print("Enviar mensagem\n");
+
                     postCard.getRequest()[0] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.enviaMensagem(postCard);
@@ -294,10 +298,12 @@ class NewClient extends Thread {
 
                 } else if (postCard.getRequest()[0].equals("delete_project")) {
                     System.out.println("Apagar um projecto\n");
+
                     postCard.getRequest()[0] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.apagaProjecto(postCard);
                     myMail.setStage(4);
+
 
                 } else if (postCard.getRequest()[0].equals("list_my_projects")) {
                     System.out.println("Vim consultar os meus projectos!\n");
@@ -310,29 +316,26 @@ class NewClient extends Thread {
 
                 } else if ((postCard.getRequest()[0].equals("list_actual_projects")) || (postCard.getRequest()[0].equals("list_old_projects"))) {
                     System.out.print("Vim consultar os projectos!\n");
+
                     postCard.setStage(1);
-
                     myMail = remoteConection.getActualProjects(postCard);
-
                     myMail.setStage(4);
 
                 } else if ((postCard.getRequest()[0].equals("list_project_details"))) {
-                    System.out.println("Vim consultar os detalhes do projecto");
                     postCard.setStage(1);
                     myMail = remoteConection.getProjectDetails(postCard);
                     myMail.setStage(4);
 
                 } else if (postCard.getRequest()[0].equals("pledge")) {
-                    System.out.println("[Server] Pledge");
                     postCard.getRequest()[0] = myUserID;
                     myMail = remoteConection.pledgeToProject(postCard);
                     myMail.setStage(4);
 
                 } else if (postCard.getRequest()[0].equals("add_Admin")) {
-                    System.out.println("[Server] Add Admin");
                     postCard.setStage(1);
                     myMail = remoteConection.addAdminToProject(postCard);
                     myMail.setStage(4);
+
 
                 } else if (postCard.getRequest()[0].equals("vote_for_product")) {
                     System.out.println("[Server] Vote For Product");
@@ -354,7 +357,6 @@ class NewClient extends Thread {
                     myMail = remoteConection.listarRecompensas(postCard);
                     myMail.setStage(4);
                             
-
                 }
 
                 System.out.println("Vou mandar qualquer coisa");
@@ -366,12 +368,14 @@ class NewClient extends Thread {
                 System.out.println("[EOFException]Cliente desligou-se!");
                 System.out.println("Exception->"+ex.getMessage());
                 return;
+
             } catch (IOException ex) {
                 System.out.println("[IOException]Cliente desligou-se!");
                 System.out.println("Exception->"+ex.getMessage());
                 return;
             } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
+
             }
         }
     }
@@ -438,7 +442,7 @@ class BackupServer extends Thread {
 
                     } else {
 
-                        System.out.println("[Backup Server] O Servidor principal está em baixo, vouassumir o controlo.");
+                        System.out.println("[Backup Server] O Servidor principal está em baixo, vou assumir o controlo.");
                         udpConection.close();
 
                         PropertiesReaderServer prop = new PropertiesReaderServer();

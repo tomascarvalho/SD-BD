@@ -129,15 +129,16 @@ public class Client {
     public void reLog() throws IOException {
 
         ClientRequest newRequest;
-        System.out.println("[reLog]Fui chamdo");
-        
-        if(myCredentials[0]==null && myCredentials[1]==null){
-            return;
-        }
+
 
         while (true) {
             System.out.println("[reLog]Passei aqui");
             ClientRequest rememberMe;
+
+            if(myCredentials[0]==null && myCredentials[1]==null){
+                return;
+            }
+            
             Object[] tempCard = new Object[2];
             tempCard[0] = "log";
             tempCard[1] = myCredentials;
@@ -150,12 +151,9 @@ public class Client {
             try {
                 rememberMe = (ClientRequest) reciver.readUnshared();
             } catch (ClassNotFoundException ex) {
-                System.out.println("Deu bode");
             }
 
-            System.out.println("Fiz o login....");
             if (rememberMe.getResponse()[0].equals("log_in_correcto")) {
-                System.out.println("I'm Back Bitches...");
                 break;
             }
         }
@@ -203,7 +201,7 @@ public class Client {
 
             newResponse.setStage(5);
             updateRequest(newRequest, newResponse);
-            System.out.println("Response->"+newResponse.getResponse()[0]);
+
             return newResponse.getResponse();
 
         }catch (IOException ex) {
@@ -279,7 +277,7 @@ public class Client {
     public boolean criaConta() {
         sc.nextLine();
         String[] newUserData = new String[2];
-
+        sc.nextLine();
         System.out.print("\t\tUsername:");
         newUserData[0] = sc.nextLine();
         System.out.print("\t\tPassword:");
@@ -327,34 +325,69 @@ public class Client {
         System.out.println(postCard[0]);
       }
       
+      public void haResposta(){
+          postCard[0] = "answer";
+          postCard[1] = myId;
+          postCard = postOffice(postCard);
+          Object[] objecto = postCard;
+          ArrayList<ArrayList<String>>  pr= (ArrayList<ArrayList<String>>)postCard[0];
+          
+          int tamanho = pr.size();
+          int i;
+          
+              if(pr.isEmpty()==false){
+                for(i=0; i<tamanho; i++){
+                      System.out.println("ID do Projecto:  " + pr.get(i).get(0));
+                      System.out.print("Pergunta:\t" + pr.get(i).get(1));
+                      System.out.print("\nResposta:\t" + pr.get(i).get(2));
+                      }
+              }else{
+                  System.out.println("Sem mensagens.");
+              }
+          
+      }
+      
+      
       public void caixaCorreio(){
           System.out.println("Caixa de Correio:");
           
           postCard[0] = "mailbox";
           postCard = postOffice(postCard);
-          
           Object[] objecto = postCard;
           ArrayList<ArrayList<Integer>>  listaPerguntas= (ArrayList<ArrayList<Integer>>)postCard[0];
-          ArrayList <String> perguntas = (ArrayList<String>) postCard[1];
+          ArrayList<ArrayList<String>>  perguntas= (ArrayList<ArrayList<String>>)postCard[1];
           int tamanho = listaPerguntas.size();
           int i,j;
           
-          for(i=0; i<tamanho; i++){
-              if(listaPerguntas.get(i).isEmpty()==false){
-                System.out.println("ID do Projecto:  " + listaPerguntas.get(i).get(0));
-                int novotam = listaPerguntas.get(i).size();
-                System.out.println("Perguntas associadas:");
-                for(j=1; j<novotam; j++){
-                    System.out.print(listaPerguntas.get(i).get(j) + ":\t" + perguntas.get(j) + "\n");
-                }
+          
+          //imprime primeiro respostas a perguntas feitas
+          System.out.print("Correio Respondido:");
+          haResposta();
+
+          //imprime perguntas feita a algum projecto
+          if(listaPerguntas.isEmpty() == false){
+          
+            System.out.print("\n\nQuestões sobre Projectos:");
+            for(i=0; i<tamanho; i++){
+                if(listaPerguntas.get(i).isEmpty()==false){
+                  System.out.println("ID do Projecto:  " + listaPerguntas.get(i).get(0));
+                  int novotam = listaPerguntas.get(i).size();
+                  System.out.println("Perguntas associadas:");
+                  for(j=1; j<novotam; j++){
+                      System.out.print(listaPerguntas.get(i).get(j) + ":\t" + perguntas.get(i).get(j) + "\n");
+                  }
+              }
             }
-          }
+            System.out.print("ID da mensagem a responder: ");
+            int idResposta = sc.nextInt();
+          
+            respondeMensagem(idResposta);
+            }else{
+                  System.out.println("Não tem questões sobre Projectos.");
+            }
           
           
-          System.out.print("ID da mensagem a responder: ");
-          int idResposta = sc.nextInt();
-          
-          respondeMensagem(idResposta);
+
              
       }
     
