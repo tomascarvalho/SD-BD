@@ -361,7 +361,8 @@ class NewClient extends Thread {
                     myMail.setStage(4);
 
                 }
-
+                
+                System.out.println("Passou");
                 sender.reset();
                 sender.writeUnshared(myMail);
                 postCard = null;
@@ -373,6 +374,8 @@ class NewClient extends Thread {
                         System.out.println("[Server]RMI está down.");
                         postCard = null;
                         remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
+                        
+                       while(!remoteConection.checkDataBaseConection().equals("done"));
                         Object[] rmiDown = {"rmidown"};
                         ClientRequest temp = new ClientRequest("", rmiDown, "");
                         sender.reset();
