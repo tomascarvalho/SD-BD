@@ -923,12 +923,12 @@ public class Client {
 
         conectionError = 0;
         System.out.println("\t\t\tMenu Inicial\n\n");
-        System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
+        System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t0 - Sair\n\n\t\t>>");
         userPick = sc.nextInt();
         //Verificar Escolhas
         while ((userPick == 1) && (userPick == 2) && (userPick == 3) && (userPick == 4)) {
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
-            System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
+            System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t0 - Sair\n\n\t\t>>");
             userPick = sc.nextInt();
         }
         if (userPick == 1) {
@@ -949,6 +949,9 @@ public class Client {
             listarProjectosActuais(0, 0);
         } else if (userPick == 4) {
             listarProjectosActuais(1, 0);
+        } else if (userPick == 0) {
+            conectionToServer.close();
+            System.exit(0);
         }
         mainMenu();
 
@@ -961,7 +964,7 @@ public class Client {
         int userPick;
 
         System.out.println("\t\t\tMenu Inicial\n\n");
-        System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\t\t7 - As minhas recompensas\n\n\t\t>>");
+        System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\t\t7 - As minhas recompensas\n\t\t0 - Sair\n\n\t\t>>");
         userPick = sc.nextInt();
 
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
@@ -969,7 +972,7 @@ public class Client {
         while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5) && (userPick!=6) && (userPick != 7)) {
 
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
-            System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\t\t7 - As minhas recompensas\n\n\t\t>>");
+            System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\t\t7 - As minhas recompensas\n\t\t0 - Sair\n\n\t\t>>");
             userPick = sc.nextInt();
 
         }
@@ -988,6 +991,8 @@ public class Client {
             caixaCorreio();
         } else if (userPick == 7) {
             listarRecompensas();
+        } else if (userPick == 0) {
+            mainMenu();
         }
 
         menuConta();

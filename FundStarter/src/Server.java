@@ -369,6 +369,7 @@ class NewClient extends Thread {
             } catch (IOException ex) {
                 System.out.println("[IOException]Cliente desligou-se!");
                 System.out.println("Exception->"+ex.getMessage());
+                return;
             } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
