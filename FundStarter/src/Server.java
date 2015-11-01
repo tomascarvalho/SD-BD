@@ -3,6 +3,8 @@ import java.net.*;
 import java.io.*;
 import static java.lang.Thread.sleep;
 import java.rmi.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /*
  * FundStart
  *  Projecto para a cadeira de Sistemas Distribuidos
@@ -11,6 +13,7 @@ import java.rmi.*;
  *  Diana Umbelino 2012169525
  *  Tomás Carvalho 2012138578
  */
+
 /**
  *
  * @author gabrieloliveira
@@ -167,7 +170,7 @@ class NewClient extends Thread {
     String alterRequest;
     String rmiLocation;
 
-    NewClient(Socket cliente, RMIServerInterface rmiConection, String ipRMI) {
+    NewClient(Socket cliente, RMIServerInterface rmiConection, String ipRMI) throws RemoteException{
 
         try {
             /**
@@ -203,9 +206,7 @@ class NewClient extends Thread {
         while (true) {
             try {
 
-                //if (postCard == null) {
-                    postCard = (ClientRequest) reciver.readUnshared();
-               // }
+                postCard = (ClientRequest) reciver.readUnshared();
                 System.out.println(postCard.getRequest()[0]);
 
                
@@ -262,45 +263,60 @@ class NewClient extends Thread {
                     postCard.setStage(1);
                     myMail = remoteConection.getUserSaldo(postCard);
                     myMail.setStage(4);
-                    
-                   
-                }else if(postCard.getRequest()[0].equals("mailbox")){
+
+                } else if (postCard.getRequest()[0].equals("mailbox")) {
+
+                    System.out.println("Caixa de Correio\n");
+
                     postCard.getRequest()[0] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.caixaCorreio(postCard);
-                    
+
                     myMail.setStage(4);
+
                 }else if (postCard.getRequest()[0].equals("answer")){
                     postCard.getRequest()[1] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.veResposta(postCard);
                     myMail.setStage(4);
-                }else if(postCard.getRequest()[0].equals("resp_mess")){
+
+                } else if (postCard.getRequest()[0].equals("resp_mess")) {
+                    System.out.print("Responder mensagem\n");
+
                     postCard.getRequest()[0] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.respMensagem(postCard);
                     myMail.setStage(4);
-                    
-                }else if(postCard.getRequest()[0].equals("send_mess")){
+
+                } else if (postCard.getRequest()[0].equals("send_mess")) {
+                    System.out.print("Enviar mensagem\n");
+
                     postCard.getRequest()[0] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.enviaMensagem(postCard);
                     myMail.setStage(4);
-                    
-                }else if (postCard.getRequest()[0].equals("delete_project")){
+
+                } else if (postCard.getRequest()[0].equals("delete_project")) {
+                    System.out.println("Apagar um projecto\n");
+
                     postCard.getRequest()[0] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.apagaProjecto(postCard);
                     myMail.setStage(4);
-                    
-                }else if (postCard.getRequest()[0].equals("list_my_projects")){
+
+
+                } else if (postCard.getRequest()[0].equals("list_my_projects")) {
+                    System.out.println("Vim consultar os meus projectos!\n");
+
                     postCard.getRequest()[1] = myUserID;
                     postCard.setStage(1);
+
                     myMail = remoteConection.getUserProjects(postCard);
                     myMail.setStage(4);
-                    
-                
-                }else if ((postCard.getRequest()[0].equals("list_actual_projects")) || (postCard.getRequest()[0].equals("list_old_projects"))) {
+
+                } else if ((postCard.getRequest()[0].equals("list_actual_projects")) || (postCard.getRequest()[0].equals("list_old_projects"))) {
+                    System.out.print("Vim consultar os projectos!\n");
+
                     postCard.setStage(1);
                     myMail = remoteConection.getActualProjects(postCard);
                     myMail.setStage(4);
@@ -314,48 +330,52 @@ class NewClient extends Thread {
                     postCard.getRequest()[0] = myUserID;
                     myMail = remoteConection.pledgeToProject(postCard);
                     myMail.setStage(4);
-                    
+
                 } else if (postCard.getRequest()[0].equals("add_Admin")) {
                     postCard.setStage(1);
                     myMail = remoteConection.addAdminToProject(postCard);
                     myMail.setStage(4);
-                    
-                } else if (postCard.getRequest()[0].equals("vote_for_product")){
+
+
+                } else if (postCard.getRequest()[0].equals("vote_for_product")) {
+                    System.out.println("[Server] Vote For Product");
                     postCard.setStage(1);
                     myMail = remoteConection.voteForProduct(postCard);
                     myMail.setStage(4);
-                    
-                } else if (postCard.getRequest()[0].equals("donate_reward_take_mine_away")){  
+
+                } else if (postCard.getRequest()[0].equals("donate_reward_take_mine_away")) {
+                    System.out.println("[Server] Donating Reward");
+
                     postCard.setStage(1);
                     myMail = remoteConection.donateReward(postCard);
                     myMail.setStage(4);
+      
+                } else if (postCard.getRequest()[0].equals("listar_recompensas")){
+                    System.out.println("[Server] Listar Rewards");
+                    postCard.getRequest()[1] = myUserID;
+                    postCard.setStage(1);
+                    myMail = remoteConection.listarRecompensas(postCard);
+                    myMail.setStage(4);
+                            
                 }
-                 
 
+                System.out.println("Vou mandar qualquer coisa");
+                System.out.println("My Mail->" + myMail.getResponse()[0]);
                 sender.writeUnshared(myMail);
                 postCard = null;
 
-            } catch (EOFException e) {
-                System.out.println("Cliente desligou-se!");
+            } catch (EOFException ex) {
+                System.out.println("[EOFException]Cliente desligou-se!");
+                System.out.println("Exception->"+ex.getMessage());
                 return;
-            } catch (RemoteException e) {
-                System.out.println("[Server]Erro no RMI!");
-                while (true) {
-                    try {
-                        System.out.println("[Server]Vou tentar ligar ao RMI!");
-                        remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
-                        System.out.println("[Server]Voltei a ligar ao RMI!");
-                        break;
-                    } catch (NotBoundException ex) {
-                        System.out.println("[Server]Não me consigo ligar ao RMI!");
-                    } catch (MalformedURLException ex) {
-                        System.out.println("[Server]MalformedRLException");
-                    } catch (RemoteException ex) {
-                        System.out.println("[Server]RemoteException");
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+
+            } catch (IOException ex) {
+                System.out.println("[IOException]Cliente desligou-se!");
+                System.out.println("Exception->"+ex.getMessage());
+                return;
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+
             }
         }
     }

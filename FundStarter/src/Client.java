@@ -79,8 +79,6 @@ public class Client {
                 if (reconnect) {
                     System.out.println("[Cliente]Vou fazer o login de novo");//apagar depois
                     reLog();
-                    // System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");//apagar depois
-                    // checkRequest();
                 }
 
                 return;
@@ -109,8 +107,6 @@ public class Client {
                         if (reconnect) {
                             System.out.println("[Cliente]Vou fazer o login de novo");//apagar depois
                             reLog();
-                            //System.out.println("[Cliente]Vou pedir ao rmi para ver os meus pedidos");//apagar depois
-                            //checkRequest();
                         }
 
                         return;
@@ -134,21 +130,30 @@ public class Client {
 
         ClientRequest newRequest;
 
+
         while (true) {
-            ClientRequest remenberMe;
+            System.out.println("[reLog]Passei aqui");
+            ClientRequest rememberMe;
+
+            if(myCredentials[0]==null && myCredentials[1]==null){
+                return;
+            }
+            
             Object[] tempCard = new Object[2];
             tempCard[0] = "log";
             tempCard[1] = myCredentials;
 
-            remenberMe = new ClientRequest("", tempCard, "");
-
-            sender.writeUnshared(remenberMe);
+            rememberMe = new ClientRequest("", tempCard, "");
+            
+            sender.reset();
+            sender.writeUnshared(rememberMe);
 
             try {
-                remenberMe = (ClientRequest) reciver.readUnshared();
+                rememberMe = (ClientRequest) reciver.readUnshared();
             } catch (ClassNotFoundException ex) {
             }
-            if (remenberMe.getResponse()[0].equals("log_in_correcto")) {
+
+            if (rememberMe.getResponse()[0].equals("log_in_correcto")) {
                 break;
             }
         }
@@ -157,10 +162,13 @@ public class Client {
     public Object[] checkRequest() throws IOException {
 
         int lastRequestIndex = myRequest.size() - 1;
+        Object[] cenas;
 
-        System.out.println("Last Request->" + myRequest.get(lastRequestIndex).getRequest()[0]);//procurar o ultimo request bão terminado na base de dados
-
-        return postOffice(myRequest.get(lastRequestIndex).getRequest());
+        System.out.println("Last Request->" + myRequest.get(lastRequestIndex).getRequest()[0]);//procurar o ultimo request não terminado
+        
+        cenas= postOffice(myRequest.get(lastRequestIndex).getRequest());
+        System.out.println("Pintou");
+        return cenas;
 
     }
 
@@ -185,18 +193,28 @@ public class Client {
             newRequest = new ClientRequest(requestID, postCard, requestDate.toString());
             myRequest.add(newRequest);
             newRequest.setStage(0);
+            
             sender.reset();
             sender.writeUnshared(newRequest);
-
+            
             newResponse = (ClientRequest) reciver.readObject();
 
             newResponse.setStage(5);
             updateRequest(newRequest, newResponse);
+
             return newResponse.getResponse();
 
-        } catch (IOException ex) {
+        }catch (IOException ex) {
+            
+            
             connectionFunction(true);
-        } catch (ClassNotFoundException ex) {
+            try {
+                return checkRequest();
+            } catch (IOException ex1) {
+                System.out.println("Não consegui replicar o seu request!");
+            }
+            
+        }catch (ClassNotFoundException ex) {
             System.out.println("Classe não encontrada!");
         }
 
@@ -242,7 +260,7 @@ public class Client {
         postCard[0] = "log";
         postCard[1] = person;
 
-        postCard = postOffice(postCard);//AQUI
+        postCard = postOffice(postCard);
 
         if (postCard[0].equals("log_in_correcto")) {
             myId = (int) postCard[1];
@@ -268,7 +286,7 @@ public class Client {
         postCard[0] = "new";
         postCard[1] = newUserData;
 
-        postCard = postOffice(postCard);//AQUI
+        postCard = postOffice(postCard);
 
         if (postCard[0].equals("infosave")) {
             myId = (int) postCard[1];
@@ -381,15 +399,6 @@ public class Client {
 
         postCard = postOffice(postCard);
 
-        while (postCard == null) {
-
-            try {
-                postCard = checkRequest();
-            } catch (IOException ex) {
-
-            }
-        }
-
         System.out.println("\t\tO seu saldo é de " + postCard[0] + " euros.");
 
         return true;
@@ -469,15 +478,6 @@ public class Client {
 
         postCard = postOffice(postCard);
 
-        while (postCard == null) {
-            try {
-                postCard = checkRequest();
-            } catch (IOException ex) {
-                connectionFunction(true);
-            }
-
-        }
-
         if (postCard[0].equals("infosave")) {
             return true;
         } else {
@@ -512,10 +512,13 @@ public class Client {
 
         if ((!array_projectos[0].equals("error_no_active_projects")) || (!array_projectos[0].equals("error_no_old_projects"))) {
             if (choice == 0) {
-                System.out.println("Projectos Actuais: ");
+                System.out.println("\t\t\tProjectos Actuais\n\n"
+                        + "\tID\t\tTitulo\t\t\t\t\tProgresso:");
             } else {
-                System.out.println("Projectos Antigos: ");
+                System.out.println("\t\t\tProjectos Antigos\n\n"
+                        + "\tID\t\tTitulo");
             }
+           
 
             while (j < i) {
 
@@ -528,14 +531,14 @@ public class Client {
                 valorpretendido = array_projectos[j];
                 j++;
                 if (choice == 0) {
-                    System.out.println("ID: " + id + " Titulo: " + titulo + " Progresso: " + valoractual + " euros angariados / " + valorpretendido + " euros pretendidos");
+                    System.out.println("\t" + id + "\t\t" + titulo + "\t\t" + valoractual + " euros angariados / " + valorpretendido + " euros pretendidos");
                 } else {
-                    System.out.println("ID: " + id + " Titulo: " + titulo);
+                    System.out.println("\t" + id + "\t\t" + titulo);
                 }
             }
-
+            
             if (choice == 0) {
-                System.out.println("1 - Consultar detalhes de um projcto");
+                System.out.println("\n1 - Consultar detalhes de um projcto");
                 System.out.println("2 - Enviar mensagem a um projecto");
                 System.out.println("3 - Voltar ao Menu de Conta");
                 System.out.println(">>>");
@@ -544,7 +547,7 @@ public class Client {
                 while ((choice != 1) && (choice != 2) && (choice !=3)) {
 
 
-                    System.out.println("1 - Consultar detalhes de um projecto");
+                    System.out.println("\n1 - Consultar detalhes de um projecto");
                     System.out.println("2 - Enviar mensagem a um projecto");
                     System.out.println("3 - Voltar ao Menu");
                     choice = sc.nextInt();
@@ -595,7 +598,7 @@ public class Client {
         int i = 0, num_recompensas = 0, j = 0;
 
         if (!project_details[0].equals("no_project_to_show")) {
-            System.out.println("Detalhes do Projecto " + id);
+            System.out.println("\n\nDetalhes do Projecto " + id);
             titulo_projecto = project_details[i];
             i++;
             descricao_projecto = project_details[i];
@@ -666,6 +669,7 @@ public class Client {
                 }
 
             }
+            System.out.println("\n\n");
 
             if (logged == 1){
                 System.out.println("\n1 - Doar ao Projecto"
@@ -722,17 +726,34 @@ public class Client {
                 System.out.println("Ganhou a seguinte recompensa: " + recompensa);
                 System.out.print("Se desejar manter a sua recompensa seleccione 1. Caso a deseje oferecer a outro utilizador seleccione 2\n>>");
                 conta = sc.nextInt();
-                if (conta == 2){
-  
-                    while(!donateReward(id, recompensa)){
-                        System.out.println("Erro ao doar recompensa");
-                    }
+                while(conta != 2 && conta != 1){
+                    System.out.println("Ganhou a seguinte recompensa: " + recompensa);
+                    System.out.print("Se desejar manter a sua recompensa seleccione 1. Caso a deseje oferecer a outro utilizador seleccione 2\n>>");
+                    conta = sc.nextInt();
                 }
+                
+                
+                if (conta == 2){
+                    while (conta == 2){
+                        if (!donateReward(id, recompensa)){
+                            System.out.println("Erro ao fazer a doação");
+                            System.out.println("Ganhou a seguinte recompensa: " + recompensa);
+                            System.out.print("Se desejar manter a sua recompensa seleccione 1. Caso a deseje oferecer a outro utilizador seleccione 2\n>>");
+                            conta = sc.nextInt();
+                        }   
+                        else{
+                            conta = 3;
+                        }
+                    }
+                    
+            }
+                
+                
             } else {
                 System.out.println("Não ganhou recompensas");
             }
 
-        } else if (answer.equals("sem saldo")) {
+        } else if (answer.equals("Sem saldo")) {
             System.out.println("O seu saldo não é suficiente para doar!");
             System.out.println("Tem " + saldo + " euros na sua conta!");
         }
@@ -760,7 +781,7 @@ public class Client {
         
         sc.nextLine();
         String username;
-       
+        
         postCard[0] = "donate_reward_take_mine_away";
         
         System.out.println("A que utilizador deseja doar a sua recompensa: ");
@@ -775,7 +796,7 @@ public class Client {
             System.out.println("Recompensa doada com sucesso");
             return true;
         }
-        else if(resposta.equals("no_user")){
+        else if(resposta.equals("no_reward")){
             System.out.println("Esse utilizador não existe");
             return false;
         }
@@ -884,6 +905,47 @@ public class Client {
         System.out.println(postCard[0]);
 
     }
+    
+    public void listarRecompensas(){
+        
+        postCard[0] = "listar_recompensas";
+        postCard = postOffice(postCard);
+        ArrayList <String> definitivas =(ArrayList <String>) postCard[1];
+        ArrayList <String> temporarias = (ArrayList <String>) postCard[2];
+        int choice = 0;
+        
+        if (definitivas.size()>=0){
+            Iterator <String> it = definitivas.iterator();
+            System.out.println("Recompensas Ganhas\n");
+            while (it.hasNext()){
+                System.out.println("ID: "+it.next());
+            }
+            System.out.println("\n");
+        } 
+        if (temporarias.size() >=0){
+            Iterator <String> it = temporarias.iterator();
+            System.out.println("Recompensas que vai ganhar caso o projecto seja financiado\n");
+            while (it.hasNext()){
+                System.out.println("ID: "+it.next());
+            }
+            System.out.println("\n");
+        }
+        if (temporarias.size() <=0 && definitivas.size() <= 0){
+            System.out.println("Não tem recompensas ganhas");
+        }
+        
+        if (temporarias.size()>0 || definitivas.size() >0){
+            System.out.println("1 - Doar Recompensas\n2 - Voltar ao Menu");
+            choice = sc.nextInt();
+            if (choice == 1){
+                System.out.println("ID da recompensa a doar: ");
+                choice = sc.nextInt();
+                donateReward(choice, "listar_rec_flag");
+                
+            }
+            
+        }
+    }
 
     public void mainMenu() throws IOException, ClassNotFoundException {
         // 0 - I am not logged
@@ -894,12 +956,12 @@ public class Client {
 
         conectionError = 0;
         System.out.println("\t\t\tMenu Inicial\n\n");
-        System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
+        System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t0 - Sair\n\n\t\t>>");
         userPick = sc.nextInt();
         //Verificar Escolhas
         while ((userPick == 1) && (userPick == 2) && (userPick == 3) && (userPick == 4)) {
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
-            System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t>>");
+            System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t0 - Sair\n\n\t\t>>");
             userPick = sc.nextInt();
         }
         if (userPick == 1) {
@@ -920,6 +982,9 @@ public class Client {
             listarProjectosActuais(0, 0);
         } else if (userPick == 4) {
             listarProjectosActuais(1, 0);
+        } else if (userPick == 0) {
+            conectionToServer.close();
+            System.exit(0);
         }
         mainMenu();
 
@@ -932,15 +997,15 @@ public class Client {
         int userPick;
 
         System.out.println("\t\t\tMenu Inicial\n\n");
-        System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\n\n\t\t>>");
+        System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\t\t7 - As minhas recompensas\n\t\t0 - Sair\n\n\t\t>>");
         userPick = sc.nextInt();
 
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
 
-        while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5) && (userPick!=6)) {
+        while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5) && (userPick!=6) && (userPick != 7)) {
 
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
-            System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\n\n\t\t>>");
+            System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\t\t7 - As minhas recompensas\n\t\t0 - Sair\n\n\t\t>>");
             userPick = sc.nextInt();
 
         }
@@ -955,8 +1020,12 @@ public class Client {
         } else if (userPick == 5) {
             consultarProjectosUser();
             listarProjectosActuais(1, 1);
-        }else if (userPick == 6){
+        } else if (userPick == 6) {
             caixaCorreio();
+        } else if (userPick == 7) {
+            listarRecompensas();
+        } else if (userPick == 0) {
+            mainMenu();
         }
 
         menuConta();
