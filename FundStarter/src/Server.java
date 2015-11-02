@@ -361,12 +361,19 @@ class NewClient extends Thread {
                     myMail.setStage(4);
 
                             
-                } else if (postCard.getRequest()[0].equals("add_reward")){
+                } else if (postCard.getRequest()[0].equals("new_reward")){
                     System.out.println("[Server] Adicionar Recompensa");
+                    postCard.getRequest()[0] = myUserID;
                     postCard.setStage(1);
                     myMail = remoteConection.addReward(postCard);
                     myMail.setStage(4);
 
+                } else if (postCard.getRequest()[0].equals("delete_reward")){
+                    System.out.println("[Server] Apagar Recompensa");
+                    postCard.getRequest()[3] = myUserID;
+                    postCard.setStage(1);
+                    myMail = remoteConection.deleteReward(postCard);
+                    myMail.setStage(4);
                 }
                 
                 System.out.println("Passou");

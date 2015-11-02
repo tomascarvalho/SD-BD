@@ -861,11 +861,12 @@ public class Client {
             }
             else if (userPick == 3) {
                 
-                if (listarRecompensas(1)){
-                    System.out.println("1 - Adicionar Recompensa ao Projecto\n2 - Remover Recompensa ao Projecto\n3 - Voltar ao Menu");
+                if ((listarRecompensas(1))){
+                    listarRecompensas(2);
+                    System.out.println("1 - Adicionar Recompensa ao Projecto\n2 - Remover Recompensa ao Projecto\n3 - Adicionar Nivel Extra ao Projecto\n4 - Remover Nivel Extra do Projecto\n0 - Voltar ao Menu");
                     choice = sc.nextInt();
-                    while ((choice != 1) && (choice != 2) && (choice != 3)){
-                        System.out.println("1 - Adicionar Recompensa ao Projecto\n2 - Remover Recompensa ao Projecto\n3 - Voltar ao Menu");
+                    while ((choice != 1) && (choice != 2) && (choice != 3) && (choice != 4) && (choice != 0)){
+                    System.out.println("1 - Adicionar Recompensa ao Projecto\n2 - Remover Recompensa ao Projecto\n3 - Adicionar Nivel Extra ao Projecto\n4 - Remover Nivel Extra do Projecto\n0 - Voltar ao Menu");
                         choice = sc.nextInt(); 
                     }
                     if (choice == 1){
@@ -878,14 +879,18 @@ public class Client {
                     }
                     else if (choice == 3){
                         
-                        addReward(0);
+                        addReward(1);
                         
+                    }
+                    else if (choice == 4){
+                        deleteReward(1);
                     }
                     
                 }
                 
                 
             }
+            
 
         } 
         else {
@@ -895,11 +900,19 @@ public class Client {
     }
     
     public void deleteReward(int flag){
+        
+        System.out.println("ID da reward a remover: ");
+        int id = sc.nextInt();
+        postCard[0] = "delete_reward";
+        postCard[1] = id;
+        postCard[2] = flag;
+        postCard = postOffice(postCard);
     
     }
     
     public void addReward(int flag) {
         
+
         int projectID;
         String titulo = new String();
         int valor;
@@ -930,14 +943,18 @@ public class Client {
         postCard[3] = valor;
         postCard[4] = flag;
         postCard = postOffice(postCard);
+        if ((int)postCard[1] == 1){
+            System.out.println("\nSucesso");
+        }
+        else{ 
+            System.out.println("\nERRO");
+        }
         
         
         
     }
     
-    public void removeReward(int flag) {
-        
-    }
+   
 
     public void addAdminToProject(int id_projecto) {
 
@@ -1017,21 +1034,39 @@ public class Client {
             
             }
         }
-        else{
+        else if (flag== 1){
             if (projecto.size() >0){
                 System.out.println("Recompensas dos seus projectos: ");
                 Iterator <String> it = projecto.iterator();
                 while (it.hasNext()){
                     System.out.println(it.next());
                 }
+                System.out.println("\n\n");
                 return true;
 
             }
             else{
-                System.out.println("Não tem recompensas associadas aos seus projectos");
+                System.out.println("Não tem recompensas associadas aos seus projectos\n");
                 return false;
             }
 
+        }
+        else {
+            if (projecto.size() >0){
+                System.out.println("Niveis Extra dos seus projectos: ");
+                Iterator <String> it = projecto.iterator();
+                while (it.hasNext()){
+                    System.out.println(it.next());
+                }
+                System.out.println("\n\n");
+                return true;
+
+            }
+            else{
+                System.out.println("Não tem niveis extra associados aos seus projectos\n");
+                return false;
+            }
+            
         }
         return true;
   
