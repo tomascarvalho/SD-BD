@@ -55,6 +55,9 @@ public interface RMIServerInterface extends Remote {
     public ClientRequest donateReward(ClientRequest clrqst) throws RemoteException;
     
     public ClientRequest listarRecompensas(ClientRequest clrqst) throws RemoteException;
+    
+    public String checkDataBaseConection() throws RemoteException;
+    
 
     public ClientRequest addReward(ClientRequest clrqst) throws RemoteException;
 
