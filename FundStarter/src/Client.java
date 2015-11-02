@@ -335,9 +335,9 @@ public class Client {
           
               if(pr.isEmpty()==false){
                 for(i=0; i<tamanho; i++){
-                      System.out.println("\nID do Projecto:  " + pr.get(i).get(0));
+                      System.out.println("\n\nID do Projecto:  " + pr.get(i).get(0));
                       System.out.print("Pergunta:\t" + pr.get(i).get(1));
-                      System.out.print("\nResposta:\t" + pr.get(i).get(2));
+                      System.out.print("\nResposta:\t" + pr.get(i).get(2) + "\n");
                       }
               }else{
                   System.out.println("\nSem mensagens.");
@@ -355,37 +355,52 @@ public class Client {
           ArrayList<ArrayList<Integer>>  listaPerguntas= (ArrayList<ArrayList<Integer>>)postCard[0];
           ArrayList<ArrayList<String>>  perguntas= (ArrayList<ArrayList<String>>)postCard[1];
           int tamanho = listaPerguntas.size();
-          int i,j;
+          int i,j, aux, resp =0, empty = 0;
           
           
-          //imprime primeiro respostas a perguntas feitas
+          //imprime primeiro respostas a perguntas 
           System.out.print("\nCorreio Respondido:");
           haResposta();
 
           //imprime perguntas feita a algum projecto
-          if(listaPerguntas.isEmpty() == false){
-          
-            System.out.print("\n\nQuestões sobre Projectos:\n");
-            for(i=0; i<tamanho; i++){
-                if(listaPerguntas.get(i).isEmpty()==false){
-                  System.out.println("\nID do Projecto:  " + listaPerguntas.get(i).get(0));
-                  int novotam = listaPerguntas.get(i).size();
-                  System.out.println("Perguntas associadas:");
-                  for(j=1; j<novotam; j++){
-                      System.out.print(listaPerguntas.get(i).get(j) + ":\t" + perguntas.get(i).get(j) + "\n");
-                  }
-              }
+          //if(listaPerguntas.isEmpty() == false){
+              //verificar se realmente existe alguma pergunta
+            for(aux =0; aux<tamanho;aux++){
+                if(listaPerguntas.get(aux).isEmpty() == false){
+                    System.out.print("\n\nQuestões sobre Projectos:\n");
+                    for(i=0; i<tamanho; i++){
+                        if(listaPerguntas.get(i).isEmpty()==false){
+                            empty ++;
+                            System.out.println("\nID do Projecto:  " + listaPerguntas.get(i).get(0));
+                            int novotam = listaPerguntas.get(i).size();
+                            System.out.println("Perguntas associadas:");
+                            for(j=1; j<novotam; j++){
+                                System.out.print(listaPerguntas.get(i).get(j) + ":\t" + perguntas.get(i).get(j) + "\n");
+                            }
+                            break;
+                        }
+                    }
+                    
+                    do{
+                        System.out.println("1 - Responder à mensagem");
+                        System.out.println("0 - Sair");
+                        sc.nextLine();
+                        resp = sc.nextInt();
+                        if(resp == 1){
+                            System.out.println("ID da mensagem a responder: ");
+                            int idResposta = sc.nextInt();
+                            respondeMensagem(idResposta);
+                        }
+                    }while(resp != 0 && resp !=1);
             }
-            System.out.println("ID da mensagem a responder: ");
-            int idResposta = sc.nextInt();
-          
-            respondeMensagem(idResposta);
-        }else{
-              System.out.println("\n\nNão tem questões sobre Projectos.");
         }
+        if(empty ==0){
+                System.out.println("\n\nNão tem questões sobre Projectos.");
+        }
+      
+      
       }
-    
-
+      
     public boolean consultaSaldo() {
 
         postCard[0] = "seesal";
@@ -1045,7 +1060,7 @@ public class Client {
         int userPick;
 
         conectionError = 0;
-        System.out.println("\t\t\tMenu Inicial\n\n");
+        System.out.println("\n\n\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t0 - Sair\n\n\t\t>>");
         userPick = sc.nextInt();
         //Verificar Escolhas
