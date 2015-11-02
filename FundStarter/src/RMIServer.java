@@ -875,17 +875,31 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         clrqst.setStage(2);
         myRequests.add(clrqst);
         try {
-            query = "INSERT INTO mensagem(id_user_envia, id_projecto,pergunta) VALUES (?,?,?)";
+            query = "SELECT id FROM projecto WHERE id = ? AND status = TRUE";
             preparedstatement = connection.prepareStatement(query);
-            preparedstatement.setInt(1, userID);
-            preparedstatement.setInt(2, projectID);
-            preparedstatement.setString(3, mensagem);
-            preparedstatement.executeUpdate();
-
+            preparedstatement.setInt(1, projectID);
+            rs = preparedstatement.executeQuery();
+            if (rs.next()){
+                try {
+                    query = "INSERT INTO mensagem(id_user_envia, id_projecto,pergunta) VALUES (?,?,?)";
+                    preparedstatement = connection.prepareStatement(query);
+                    preparedstatement.setInt(1, userID);
+                    preparedstatement.setInt(2, projectID);
+                    preparedstatement.setString(3, mensagem);
+                    preparedstatement.executeUpdate();
+                    resposta[0] = "Mensagem enviada";
+                } catch (SQLException ex) {
+                    System.err.println("Erro:" + ex);
+                }
+            }
+            else{
+                resposta[0] = "Nao existe";
+            }
         } catch (SQLException ex) {
             System.err.println("Erro:" + ex);
         }
-        resposta[0] = "Mensagem enviada";
+        
+        
         clrqst.setResponse(resposta);
         clrqst.setStage(3);
         updateRequest(clrqst);

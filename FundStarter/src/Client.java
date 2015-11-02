@@ -274,7 +274,6 @@ public class Client {
     }
 
     public boolean criaConta() {
-        sc.nextLine();
         String[] newUserData = new String[2];
         sc.nextLine();
         System.out.print("\t\tUsername:");
@@ -308,6 +307,11 @@ public class Client {
         postCard[1] = idProjecto;
         postCard[2] = mensagem;
         postCard = postOffice(postCard);
+        String resposta = (String)postCard[0];
+        if (resposta.equals("Mensagem enviada")){
+            System.out.println("Mensagem enviada");
+        }else
+              System.out.println("Projecto não existente");
         System.out.println(postCard[0]);
         
     }
