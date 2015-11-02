@@ -1,10 +1,7 @@
 
-import java.io.*;
 import java.net.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
+import java.io.*;
 
 /*
  * FundStart
@@ -277,6 +274,7 @@ public class Client {
     }
 
     public boolean criaConta() {
+        sc.nextLine();
         String[] newUserData = new String[2];
         sc.nextLine();
         System.out.print("\t\tUsername:");
@@ -300,7 +298,7 @@ public class Client {
 
     }
     
-    public void enviaMensagem (int idProjecto){
+      public void enviaMensagem (int idProjecto){
         System.out.println("Digite a sua mensagem:\n");
         Scanner sc = new Scanner(System.in);
         String mensagem = sc.nextLine();
@@ -310,16 +308,11 @@ public class Client {
         postCard[1] = idProjecto;
         postCard[2] = mensagem;
         postCard = postOffice(postCard);
-        String resposta = (String)postCard[0];
-        if (resposta.equals("Mensagem enviada")){
-            System.out.println("Mensagem enviada");
-        }else
-              System.out.println("Projecto não existente");
         System.out.println(postCard[0]);
         
     }
       
-    public void respondeMensagem(int idResposta){
+      public void respondeMensagem(int idResposta){
         System.out.println("Digite a sua mensagem:\n");
         Scanner sc = new Scanner(System.in);
         String resposta = sc.nextLine();
@@ -329,94 +322,70 @@ public class Client {
         postCard[2] = resposta;
         postCard = postOffice(postCard);
         System.out.println(postCard[0]);
-    }
+      }
       
-    public void haResposta(){
-        postCard[0] = "answer";
-        postCard = postOffice(postCard);
-        Object[] objecto = postCard;
-        ArrayList<ArrayList<String>>  pr= (ArrayList<ArrayList<String>>)postCard[0];
-
-        int tamanho = pr.size();
-        int i;
+      public void haResposta(){
+          postCard[0] = "answer";
+          postCard = postOffice(postCard);
+          Object[] objecto = postCard;
+          ArrayList<ArrayList<String>>  pr= (ArrayList<ArrayList<String>>)postCard[0];
           
-            if(pr.isEmpty()==false){
-              for(i=0; i<tamanho; i++){
-                    System.out.println("\n\nID do Projecto:  " + pr.get(i).get(0));
-                    System.out.print("Pergunta:\t" + pr.get(i).get(1));
-                    System.out.print("\nResposta:\t" + pr.get(i).get(2) + "\n");
-                    }
-            }else{
-                System.out.println("\nSem mensagens.");
-            }
+          int tamanho = pr.size();
+          int i;
           
-    }
+              if(pr.isEmpty()==false){
+                for(i=0; i<tamanho; i++){
+                      System.out.println("\nID do Projecto:  " + pr.get(i).get(0));
+                      System.out.print("Pergunta:\t" + pr.get(i).get(1));
+                      System.out.print("\nResposta:\t" + pr.get(i).get(2));
+                      }
+              }else{
+                  System.out.println("\nSem mensagens.");
+              }
+          
+      }
       
       
-    public void caixaCorreio(){
-        System.out.println("Caixa de Correio:");
-
-        postCard[0] = "mailbox";
-        postCard = postOffice(postCard);
-        Object[] objecto = postCard;
-        ArrayList<ArrayList<Integer>>  listaPerguntas= (ArrayList<ArrayList<Integer>>)postCard[0];
-        ArrayList<ArrayList<String>>  perguntas= (ArrayList<ArrayList<String>>)postCard[1];
-        int tamanho = listaPerguntas.size();
-        int i,j, aux, resp =0, empty = 0;
-
-
-        //imprime primeiro respostas a perguntas 
-        System.out.print("\nCorreio Respondido:");
-        haResposta();
+      public void caixaCorreio(){
+          System.out.println("Caixa de Correio:");
+          
+          postCard[0] = "mailbox";
+          postCard = postOffice(postCard);
+          Object[] objecto = postCard;
+          ArrayList<ArrayList<Integer>>  listaPerguntas= (ArrayList<ArrayList<Integer>>)postCard[0];
+          ArrayList<ArrayList<String>>  perguntas= (ArrayList<ArrayList<String>>)postCard[1];
+          int tamanho = listaPerguntas.size();
+          int i,j;
+          
+          
+          //imprime primeiro respostas a perguntas feitas
+          System.out.print("\nCorreio Respondido:");
+          haResposta();
 
           //imprime perguntas feita a algum projecto
-          //if(listaPerguntas.isEmpty() == false){
-          //verificar se realmente existe alguma pergunta
-            for(aux =0; aux<tamanho;aux++){
-                if(listaPerguntas.get(aux).isEmpty() == false){
-                    System.out.print("\n\nQuestões sobre Projectos:\n");
-                    for(i=0; i<tamanho; i++){
-                        if(listaPerguntas.get(i).isEmpty()==false){
-                            empty ++;
-                            System.out.println("\nID do Projecto:  " + listaPerguntas.get(i).get(0));
-                            int novotam = listaPerguntas.get(i).size();
-                            System.out.println("Perguntas associadas:");
-                            for(j=1; j<novotam; j++){
-                                System.out.print(listaPerguntas.get(i).get(j) + ":\t" + perguntas.get(i).get(j) + "\n");
-                            }
-                            break;
-                        }
-                    }
-                    
-                    do{
-                        System.out.println("1 - Responder à mensagem");
-                        System.out.print("0 - Sair\n\t\t>>");
-                        
-                        while (!sc.hasNextInt()){
-                            System.out.print("\t\t>>");
-                            sc.next();
-                        }
-                        resp = sc.nextInt();
-                        sc.nextLine();
-                        if(resp == 1){
-                            System.out.print("ID da mensagem a responder: \n\t\t>>");
-                            while (!sc.hasNextInt()){
-                                System.out.print("\t\t>>");
-                                sc.next();
-                            }
-                            int idResposta = sc.nextInt();
-                            respondeMensagem(idResposta);
-                        }
-                    }while(resp != 0 && resp !=1);
+          if(listaPerguntas.isEmpty() == false){
+          
+            System.out.print("\n\nQuestões sobre Projectos:\n");
+            for(i=0; i<tamanho; i++){
+                if(listaPerguntas.get(i).isEmpty()==false){
+                  System.out.println("\nID do Projecto:  " + listaPerguntas.get(i).get(0));
+                  int novotam = listaPerguntas.get(i).size();
+                  System.out.println("Perguntas associadas:");
+                  for(j=1; j<novotam; j++){
+                      System.out.print(listaPerguntas.get(i).get(j) + ":\t" + perguntas.get(i).get(j) + "\n");
+                  }
+              }
             }
+            System.out.println("ID da mensagem a responder: ");
+            int idResposta = sc.nextInt();
+          
+            respondeMensagem(idResposta);
+        }else{
+              System.out.println("\n\nNão tem questões sobre Projectos.");
         }
-        if(empty ==0){
-                System.out.println("\n\nNão tem questões sobre Projectos.");
-        }
-      
-      
-    }
-      
+      }
+    
+
     public boolean consultaSaldo() {
 
         postCard[0] = "seesal";
@@ -431,11 +400,9 @@ public class Client {
 
     public boolean criaProjecto() {
 
-        
         sc.nextLine();
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String[] newProjectData = new String[2000];
-        String data = new String();
+        String constroi_data_limite;
         int num_recompensas = 0;
         int num_niveis_extra = 0;
         int num_produto = 0;
@@ -448,30 +415,11 @@ public class Client {
         System.out.println("\n\tDescrição do Projecto: ");
         newProjectData[1] = sc.nextLine(); //Descrição do Projecto
         System.out.println("\n\tValor Pretendido: ");
-        while (!sc.hasNextInt()){
-            System.out.print("\t\t>>");
-            sc.next();
-        }
-        newProjectData[2] = ""+sc.nextInt(); //Valor Pretendido para o Projecto
-        sc.nextLine();
+        newProjectData[2] = sc.nextLine(); //Valor Pretendido para o Projecto
         System.out.println("\tData limite para a conclusão do Projecto(yyyy-mm-dd): ");
-        Date date = null;
-        while (date == null) {
-            data = sc.nextLine();
-            try {
-                date = format.parse(data);
-            } catch (ParseException e) {
-                System.out.println("Data não valida, tente novamente.");
-            }
-        }
-       
-        newProjectData[3] = data; //Data Limite
+        newProjectData[3] = sc.nextLine(); //Data Limite
         System.out.println("\n\tQuantas Recompensas quer oferecer: ");
-
-        while (!sc.hasNextInt()){
-            System.out.print("\t\t>>");
-            sc.next();
-        }
+        //while(!sc.hasNextInt()) sc.next();
         num_recompensas = sc.nextInt();
         sc.nextLine();
         newProjectData[4] = "" + num_recompensas;
@@ -480,12 +428,7 @@ public class Client {
             j++;
             System.out.println("Recompensa nº" + i);
             System.out.println("Montante a doar: ");
-            while (!sc.hasNextInt()){
-                System.out.print("\t\t>>");
-                sc.next();
-            }
-            montante = ""+sc.nextInt();
-            sc.nextLine();
+            montante = sc.nextLine();
             newProjectData[4 + j] = montante;
             j++;
             System.out.println("Recompensa associada: ");
@@ -503,12 +446,7 @@ public class Client {
             j++;
             System.out.println("Nivel Extra nº" + i + "\nValor: ");
             //while(!sc.hasNextInt()) sc.next();
-            while (!sc.hasNextInt()){
-                System.out.print("\t\t>>");
-                sc.next();
-            }
-            montante = ""+sc.nextInt();
-            sc.nextLine();
+            montante = sc.nextLine();
             newProjectData[4 + j] = montante;
             j++;
             System.out.println("Nivel Extra: ");
@@ -595,11 +533,7 @@ public class Client {
                 System.out.println("\n1 - Consultar detalhes de um projcto");
                 System.out.println("2 - Enviar mensagem a um projecto");
                 System.out.println("3 - Voltar ao Menu de Conta");
-                System.out.println("\t\t>>");
-                while (!sc.hasNextInt()){
-                    System.out.print("\t\t>>");
-                    sc.next();
-                }
+                System.out.println(">>>");
                 choice = sc.nextInt();
 
                 while ((choice != 1) && (choice != 2) && (choice !=3)) {
@@ -608,28 +542,15 @@ public class Client {
                     System.out.println("\n1 - Consultar detalhes de um projecto");
                     System.out.println("2 - Enviar mensagem a um projecto");
                     System.out.println("3 - Voltar ao Menu");
-                    System.out.print("\n\t\t>>");
-                    while (!sc.hasNextInt()){
-                        System.out.print("\t\t>>");
-                        sc.next();
-                    }
                     choice = sc.nextInt();
                 }
                 if (choice == 1) {
-                    System.out.print("ID do projecto a consultar: \n\t\t>>");
-                    while (!sc.hasNextInt()){
-                        System.out.print("\t\t>>");
-                        sc.next();
-                    }
+                    System.out.println("ID do projecto a consultar: ");
                     choice = sc.nextInt();
                     consultarDetalhesProjecto(choice, logged);
                 }
                 if (choice == 2){
-                    System.out.print("ID do projecto a enviar mensagem: \n\t\t>>");
-                    while (!sc.hasNextInt()){
-                        System.out.print("\t\t>>");
-                        sc.next();
-                    }
+                    System.out.println("ID do projecto a enviar mensagem: ");
                     choice = sc.nextInt();
                     enviaMensagem (choice);
                 }
@@ -747,23 +668,14 @@ public class Client {
                     + "\n2 - Enviar Mensagem ao Projecto"
                     + "\n3 - Voltar ao Menu");
 
-                System.out.print("\t\t>>");
-                while (!sc.hasNextInt()){
-                    System.out.print("\t\t>>");
-                    sc.next();
-                }
+                System.out.print(">>");
                 choice = sc.nextInt();
 
                 while ((choice != 1) && (choice != 2) && (choice != 3)) {
                     System.out.println("\n 1 - Doar ao Projecto"
                             + "\n2 - Enviar Mensagem ao Projecto"
                             + "\n3 - Voltar ao Menu");
-                    System.out.print("\t\t>>");
-                    while (!sc.hasNextInt()){
-                        System.out.print("\t\t>>");
-                        sc.next();
-                    }
-                    
+                    System.out.print(">>");
                     choice = sc.nextInt();
                 }
                 if (choice == 1) {
@@ -784,12 +696,8 @@ public class Client {
 
     public void pledgeToProject(int id) {
         int[] how_much__to_who = new int[2];
-        System.out.print("Quanto quer doar a este projecto: \n\t\t>>");
+        System.out.println("Quanto quer doar a este projecto: ");
         how_much__to_who[0] = sc.nextInt();
-        while (!sc.hasNextInt()){
-            System.out.print("\t\t>>");
-            sc.next();
-        }
         how_much__to_who[1] = id;
         postCard[0] = "pledge";
         postCard[1] = how_much__to_who;
@@ -808,19 +716,11 @@ public class Client {
             System.out.println("Doou com sucesso");
             if (boolean_recompensa == 1) {
                 System.out.println("Ganhou a seguinte recompensa: " + recompensa);
-                System.out.print("Se desejar manter a sua recompensa seleccione 1. Caso a deseje oferecer a outro utilizador seleccione 2\n\t\t>>");
-                while (!sc.hasNextInt()){
-                    System.out.print("\t\t>>");
-                    sc.next();
-                }
+                System.out.print("Se desejar manter a sua recompensa seleccione 1. Caso a deseje oferecer a outro utilizador seleccione 2\n>>");
                 conta = sc.nextInt();
                 while(conta != 2 && conta != 1){
                     System.out.println("Ganhou a seguinte recompensa: " + recompensa);
-                    System.out.print("Se desejar manter a sua recompensa seleccione 1. Caso a deseje oferecer a outro utilizador seleccione 2\n\t\t>>");
-                    while (!sc.hasNextInt()){
-                        System.out.print("\t\t>>");
-                        sc.next();
-                    }
+                    System.out.print("Se desejar manter a sua recompensa seleccione 1. Caso a deseje oferecer a outro utilizador seleccione 2\n>>");
                     conta = sc.nextInt();
                 }
                 
@@ -830,11 +730,7 @@ public class Client {
                         if (!donateReward(id, recompensa)){
                             System.out.println("Erro ao fazer a doação");
                             System.out.println("Ganhou a seguinte recompensa: " + recompensa);
-                            System.out.print("Se desejar manter a sua recompensa seleccione 1. Caso a deseje oferecer a outro utilizador seleccione 2\n\t\t>>");
-                            while (!sc.hasNextInt()){
-                                System.out.print("\t\t>>");
-                                sc.next();
-                            }
+                            System.out.print("Se desejar manter a sua recompensa seleccione 1. Caso a deseje oferecer a outro utilizador seleccione 2\n>>");
                             conta = sc.nextInt();
                         }   
                         else{
@@ -932,35 +828,19 @@ public class Client {
             }
             System.out.println("\t\t\tMenu Admin\n\n");
             System.out.print("\t\t1 - Adicionar Administrador ao Projecto\n\t\t2 - Cancelar Projectos\n\t\t3 - Alterar Recompensas do Projecto\n\t\t4 - Voltar ao Menu\n\n\n\t\t>>");
-            while (!sc.hasNextInt()){
-                System.out.print("\t\t>>");
-                sc.next();
-            }
             userPick = sc.nextInt();
             //Verificar Escolhas
             while ((userPick != 1) && (userPick != 2) && (userPick != 3) && (userPick != 4)){
                 System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
                 System.out.print("\t\t1 - Adicionar Administrador ao Projecto\n\t\t2 - Cancelar Projectos\n\t\t3 - Alterar Recompensas do Projecto\n\t\t4 -Voltar ao Menu\n\n\n\t\t>>");
-                while (!sc.hasNextInt()){
-                    System.out.print("\t\t>>");
-                    sc.next();
-                }
                 userPick = sc.nextInt();
             }
             if (userPick == 1) {
-                System.out.print("ID do projecto ao qual quer adicionar um administrador: \n\t\t>>");
-                while (!sc.hasNextInt()){
-                    System.out.print("\t\t>>");
-                    sc.next();
-                }
+                System.out.println("ID do projecto ao qual quer adicionar um administrador: ");
                 id_projecto_pick = sc.nextInt();
                 while (!id_projecto.contains(id_projecto_pick)) {
                     System.out.println("Não é admin do projecto que escolheu!");
-                    System.out.print("ID do projecto ao qual quer adicionar um administrador: \n\t\t>>");
-                    while (!sc.hasNextInt()){
-                        System.out.print("\t\t>>");
-                        sc.next();
-                    }
+                    System.out.print("ID do projecto ao qual quer adicionar um administrador: ");
                     id_projecto_pick = sc.nextInt();
 
                 }
@@ -968,20 +848,12 @@ public class Client {
 
             }
             else if (userPick == 2) {
-                System.out.print("ID do projecto a cancelar: \n\t\t>>");
-                while (!sc.hasNextInt()){
-                    System.out.print("\t\t>>");
-                    sc.next();
-                }
+                System.out.println("ID do projecto a cancelar: ");
                 id_projecto_pick = sc.nextInt();
 
                 while (!id_projecto.contains(id_projecto_pick)) {
                     System.out.println("Não é admin do projecto que escolheu!");
-                    System.out.print("ID do projecto a cancelar: \n\t\t>>");
-                    while (!sc.hasNextInt()){
-                        System.out.print("\t\t>>");
-                        sc.next();
-                    }
+                    System.out.print("ID do projecto a cancelar: ");
                     id_projecto_pick = sc.nextInt();
 
                 }
@@ -989,44 +861,27 @@ public class Client {
             }
             else if (userPick == 3) {
                 
-                if ((listarRecompensas(1))){
-                    listarRecompensas(2);
-                    System.out.print("1 - Adicionar Recompensa ao Projecto\n2 - Remover Recompensa ao Projecto\n3 - Adicionar Nivel Extra ao Projecto\n4 - Remover Nivel Extra do Projecto\n0 - Voltar ao Menu\n\t\t>>");
-                    while (!sc.hasNextInt()){
-                        System.out.print("\t\t>>");
-                        sc.next();
-                    }
+                if (listarRecompensas(1)){
+                    System.out.println("1 - Adicionar Recompensa ao Projecto\n2 - Remover Recompensa ao Projecto\n3 - Voltar ao Menu");
                     choice = sc.nextInt();
-                    while ((choice != 1) && (choice != 2) && (choice != 3) && (choice != 4) && (choice != 0)){
-                    System.out.print("1 - Adicionar Recompensa ao Projecto\n2 - Remover Recompensa ao Projecto\n3 - Adicionar Nivel Extra ao Projecto\n4 - Remover Nivel Extra do Projecto\n0 - Voltar ao Menu\n\t\t>>");
-                    while (!sc.hasNextInt()){
-                        System.out.print("\t\t>>");
-                        sc.next();
-                    }    
-                    choice = sc.nextInt(); 
+                    while ((choice != 1) && (choice != 2) && (choice != 3)){
+                        System.out.println("1 - Adicionar Recompensa ao Projecto\n2 - Remover Recompensa ao Projecto\n3 - Voltar ao Menu");
+                        choice = sc.nextInt(); 
                     }
                     if (choice == 1){
-                        addReward(0);
                         
                     }
                     else if (choice == 2){
-                        deleteReward(0);
                         
                     }
                     else if (choice == 3){
                         
-                        addReward(1);
-                        
-                    }
-                    else if (choice == 4){
-                        deleteReward(1);
                     }
                     
                 }
                 
                 
             }
-            
 
         } 
         else {
@@ -1034,83 +889,6 @@ public class Client {
         }
         menuConta();
     }
-    
-    public void deleteReward(int flag){
-        
-        System.out.print("ID da reward a remover: \n\t\t>>");
-        while (!sc.hasNextInt()){
-                System.out.print("\t\t>>");
-                sc.next();
-            }
-        int id = sc.nextInt();
-        postCard[0] = "delete_reward";
-        postCard[1] = id;
-        postCard[2] = flag;
-        postCard = postOffice(postCard);
-    
-    }
-    
-    public void addReward(int flag) {
-        
-
-        int projectID;
-        String titulo = new String();
-        int valor;
-        if (flag == 0){
-            System.out.println("\nAdicionar Recompensa a um Projecto");
-            System.out.print("ID do Projecto ao qual quer adicionar uma recompensa: \n\t\t>>");
-            while (!sc.hasNextInt()){
-                System.out.print("\t\t>>");
-                sc.next();
-            }
-            projectID = sc.nextInt();
-            System.out.print("Descrição da Recompensa a acrescentar: \n\t\t>>");
-            sc.nextLine();
-            titulo = sc.nextLine();
-            System.out.print("Montante a doar para ganhar a recompensa: \n\t\t>>");
-            while (!sc.hasNextInt()){
-                System.out.print("\t\t>>");
-                sc.next();
-            }
-            valor = sc.nextInt();
-        }
-        else{
-            System.out.println("\nAdicionar Nivel Extra a um Projecto");
-            System.out.print("ID do Projecto ao qual quer adicionar um Nivel Extra: \n\t\t>>");
-            while (!sc.hasNextInt()){
-                System.out.print("\t\t>>");
-                sc.next();
-            }
-            projectID = sc.nextInt();
-            System.out.print("Descrição do Nivel Extra a acrescentar: \n\t\t>>");
-            sc.nextLine();
-            titulo = sc.nextLine();
-            System.out.print("Montante a que o projecto tem que chegar para desbloquear esse nivel: \n\t\t>>");
-            while (!sc.hasNextInt()){
-                System.out.print("\t\t>>");
-                sc.next();
-            }
-            valor = sc.nextInt();
-            
-        }
-        postCard[0] = "new_reward";
-        postCard[1] = projectID;
-        postCard[2] = titulo;
-        postCard[3] = valor;
-        postCard[4] = flag;
-        postCard = postOffice(postCard);
-        if ((int)postCard[1] == 1){
-            System.out.println("\nSucesso");
-        }
-        else{ 
-            System.out.println("\nERRO");
-        }
-        
-        
-        
-    }
-    
-   
 
     public void addAdminToProject(int id_projecto) {
 
@@ -1190,39 +968,21 @@ public class Client {
             
             }
         }
-        else if (flag== 1){
+        else{
             if (projecto.size() >0){
                 System.out.println("Recompensas dos seus projectos: ");
                 Iterator <String> it = projecto.iterator();
                 while (it.hasNext()){
                     System.out.println(it.next());
                 }
-                System.out.println("\n\n");
                 return true;
 
             }
             else{
-                System.out.println("Não tem recompensas associadas aos seus projectos\n");
+                System.out.println("Não tem recompensas associadas aos seus projectos");
                 return false;
             }
 
-        }
-        else {
-            if (projecto.size() >0){
-                System.out.println("Niveis Extra dos seus projectos: ");
-                Iterator <String> it = projecto.iterator();
-                while (it.hasNext()){
-                    System.out.println(it.next());
-                }
-                System.out.println("\n\n");
-                return true;
-
-            }
-            else{
-                System.out.println("Não tem niveis extra associados aos seus projectos\n");
-                return false;
-            }
-            
         }
         return true;
   
@@ -1236,19 +996,13 @@ public class Client {
         int userPick;
 
         conectionError = 0;
-        System.out.println("\n\n\t\t\tMenu Inicial\n\n");
+        System.out.println("\t\t\tMenu Inicial\n\n");
         System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t0 - Sair\n\n\t\t>>");
-        while (!sc.hasNextInt()){
-            System.out.print("\t\t>>");
-            sc.next();
-        }
-        
         userPick = sc.nextInt();
         //Verificar Escolhas
         while ((userPick != 1) && (userPick != 2) && (userPick != 3) && (userPick != 4) && (userPick!= 0)) {
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
             System.out.print("\t\t1 - Criar Conta\n\t\t2 - LogIn\n\t\t3 - Consultar Projectos Actuais\n\t\t4 - Consultar Projectos Antigos\n\n\n\t\t0 - Sair\n\n\t\t>>");
-            while (!sc.hasNextInt()) sc.next();
             userPick = sc.nextInt();
         }
         if (userPick == 1) {
@@ -1289,14 +1043,14 @@ public class Client {
 
         //Verificar Escolhas. Inserir novos casos quando forem inseridas novas funções
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dda644374cc7afa218dbb6c9762569d4ff431b59
         while ((userPick!= 1) && (userPick != 2) && (userPick != 3) && (userPick!= 4) && (userPick != 5) && (userPick!=6) && (userPick != 7) && (userPick != 0)) {
 
             System.out.println("\nERRO - Escolher uma das opções dadas!!\n");
             System.out.print("\t\t1 - Consultar Saldo\n\t\t2 - Criar Projecto\n\t\t3 - Listar Projectos Actuais\n\t\t4 - Listar Projectos Antigos\n\t\t5 - Listar os meus projectos\n\t\t6 - Caixa de Correio\n\t\t7 - As minhas recompensas\n\t\t0 - Sair\n\n\t\t>>");
-            while (!sc.hasNextInt()){
-                System.out.print("\t\t>>");
-                sc.next();
-            }
             userPick = sc.nextInt();
 
         }
