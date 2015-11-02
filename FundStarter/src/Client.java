@@ -381,7 +381,7 @@ public class Client {
                         }
                     }
                     
-                    do{
+                    while(true){
                         System.out.println("1 - Responder à mensagem");
                         System.out.println("0 - Sair");
                         sc.nextLine();
@@ -390,8 +390,12 @@ public class Client {
                             System.out.println("ID da mensagem a responder: ");
                             int idResposta = sc.nextInt();
                             respondeMensagem(idResposta);
+                            break;
                         }
-                    }while(resp != 0 && resp !=1);
+                        if(resp == 0){
+                            break;
+                        }
+                    }
             }
         }
         if(empty ==0){
