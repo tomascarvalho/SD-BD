@@ -289,7 +289,7 @@ class NewClient extends Thread {
                 } else if (postCard.getRequest()[0].equals("resp_mess")) {
                     System.out.print("Responder mensagem\n");
 
-                    postCard.getRequest()[0] = myUserID;
+                    postCard.getRequest()[0] = 0;
                     postCard.setStage(1);
                     myMail = remoteConection.respMensagem(postCard);
                     myMail.setStage(4);
