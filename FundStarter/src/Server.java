@@ -199,6 +199,7 @@ class NewClient extends Thread {
             /**
              * vai iniciar a thread.
              */
+            System.out.println("OLA GABI");
             this.start();
 
         } catch (EOFException ex) {
