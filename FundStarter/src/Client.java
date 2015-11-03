@@ -591,7 +591,7 @@ public class Client {
                 
             }
             
-            if (choice == 0) {
+            if (choice == 0 && logged == 1) {
                 System.out.println("\n1 - Consultar detalhes de um projcto");
                 System.out.println("2 - Enviar mensagem a um projecto");
                 System.out.println("3 - Voltar ao Menu de Conta");
