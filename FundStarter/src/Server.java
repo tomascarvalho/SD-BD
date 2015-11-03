@@ -199,6 +199,7 @@ class NewClient extends Thread {
             /**
              * vai iniciar a thread.
              */
+            
             this.start();
 
         } catch (EOFException ex) {
@@ -211,7 +212,7 @@ class NewClient extends Thread {
     }
 
     public void run() {
-
+        
         while (true) {
             try {
 
