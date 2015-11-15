@@ -3,8 +3,8 @@
 CREATE TABLE Utilizador
 (
 id 	SERIAL not null,
-username VARCHAR(10) not null,
-pass VARCHAR(10) not null,
+username VARCHAR(100) not null,
+pass VARCHAR(100) not null,
 saldo INTEGER not null,
 
 CONSTRAINT Utilizador_pk PRIMARY KEY (id)

@@ -802,11 +802,11 @@ public class Client {
     public void pledgeToProject(int id) {
         int[] how_much__to_who = new int[2];
         System.out.print("Quanto quer doar a este projecto: \n\t\t>>");
-        how_much__to_who[0] = sc.nextInt();
         while (!sc.hasNextInt()){
             System.out.print("\t\t>>");
             sc.next();
         }
+        how_much__to_who[0] = sc.nextInt();
         how_much__to_who[1] = id;
         postCard[0] = "pledge";
         postCard[1] = how_much__to_who;

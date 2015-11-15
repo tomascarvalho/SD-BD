@@ -1191,6 +1191,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
                                         Object[] objecto = new Object[3];
                                         // 0 flag 1 User 2 Mensagem
                                         objecto[0] = 1;
+                                                
                                         objecto[1] = result.getInt("id_user");
                                         objecto[2] = descricao_reward;
                                         ClientRequest request = new ClientRequest("", objecto, "");
