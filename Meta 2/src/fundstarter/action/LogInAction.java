@@ -13,11 +13,13 @@ public class LogInAction extends ActionSupport implements SessionAware {
 	private String username = null;
 	private String password = null;
 
+	@Override
 	public String execute() throws RemoteException {
 		
+		System.out.println("OLA!!! Cá estou eu");
 		this.getConnectToRMIBean().setUsername(this.username);
 		this.getConnectToRMIBean().setPassword(this.password);
-		
+		System.out.println("Já meti o nome e a pass ");
 		this.getConnectToRMIBean().logIn();
 		
 		
@@ -25,20 +27,25 @@ public class LogInAction extends ActionSupport implements SessionAware {
 	}
 
 	public void setUsername(String username) {
-		this.username = username; // will you sanitize this input? maybe use a prepared statement?
+			this.username = username;
 	}
 
 	public void setPassword(String password) {
-		this.password = password; // what about this input?
+		this.password = password;
 	}
 
 	public ConnectToRMIBean getConnectToRMIBean() {
-		if(!session.containsKey("ConnectToRMIBean"))
+		System.out.println("the D is silent");
+		if(session.containsKey("ConnectToRMIBean")==false){
+			System.out.println("hello little trouble maker");
 			this.setConnectToRMIBean(new ConnectToRMIBean());
+		}
+		System.out.println("Hey snowball");
 		return (ConnectToRMIBean) session.get("ConnectToRMIBean");
 	}
 
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
+		System.out.println("OLA MIcas");
 		this.session.put("ConnectToRMIBean", RMIBean);
 	}
 

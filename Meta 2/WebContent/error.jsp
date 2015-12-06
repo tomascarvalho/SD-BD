@@ -5,15 +5,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>FundStarter</title>
+<title>Insert title here</title>
 </head>
 <body>
-	<s:form action="logIn" method="post">
-		<s:text name="Username:"/>
-		<s:textfield name="username"/><br>
-		<s:text name="Password"/>
-		<s:textfield name="password"/><br>
-		<s:submit/>
-	</s:form>
+	<h1>Say what again, Say what again</h1><br>
+	<h2>I dare you, i double dare you motherfucker</h2>
 </body>
 </html>

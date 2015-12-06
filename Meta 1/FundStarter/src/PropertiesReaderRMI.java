@@ -16,22 +16,22 @@ import java.util.Properties;
  * @author gabrieloliveira
  */
 public class PropertiesReaderRMI {
-    
+
     int port;
     String name;
     String BDIP;
     String BDPort;
-    
+
     /**
      * Vai ler os dados do ficheiro configRMI.properties para fazer as ligaões do RMI.
      */
     public PropertiesReaderRMI() {
-        
+
         FileInputStream input = null;
         Properties prop = new java.util.Properties();
 
         try {
-            input = new FileInputStream("src/configRMI.properties");
+            input = new FileInputStream("configRMI.properties");
 
             if (input == null) {
                 System.out.println("[RMIServer]Não encontrei ficheiro de configurações!");
@@ -39,7 +39,7 @@ public class PropertiesReaderRMI {
             }
 
             prop.load(input);
-            
+
             this.port=Integer.parseInt(prop.getProperty("port"));
             this.name=prop.getProperty("name");
             this.BDIP=prop.getProperty("DBIP");
@@ -73,6 +73,6 @@ public class PropertiesReaderRMI {
     public String getBDPort() {
         return BDPort;
     }
-    
-    
+
+
 }
