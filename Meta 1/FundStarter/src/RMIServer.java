@@ -1,3 +1,5 @@
+package code;
+
 
   import java.awt.BorderLayout;
   import java.rmi.*;

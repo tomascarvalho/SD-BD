@@ -1,3 +1,5 @@
+package code;
+
 import java.util.*;
 import java.io.*;
 
@@ -14,7 +16,7 @@ import java.io.*;
  * @author gabrieloliveira
  */
 public class PropertiesReaderClient {
-    
+
     String primaryIP,secundaryIP;
     int primaryPort,secundaryPort;
 
@@ -22,26 +24,26 @@ public class PropertiesReaderClient {
      * Vai ler os dados do ficheiro de propriedes para que o cliente se possa ligar aos servidores.
      */
     public PropertiesReaderClient() {
-        
+
         FileInputStream input=null;
         Properties prop=new java.util.Properties();
-        
+
         try{
             input=new FileInputStream("src/configClient.properties");
-            
+
             if(input==null){
                 System.out.println("[Client]Não encontrei ficheiro de configurações!");
                 return;
             }
-            
+
             prop.load(input);
-            
+
             this.primaryIP=prop.getProperty("PrimaryServerIP");
             this.primaryPort=Integer.parseInt(prop.getProperty("PrimaryServerPort"));
             this.secundaryIP=prop.getProperty("SecundaryServerIP");
             this.secundaryPort=Integer.parseInt(prop.getProperty("SecundaryServerPort"));
-            
-            
+
+
         }catch(IOException e){
             e.printStackTrace();
         }finally{
@@ -54,20 +56,20 @@ public class PropertiesReaderClient {
             }
         }
     }
-    
+
     /**
      * Sempre que existe uma mudança de servidores vai escrever no ficheiro de propriesdades
      * para o caso de um cliente novo se ligar este não ir ligar ao servidor anterior.
      */
     public void writeOnFile(){
-        
+
         FileOutputStream output;
         Properties prop=new java.util.Properties();
         String temp;
-        
+
         try {
             output=new FileOutputStream("src/configClient.properties");
-            
+
             if(output==null){
                 System.out.println("[Client] Não encontrei o ficheiro de configurações!");
                 return;
@@ -79,9 +81,9 @@ public class PropertiesReaderClient {
             prop.setProperty("SecundaryServerIP", primaryIP);
             temp=""+primaryPort;
             prop.setProperty("SecundaryServerPort", temp);
-            
+
             prop.store(output,"");
-            
+
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -104,7 +106,7 @@ public class PropertiesReaderClient {
     public int getSecundaryPort() {
         return secundaryPort;
     }
-    
-    
-    
+
+
+
 }

@@ -1,3 +1,5 @@
+package code;
+
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -63,13 +65,13 @@ public class PropertiesReaderServer {
             }
         }
     }
-   
+
 
     /**
      * Sempre que um servidor vai abaixo troca os ip's e portos do ficheiro de propriedades.
      */
     public void switchIPS() {
-        
+
         Properties prop = new java.util.Properties();
         String temp;
         try {
