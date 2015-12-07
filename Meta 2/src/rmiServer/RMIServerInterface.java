@@ -12,10 +12,6 @@ import java.rmi.*;
  *  Tomás Carvalho 2012138578
  */
 
-/**
- *
- * @author gabrieloliveira
- */
 public interface RMIServerInterface extends Remote {
     
     public ClientRequest getProjectDetails(ClientRequest clrqst) throws RemoteException;

@@ -1,12 +1,5 @@
 package code;
 
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Properties;
-
 /*
  * FundStart
  *  Projecto para a cadeira de Sistemas Distribuidos
@@ -19,6 +12,15 @@ import java.util.Properties;
  *
  * @author gabrieloliveira
  */
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
+import rmiServer.*;
+
+
 public class PropertiesReaderServer {
 
     String primaryIp;
@@ -37,7 +39,7 @@ public class PropertiesReaderServer {
         Properties prop = new java.util.Properties();
 
         try {
-            input = new FileInputStream("src/configServer.properties");
+            input = new FileInputStream("code/configServer.properties");
 
             if (input == null) {
                 System.out.println("[Server]Não encontrei o ficheiro de configurações!");

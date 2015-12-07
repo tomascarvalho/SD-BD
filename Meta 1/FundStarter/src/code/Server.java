@@ -1,13 +1,5 @@
 package code;
 
-
-import java.net.*;
-import java.io.*;
-import static java.lang.Thread.sleep;
-import java.rmi.*;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /*
  * FundStart
  *  Projecto para a cadeira de Sistemas Distribuidos
@@ -21,6 +13,17 @@ import java.util.logging.Logger;
  *
  * @author gabrieloliveira
  */
+
+import java.net.*;
+import java.io.*;
+import static java.lang.Thread.sleep;
+import java.rmi.*;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import rmiServer.*;
+
+
 public class Server {
 
     private String serverIP;
@@ -200,7 +203,7 @@ class NewClient extends Thread {
             /**
              * vai iniciar a thread.
              */
-            
+
             this.start();
 
         } catch (EOFException ex) {
@@ -213,7 +216,7 @@ class NewClient extends Thread {
     }
 
     public void run() {
-        
+
         while (true) {
             try {
 
@@ -258,7 +261,7 @@ class NewClient extends Thread {
 
                     myMail = remoteConection.novoProjecto(postCard);
 
-                   
+
 
                     myMail.setStage(4);
 
@@ -359,7 +362,7 @@ class NewClient extends Thread {
                     myMail = remoteConection.listarRecompensas(postCard);
                     myMail.setStage(4);
 
-                            
+
                 } else if (postCard.getRequest()[0].equals("new_reward")){
                     System.out.println("[Server] Adicionar Recompensa");
                     postCard.getRequest()[0] = myUserID;
@@ -374,7 +377,7 @@ class NewClient extends Thread {
                     myMail = remoteConection.deleteReward(postCard);
                     myMail.setStage(4);
                 }
-                
+
                 System.out.println("Passou");
                 sender.reset();
                 sender.writeUnshared(myMail);
@@ -387,7 +390,7 @@ class NewClient extends Thread {
                         System.out.println("[Server]RMI está down.");
                         postCard = null;
                         remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
-                        
+
                        while(!remoteConection.checkDataBaseConection().equals("done"));
                         Object[] rmiDown = {"rmidown"};
                         ClientRequest temp = new ClientRequest("", rmiDown, "");

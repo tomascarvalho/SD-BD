@@ -11,13 +11,14 @@ import java.io.Serializable;
  *  Diana Umbelino 2012169525
  *  Tomás Carvalho 2012138578
 */
-/**
- *
- * @author gabrieloliveira
- */
+
 public class ClientRequest implements Serializable{
     
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
      * STAGE 
      * 
      * * * * clrqst -> Cliente enviou pedido para o Servidor

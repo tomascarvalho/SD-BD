@@ -1,9 +1,4 @@
-package code;
-
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
+package rmiServer;
 
 /*
  * FundStart
@@ -17,6 +12,11 @@ import java.util.Properties;
  *
  * @author gabrieloliveira
  */
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 public class PropertiesReaderRMI {
 
     int port;
@@ -33,7 +33,7 @@ public class PropertiesReaderRMI {
         Properties prop = new java.util.Properties();
 
         try {
-            input = new FileInputStream("src/configRMI.properties");
+            input = new FileInputStream("rmiServer/configRMI.properties");
 
             if (input == null) {
                 System.out.println("[RMIServer]Não encontrei ficheiro de configurações!");

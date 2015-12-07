@@ -1,5 +1,17 @@
-package code;
+package rmiServer;
 
+/*
+ * FundStart
+ *  Projecto para a cadeira de Sistemas Distribuidos
+ *  Ano Lectivo 2015/1016
+ *  Carlos Pinto 2011143469
+ *  Diana Umbelino 2012169525
+ *  Tomás Carvalho 2012138578
+ */
+/**
+ *
+ * @author gabrieloliveira
+ */
 
   import java.awt.BorderLayout;
   import java.rmi.*;
@@ -11,19 +23,6 @@ package code;
   import java.util.logging.Logger;
   import java.util.Date;
 
-
-  /*
-   * FundStart
-   *  Projecto para a cadeira de Sistemas Distribuidos
-   *  Ano Lectivo 2015/1016
-   *  Carlos Pinto 2011143469
-   *  Diana Umbelino 2012169525
-   *  Tomás Carvalho 2012138578
-   */
-  /**
-   *
-   * @author gabrieloliveira
-   */
   public class RMIServer extends UnicastRemoteObject implements RMIServerInterface {
 
       public static void main(String[] args) throws RemoteException {
@@ -1758,7 +1757,7 @@ package code;
 
           try {
 
-              Class.forName("FundStart/org.postgresql.Driver");
+              Class.forName("org.postgresql.Driver");
 
           } catch (ClassNotFoundException e) {
 

@@ -1,8 +1,5 @@
 package code;
 
-import java.util.*;
-import java.io.*;
-
 /*
  * FundStart
  *  Projecto para a cadeira de Sistemas Distribuidos
@@ -15,6 +12,11 @@ import java.io.*;
  *
  * @author gabrieloliveira
  */
+
+import java.util.*;
+import java.io.*;
+import rmiServer.*;
+
 public class PropertiesReaderClient {
 
     String primaryIP,secundaryIP;
@@ -29,7 +31,7 @@ public class PropertiesReaderClient {
         Properties prop=new java.util.Properties();
 
         try{
-            input=new FileInputStream("src/configClient.properties");
+            input=new FileInputStream("code/configClient.properties");
 
             if(input==null){
                 System.out.println("[Client]Não encontrei ficheiro de configurações!");

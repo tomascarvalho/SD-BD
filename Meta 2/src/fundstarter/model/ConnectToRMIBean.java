@@ -21,7 +21,7 @@ public class ConnectToRMIBean {
 		try{
 			
 			System.out.println("Ligando ao RMI...");
-			this.connectToRMI = (RMIServerInterface) Naming.lookup("fundStarter");
+			this.connectToRMI = (RMIServerInterface) Naming.lookup("//localhost:7777/fundStarter");
 			System.out.println("Connectado com o RMI");
 			
 		}catch(NotBoundException|MalformedURLException|RemoteException e){
@@ -50,7 +50,17 @@ public class ConnectToRMIBean {
 			e.printStackTrace();
 		}
 		
+		System.out.println("PUMBA");
 		return "logged";
+	}
+	
+	public void checkDB() throws RemoteException{
+		
+		System.out.println("[ConnectToRMI]Chamando a função");
+		
+		System.out.println("lalal:"+this.connectToRMI.checkDataBaseConection());
+		
+		System.out.println("[ConnectToRMI]ACABOU!!!");
 	}
 
 	public void setUsername(String username) {

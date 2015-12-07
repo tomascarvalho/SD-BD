@@ -16,11 +16,14 @@ public class LogInAction extends ActionSupport implements SessionAware {
 	@Override
 	public String execute() throws RemoteException {
 		
-		this.getConnectToRMIBean().setUsername(this.username);
-		this.getConnectToRMIBean().setPassword(this.password);
+		this.setConnectToRMIBean(new ConnectToRMIBean());
 		
-		this.getConnectToRMIBean().logIn();
+		//this.getConnectToRMIBean().setUsername(this.username);
+		//this.getConnectToRMIBean().setPassword(this.password);
 		
+		//this.getConnectToRMIBean().logIn();
+		
+		this.getConnectToRMIBean().checkDB();
 		
 		return SUCCESS;
 	}

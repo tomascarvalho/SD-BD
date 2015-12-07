@@ -1,7 +1,4 @@
-package code;
-
-
-import java.io.Serializable;
+package rmiServer;
 
 /*
  * FundStart
@@ -15,11 +12,14 @@ import java.io.Serializable;
  *
  * @author gabrieloliveira
  */
+
+import java.io.Serializable;
+
 public class ClientRequest implements Serializable{
-    
+
     /**
-     * STAGE 
-     * 
+     * STAGE
+     *
      * * * * clrqst -> Cliente enviou pedido para o Servidor
      * * * * inprog -> Servidor mandou pedido para o RMI
      * * * * rmiin  -> RMI começou a tratar do pedido
@@ -28,25 +28,25 @@ public class ClientRequest implements Serializable{
      * * * * done   -> Cliente já leu o pedido
      *
      */
-    
+
     private String requestID;
     private String stage;
     private Object[] request;
-    private Object[] response; 
+    private Object[] response;
     private String[] stgType={"clrqst","inprog","rmiin","rmiout","bckcl","done"};
     private String timestamp;
-    
-    
+
+
     public ClientRequest(String id,Object[] pedido,String time){
-        
+
         this.requestID=id;
         this.request=pedido;
         this.stage=stgType[0];
         this.response=null;
         this.timestamp=time;
     }
-    
-    
+
+
     public String getRequestID(){
         return this.requestID;
     }
@@ -82,7 +82,7 @@ public class ClientRequest implements Serializable{
     public String getTimestamp() {
         return timestamp;
     }
-    
-    
-    
+
+
+
 }
