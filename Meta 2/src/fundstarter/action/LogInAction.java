@@ -16,14 +16,13 @@ public class LogInAction extends ActionSupport implements SessionAware {
 	@Override
 	public String execute() throws RemoteException {
 		
-		System.out.println("OLA!!! Cá estou eu");
 		this.getConnectToRMIBean().setUsername(this.username);
 		this.getConnectToRMIBean().setPassword(this.password);
-		System.out.println("Já meti o nome e a pass ");
+		
 		this.getConnectToRMIBean().logIn();
 		
 		
-		return "done";
+		return SUCCESS;
 	}
 
 	public void setUsername(String username) {
@@ -35,24 +34,27 @@ public class LogInAction extends ActionSupport implements SessionAware {
 	}
 
 	public ConnectToRMIBean getConnectToRMIBean() {
-		System.out.println("the D is silent");
-		if(session.containsKey("ConnectToRMIBean")==false){
+		
+		if(!session.containsKey("RMIBean")){
 			System.out.println("hello little trouble maker");
 			this.setConnectToRMIBean(new ConnectToRMIBean());
 		}
 		System.out.println("Hey snowball");
-		return (ConnectToRMIBean) session.get("ConnectToRMIBean");
+		return (ConnectToRMIBean) session.get("RMIBean");
 	}
 
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
-		System.out.println("OLA MIcas");
-		this.session.put("ConnectToRMIBean", RMIBean);
+		System.out.println("I'm positive he's dead");
+		this.session.put("RMIBean", RMIBean);
 	}
 
 	@Override
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub
+		this.session = arg0;
 		
 	}
+
+	
 
 }

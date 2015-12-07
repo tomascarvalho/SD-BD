@@ -10,5 +10,7 @@
 <body>
 	<h1>Say what again, Say what again</h1><br>
 	<h2>I dare you, i double dare you motherfucker</h2>
+	
+	<p><s:property value="exceptionStack" /></p>
 </body>
 </html>

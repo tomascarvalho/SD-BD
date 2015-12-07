@@ -21,7 +21,7 @@ public class ConnectToRMIBean {
 		try{
 			
 			System.out.println("Ligando ao RMI...");
-			this.connectToRMI = (RMIServerInterface) Naming.lookup("localhost:7777/fundStarter");
+			this.connectToRMI = (RMIServerInterface) Naming.lookup("fundStarter");
 			System.out.println("Connectado com o RMI");
 			
 		}catch(NotBoundException|MalformedURLException|RemoteException e){
