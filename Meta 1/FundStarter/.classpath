@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Tomás/Documents/GitHub/SD-BD/SD-BD/Meta 1/BD/ProjectoBDSD2/postgresql-9.4-1201.jdbc4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
