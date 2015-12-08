@@ -134,7 +134,7 @@ class cronoThread extends Thread {
         Date time = new Date();
 
         while (true) {
-            if (time.getHours() == 16) {
+            if (time.getHours() == 17) {
                 try {
                     System.out.println("Estou a correr");
                     remoteConection.terminaProjecto();
@@ -175,7 +175,6 @@ class NewClient extends Thread {
     ClientRequest myMail;
     RMIServerInterface remoteConection;
     int myUserID;
-    int myProjectID;
     String alterRequest;
     String rmiLocation;
 
@@ -257,10 +256,7 @@ class NewClient extends Thread {
 
                     myMail = remoteConection.novoProjecto(postCard);
 
-                    if (myMail.getResponse()[0].equals("infosave")) {
-                        System.out.println("myProjectID:" + (int) myMail.getResponse()[1]);
-                        myProjectID = (int) myMail.getResponse()[1];
-                    }
+                    
 
                     myMail.setStage(4);
 

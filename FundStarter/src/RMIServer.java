@@ -189,11 +189,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerInterface
         if (requestCheck != null) {
             return requestCheck;
         }
-
-        String[] projectInfo = (String[]) clrqst.getRequest()[1];
-        int id_niveis_extra = 0, id = 0, i, j, k;
+        
         clrqst.setStage(2);
         myRequests.add(clrqst);
+        
+        String[] projectInfo = (String[]) clrqst.getRequest()[1];
+        int id_niveis_extra = 0, id = 0, i, j, k;
+        
 
         String myUserID = "" + clrqst.getRequest()[0];
         int userID = Integer.parseInt(myUserID);

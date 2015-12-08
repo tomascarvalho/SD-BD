@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="FundStarter">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/FundStarter.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../BD/ProjectoBDSD2/postgresql-9.4-1201.jdbc4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
