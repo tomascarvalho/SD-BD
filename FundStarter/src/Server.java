@@ -199,7 +199,7 @@ class NewClient extends Thread {
             /**
              * vai iniciar a thread.
              */
-            System.out.println("OLA GABI");
+
             this.start();
 
         } catch (EOFException ex) {
@@ -212,7 +212,7 @@ class NewClient extends Thread {
     }
 
     public void run() {
-
+        
         while (true) {
             try {
 
@@ -257,10 +257,7 @@ class NewClient extends Thread {
 
                     myMail = remoteConection.novoProjecto(postCard);
 
-                    if (myMail.getResponse()[0].equals("infosave")) {
-                        System.out.println("myProjectID:" + (int) myMail.getResponse()[1]);
-                        myProjectID = (int) myMail.getResponse()[1];
-                    }
+                    
 
                     myMail.setStage(4);
 
@@ -422,7 +419,6 @@ class NewClient extends Thread {
 }
 
 class BackupServer extends Thread {
-
     String primaryServer;
     DatagramSocket udpConection;
     byte[] pingMessage;

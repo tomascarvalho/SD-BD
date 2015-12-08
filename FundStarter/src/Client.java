@@ -5,6 +5,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * FundStart
@@ -101,6 +103,11 @@ public class Client {
                         port1 = port2;
                         ipServer1 = ipTemp;
                         port1 = portTemp;
+                        
+                        sender = new ObjectOutputStream(conectionToServer.getOutputStream());
+                        sender.flush();
+                        
+                        reciver = new ObjectInputStream(conectionToServer.getInputStream());
                         /**
                          * Vai alterar os ips dos servidores no ficheiro de propriedades
                          */
@@ -129,7 +136,7 @@ public class Client {
 
     }
 
-    public void reLog() throws IOException {
+    public void reLog(){
 
         ClientRequest newRequest;
 
@@ -147,13 +154,19 @@ public class Client {
             tempCard[1] = myCredentials;
 
             rememberMe = new ClientRequest("", tempCard, "");
+            try{
+                sender.reset();
             
-            sender.reset();
-            sender.writeUnshared(rememberMe);
-
+                sender.writeUnshared(rememberMe);
+            } catch(IOException e){
+                System.out.println("Ola1");
+            }
+            
             try {
                 rememberMe = (ClientRequest) reciver.readUnshared();
             } catch (ClassNotFoundException ex) {
+            }catch(IOException e){
+                System.out.println("Ola");
             }
 
             if (rememberMe.getResponse()[0].equals("log_in_correcto")) {
@@ -388,7 +401,7 @@ public class Client {
                         }
                     }
                     
-                    do{
+                    while(true){
                         System.out.println("1 - Responder à mensagem");
                         System.out.print("0 - Sair\n\t\t>>");
                         
@@ -406,8 +419,12 @@ public class Client {
                             }
                             int idResposta = sc.nextInt();
                             respondeMensagem(idResposta);
+                            break;
                         }
-                    }while(resp != 0 && resp !=1);
+                        if(resp == 0){
+                            break;
+                        }
+                    }
             }
         }
         if(empty ==0){
