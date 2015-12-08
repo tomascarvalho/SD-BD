@@ -8,28 +8,27 @@ import java.util.Map;
 import fundstarter.model.ConnectToRMIBean;
 
 public class LogInAction extends ActionSupport implements SessionAware {
-	private static final long serialVersionUID = 4L;
+	private static final long serialVersionUID = 6529685098267757690L;
 	private Map<String, Object> session;
 	private String username = null;
 	private String password = null;
 
 	@Override
 	public String execute() throws RemoteException {
-		
-		this.setConnectToRMIBean(new ConnectToRMIBean());
-		
-		//this.getConnectToRMIBean().setUsername(this.username);
-		//this.getConnectToRMIBean().setPassword(this.password);
-		
-		//this.getConnectToRMIBean().logIn();
-		
-		this.getConnectToRMIBean().checkDB();
-		
-		return SUCCESS;
+
+		this.getConnectToRMIBean().setUsername(this.username);
+		this.getConnectToRMIBean().setPassword(this.password);
+
+		if (this.getConnectToRMIBean().logIn().equals("main_menu")) {
+			return SUCCESS;
+		}
+
+		return LOGIN;
+
 	}
 
 	public void setUsername(String username) {
-			this.username = username;
+		this.username = username;
 	}
 
 	public void setPassword(String password) {
@@ -37,17 +36,14 @@ public class LogInAction extends ActionSupport implements SessionAware {
 	}
 
 	public ConnectToRMIBean getConnectToRMIBean() {
-		
-		if(!session.containsKey("RMIBean")){
-			System.out.println("hello little trouble maker");
+
+		if (!session.containsKey("RMIBean")) {
 			this.setConnectToRMIBean(new ConnectToRMIBean());
 		}
-		System.out.println("Hey snowball");
 		return (ConnectToRMIBean) session.get("RMIBean");
 	}
 
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
-		System.out.println("I'm positive he's dead");
 		this.session.put("RMIBean", RMIBean);
 	}
 
@@ -55,9 +51,7 @@ public class LogInAction extends ActionSupport implements SessionAware {
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub
 		this.session = arg0;
-		
-	}
 
-	
+	}
 
 }

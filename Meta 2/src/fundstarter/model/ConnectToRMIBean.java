@@ -9,58 +9,88 @@ import rmiServer.RMIServerInterface;
 import rmiServer.ClientRequest;
 
 public class ConnectToRMIBean {
-	
+
 	private RMIServerInterface connectToRMI;
 	private ClientRequest postCard;
 	private Object[] dataToSend;
 	private String username;
 	private String password;
+	private int userID;
 
-	public ConnectToRMIBean(){
-	
-		try{
-			
+	public ConnectToRMIBean() {
+
+		try {
+
 			System.out.println("Ligando ao RMI...");
 			this.connectToRMI = (RMIServerInterface) Naming.lookup("//localhost:7777/fundStarter");
 			System.out.println("Connectado com o RMI");
-			
-		}catch(NotBoundException|MalformedURLException|RemoteException e){
+
+		} catch (NotBoundException | MalformedURLException | RemoteException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public String logIn(){
-		
-		System.out.println("[ConnectToRMI]Fazendo o LogIn");
+
+	public String logIn() {
+
+		System.out.println("[ConnectToRMI]LogIn");
 		String[] credentials = new String[2];
-		
+
 		credentials[0] = this.username;
 		credentials[1] = this.password;
-		
+
 		this.dataToSend = new Object[2];
 		this.dataToSend[1] = credentials;
-		
-		this.postCard = new ClientRequest("1",this.dataToSend,"tempo");
-		
-		try{
-			
+
+		this.postCard = new ClientRequest("1", this.dataToSend, "tempo");
+
+		try {
+
 			this.postCard = this.connectToRMI.verificaLogIn(this.postCard);
-			
-		}catch(RemoteException e){
+
+			if (this.postCard.getResponse()[0].equals("log_in_correcto")) {
+				this.userID = (int) this.postCard.getResponse()[1];
+				return "main_menu";
+			}
+
+		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
-		
-		System.out.println("PUMBA");
-		return "logged";
+
+		return "log_in";
+	}
+
+	public String signIn() {
+
+		System.out.println("[ConnectToRMI]SignIn");
+		String[] credentials = new String[2];
+
+		credentials[0] = this.username;
+		credentials[1] = this.password;
+
+		this.dataToSend = new Object[2];
+		this.dataToSend[1] = credentials;
+
+		this.postCard = new ClientRequest("1", this.dataToSend, "tempo");
+
+		try {
+
+			this.postCard = this.connectToRMI.novoUtilizador(this.postCard);
+
+			if (this.postCard.getResponse()[0].equals("infosave")) {
+				this.userID = (int) this.postCard.getResponse()[1];
+				return "main_menu";
+			}
+
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+
+		return "sig_in";
 	}
 	
-	public void checkDB() throws RemoteException{
-		
-		System.out.println("[ConnectToRMI]Chamando a função");
-		
-		System.out.println("lalal:"+this.connectToRMI.checkDataBaseConection());
-		
-		System.out.println("[ConnectToRMI]ACABOU!!!");
+	public void ListPorjects(){
+		System.out.println("[ConnectToRMI]Username:"+this.username);
+		System.out.println("[ConnectToRMI]UserID:"+this.userID);
 	}
 
 	public void setUsername(String username) {
