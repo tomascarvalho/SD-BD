@@ -139,7 +139,7 @@ class cronoThread extends Thread {
         Date time = new Date();
 
         while (true) {
-            if (time.getHours() == 16) {
+            if (time.getHours() == 17) {
                 try {
                     System.out.println("Estou a correr");
                     remoteConection.terminaProjecto();

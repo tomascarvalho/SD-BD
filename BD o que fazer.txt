@@ -1,0 +1,5 @@
+Tecnologias Fundamentais - Especificar melhor (Java RMI, etc)
+Soluções - Descrever a aplicação. Como se divide. Não há como descrever o planeamento sem decrever as partes da solução. Dividir por partes (as várias partes do projecto).
+Descrever a arquitectura do projecto, sem mostrar código. 
+Conflitos - Saber quais os conflitos. Onde pode haver conflitos de concorrência. Como prevenir erros. (o mesmo cliente em duas plataformas a tentar fazer o mesmo, como resolver?) Tratar correctamente as excepções. Onde e o que pode acontecer e como corrigir. A alto nível, não a nível de código. A nível de conceitos.
+Planeamento- Divisão de tarefas com a descrição de quem vai fazer o quê. Prazos e afins. 

@@ -773,6 +773,7 @@ public class Client {
                     sc.next();
                 }
                 choice = sc.nextInt();
+                
 
                 while ((choice != 1) && (choice != 2) && (choice != 3)) {
                     System.out.println("\n 1 - Doar ao Projecto"
@@ -806,9 +807,11 @@ public class Client {
         int[] how_much__to_who = new int[2];
         System.out.print("Quanto quer doar a este projecto: \n\t\t>>");
         while (!sc.hasNextInt()){
-            System.out.print("\t\t>>");
-            sc.next();
+        	System.out.println("\t\t>>");
+        	sc.next();
         }
+        
+ 
         how_much__to_who[0] = sc.nextInt();
         how_much__to_who[1] = id;
         postCard[0] = "pledge";
