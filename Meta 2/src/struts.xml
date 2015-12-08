@@ -44,8 +44,8 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     </action>
 
     <!-- 'ListActProj' action call 'execute' in 'ListProjAction' -->
-    <action name="ListActProj" class="fundstarter.action.ListProjAction" method="execute">
-    	<result name="success">/mainmenu.jsp</result>
+    <action name="ListActProj" >
+    	<result name="success">/listactproj.jsp</result>
     </action>
 
   </package>
