@@ -7,12 +7,12 @@ import java.rmi.RemoteException;
 import java.util.Map;
 import fundstarter.model.ConnectToRMIBean;
 
-public class LogInAction extends ActionSupport implements SessionAware {
+public class SignInAction extends ActionSupport implements SessionAware {
 	private static final long serialVersionUID = 6529685098267757690L;
 	private Map<String, Object> session;
 	private String username = null;
 	private String password = null;
-
+	
 	@Override
 	public String execute() throws RemoteException {
 		
@@ -21,7 +21,7 @@ public class LogInAction extends ActionSupport implements SessionAware {
 		this.getConnectToRMIBean().setUsername(this.username);
 		this.getConnectToRMIBean().setPassword(this.password);
 		
-		if(this.getConnectToRMIBean().logIn().equals("main_menu")){
+		if(this.getConnectToRMIBean().signIn().equals("main_menu")){
 			return SUCCESS;
 		}
 		
@@ -48,14 +48,11 @@ public class LogInAction extends ActionSupport implements SessionAware {
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
 		this.session.put("RMIBean", RMIBean);
 	}
-
+	
 	@Override
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub
 		this.session = arg0;
-		
 	}
-
 	
-
 }

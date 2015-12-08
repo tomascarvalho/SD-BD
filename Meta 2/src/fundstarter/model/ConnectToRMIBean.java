@@ -31,7 +31,7 @@ public class ConnectToRMIBean {
 	
 	public String logIn(){
 		
-		System.out.println("[ConnectToRMI]Fazendo o LogIn");
+		System.out.println("[ConnectToRMI]LogIn");
 		String[] credentials = new String[2];
 		
 		credentials[0] = this.username;
@@ -57,14 +57,34 @@ public class ConnectToRMIBean {
 		return "log_in";
 	}
 	
-	public void checkDB() throws RemoteException{
+public String signIn(){
 		
-		System.out.println("[ConnectToRMI]Chamando a função");
+		System.out.println("[ConnectToRMI]SignIn");
+		String[] credentials = new String[2];
 		
-		System.out.println("lalal:"+this.connectToRMI.checkDataBaseConection());
+		credentials[0] = this.username;
+		credentials[1] = this.password;
 		
-		System.out.println("[ConnectToRMI]ACABOU!!!");
+		this.dataToSend = new Object[2];
+		this.dataToSend[1] = credentials;
+		
+		this.postCard = new ClientRequest("1",this.dataToSend,"tempo");
+		
+		try{
+			
+			this.postCard = this.connectToRMI.novoUtilizador(this.postCard);
+
+			if(this.postCard.getResponse()[0].equals("infosave")){
+				return "main_menu";
+			}
+
+		}catch(RemoteException e){
+			e.printStackTrace();
+		}
+		
+		return "sig_in";
 	}
+	
 
 	public void setUsername(String username) {
 		this.username = username;

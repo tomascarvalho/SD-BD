@@ -8,13 +8,12 @@
 <title>FundStarter</title>
 </head>
 <body>
-
-	<p>This is the first page</sp>
-		
-	<p>pick one option:</p>
-		
-	<p><a href="login.jsp">Log In</a></p>
-	<p><a href="signin.jsp">Sign In</a></p>
-
+	<s:form action="signIn" method="post">
+		<s:text name="Username:"/>
+		<s:textfield name="username"/><br>
+		<s:text name="Password"/>
+		<s:textfield name="password"/><br>
+		<s:submit/>
+	</s:form>
 </body>
 </html>
