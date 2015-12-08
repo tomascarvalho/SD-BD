@@ -15,22 +15,20 @@ public class LogInAction extends ActionSupport implements SessionAware {
 
 	@Override
 	public String execute() throws RemoteException {
-		
-		this.setConnectToRMIBean(new ConnectToRMIBean());
-		
+
 		this.getConnectToRMIBean().setUsername(this.username);
 		this.getConnectToRMIBean().setPassword(this.password);
-		
-		if(this.getConnectToRMIBean().logIn().equals("main_menu")){
+
+		if (this.getConnectToRMIBean().logIn().equals("main_menu")) {
 			return SUCCESS;
 		}
-		
+
 		return LOGIN;
-		
+
 	}
 
 	public void setUsername(String username) {
-			this.username = username;
+		this.username = username;
 	}
 
 	public void setPassword(String password) {
@@ -38,8 +36,8 @@ public class LogInAction extends ActionSupport implements SessionAware {
 	}
 
 	public ConnectToRMIBean getConnectToRMIBean() {
-		
-		if(!session.containsKey("RMIBean")){
+
+		if (!session.containsKey("RMIBean")) {
 			this.setConnectToRMIBean(new ConnectToRMIBean());
 		}
 		return (ConnectToRMIBean) session.get("RMIBean");
@@ -53,9 +51,7 @@ public class LogInAction extends ActionSupport implements SessionAware {
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub
 		this.session = arg0;
-		
-	}
 
-	
+	}
 
 }
