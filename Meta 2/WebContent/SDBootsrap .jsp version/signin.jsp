@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>LogIn</title>
+    <title>SignIn</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -31,7 +31,8 @@
   </head>
 
   <body>
-  <nav class="navbar navbar-inverse navbar-fixed-top mudar" role="navigation">
+
+    <nav class="navbar navbar-inverse navbar-fixed-top mudar" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -47,10 +48,10 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="login.html">Log In</a>
+                        <a href="login.jsp">Log In</a>
                     </li>
                     <li>
-                        <a href="signin.html">Sign In</a>
+                        <a href="signin.jsp">Sign In</a>
                     </li>
                 </ul>
             </div>
@@ -58,12 +59,11 @@
         </div>
         <!-- /.container -->
     </nav>
-
-
+    
     <div class="container">
 
       <form class="form-signin">
-        <h2 class="form-signin-heading">Please log in</h2>
+        <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
@@ -75,7 +75,7 @@
           </label>
         </div>
         -->
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       </form>
       
 

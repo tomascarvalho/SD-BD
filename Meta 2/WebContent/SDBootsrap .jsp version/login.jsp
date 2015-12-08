@@ -31,7 +31,8 @@
   </head>
 
   <body>
-  <nav class="navbar navbar-inverse navbar-fixed-top mudar" role="navigation">
+
+      <nav class="navbar navbar-inverse navbar-fixed-top mudar" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -47,10 +48,10 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="login.html">Log In</a>
+                        <a href="login.jsp">Log In</a>
                     </li>
                     <li>
-                        <a href="signin.html">Sign In</a>
+                        <a href="signin.jsp">Sign In</a>
                     </li>
                 </ul>
             </div>
@@ -58,7 +59,6 @@
         </div>
         <!-- /.container -->
     </nav>
-
 
     <div class="container">
 
