@@ -45,13 +45,16 @@ public class ConnectToRMIBean {
 		try{
 			
 			this.postCard = this.connectToRMI.verificaLogIn(this.postCard);
-			
+
+			if(this.postCard.getResponse()[0].equals("log_in_correcto")){
+				return "main_menu";
+			}
+
 		}catch(RemoteException e){
 			e.printStackTrace();
 		}
 		
-		System.out.println("PUMBA");
-		return "logged";
+		return "log_in";
 	}
 	
 	public void checkDB() throws RemoteException{

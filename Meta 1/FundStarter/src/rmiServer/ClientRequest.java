@@ -29,6 +29,7 @@ public class ClientRequest implements Serializable{
      *
      */
 
+    private static final long serialVersionUID = 1L;
     private String requestID;
     private String stage;
     private Object[] request;

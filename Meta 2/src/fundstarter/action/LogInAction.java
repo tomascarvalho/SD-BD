@@ -8,7 +8,7 @@ import java.util.Map;
 import fundstarter.model.ConnectToRMIBean;
 
 public class LogInAction extends ActionSupport implements SessionAware {
-	private static final long serialVersionUID = 4L;
+	private static final long serialVersionUID = 6529685098267757690L;
 	private Map<String, Object> session;
 	private String username = null;
 	private String password = null;
@@ -18,14 +18,15 @@ public class LogInAction extends ActionSupport implements SessionAware {
 		
 		this.setConnectToRMIBean(new ConnectToRMIBean());
 		
-		//this.getConnectToRMIBean().setUsername(this.username);
-		//this.getConnectToRMIBean().setPassword(this.password);
+		this.getConnectToRMIBean().setUsername(this.username);
+		this.getConnectToRMIBean().setPassword(this.password);
 		
-		//this.getConnectToRMIBean().logIn();
+		if(this.getConnectToRMIBean().logIn().equals("main_menu")){
+			return SUCCESS;
+		}
 		
-		this.getConnectToRMIBean().checkDB();
+		return LOGIN;
 		
-		return SUCCESS;
 	}
 
 	public void setUsername(String username) {
@@ -42,7 +43,6 @@ public class LogInAction extends ActionSupport implements SessionAware {
 			System.out.println("hello little trouble maker");
 			this.setConnectToRMIBean(new ConnectToRMIBean());
 		}
-		System.out.println("Hey snowball");
 		return (ConnectToRMIBean) session.get("RMIBean");
 	}
 

@@ -8,16 +8,11 @@
 <title>FundStarter</title>
 </head>
 <body>
-
-	<p>This is the first page</sp>
-		
-	<p>pick one option:</p>
-		
-	<s:form action="gotologin" method="post">
-		
-		<s:checkbox name="login" value="LogIn"/><br>
-		<s:checkbox name="signin" value="SignIn"/><br>
-		
+	<s:form action="logIn" method="post">
+		<s:text name="Username:"/>
+		<s:textfield name="username"/><br>
+		<s:text name="Password"/>
+		<s:textfield name="password"/><br>
 		<s:submit/>
 	</s:form>
 </body>
