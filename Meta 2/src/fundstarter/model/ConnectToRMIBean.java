@@ -90,6 +90,7 @@ public class ConnectToRMIBean {
 
 	public String getListProjects() throws RemoteException {
 
+		System.out.println("lalalal");
 
 		this.dataToSend = new Object[2];
 		this.dataToSend[1] = 0;
