@@ -87,27 +87,24 @@ public class ConnectToRMIBean {
 
 		return "sig_in";
 	}
-	
-	public String getListPorjects(){
-		
-		System.out.println("[ConnectToRMI]Pedindo projectos a base de dados.");
-		
-		this.dataToSend =  new Object[2];
+
+	public String getListProjects() throws RemoteException {
+
+
+		this.dataToSend = new Object[2];
 		this.dataToSend[1] = 0;
-		
+
 		this.postCard = new ClientRequest("2", this.dataToSend, "tempo");
 		
 		try{
-			
 			this.postCard = this.connectToRMI.getActualProjects(this.postCard);
-			
-			return "Ola";
-			
-		}catch(RemoteException e){
+		}catch(Exception e){
 			e.printStackTrace();
 		}
 		
-		return null;
+
+		return "Hello";
+
 	}
 
 	public void setUsername(String username) {
@@ -117,6 +114,5 @@ public class ConnectToRMIBean {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
 
 }

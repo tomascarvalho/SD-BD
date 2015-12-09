@@ -12,7 +12,12 @@
 
 	<h1>Projectos Actuais</h1>
 
-	<h2>${connectToRMIBean.listProjects }</h2>
+	<h2>
+	<jsp:useBean id="connectToRMI" class="fundstarter.model.ConnectToRMIBean" scope="request" />
+		${conectToRMI.getListProjects() }
 	
+	</h2>
+
+
 </body>
 </html>
