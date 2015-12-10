@@ -11,7 +11,7 @@
 
 	<p>Menu Inicial</p>
 
-	<s:form action="ListActProj" method="post">
+	<s:form action="listActProj" method="post">
 		<s:submit value="Listar Projectos Antigos" />
 	</s:form>
 </body>

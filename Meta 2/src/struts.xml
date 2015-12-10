@@ -44,9 +44,13 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     </action>
 
     <!-- 'ListActProj' action call 'execute' in 'ListProjAction' -->
-    <action name="ListActProj" >
+    <action name="listActProj" class="fundstarter.action.ListProjAction" method="execute">
     	<result name="success">/listactproj.jsp</result>
+    	<!-- <result name="success">/mainmenu.jsp</result>
+    	<result name="no_projects">/index.jsp</result>   mudar depois para dizer que não há projectos-->
     </action>
+    
+    
 
   </package>
 

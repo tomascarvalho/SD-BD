@@ -16,14 +16,15 @@ public class ConnectToRMIBean {
 	private String username;
 	private String password;
 	private int userID;
+	private Object[] actualProjects;
 
 	public ConnectToRMIBean() {
 
 		try {
 
-			System.out.println("Ligando ao RMI...");
+			System.out.println("Connecting to RMI");
 			this.connectToRMI = (RMIServerInterface) Naming.lookup("//localhost:7777/fundStarter");
-			System.out.println("Connectado com o RMI");
+			System.out.println("Connected to RMI");
 
 		} catch (NotBoundException | MalformedURLException | RemoteException e) {
 			e.printStackTrace();
@@ -32,7 +33,7 @@ public class ConnectToRMIBean {
 
 	public String logIn() {
 
-		System.out.println("[ConnectToRMI]LogIn");
+		System.out.println("[ConnectToRMI]Log In");
 		String[] credentials = new String[2];
 
 		credentials[0] = this.username;
@@ -61,7 +62,7 @@ public class ConnectToRMIBean {
 
 	public String signIn() {
 
-		System.out.println("[ConnectToRMI]SignIn");
+		System.out.println("[ConnectToRMI]Sign In");
 		String[] credentials = new String[2];
 
 		credentials[0] = this.username;
@@ -88,24 +89,31 @@ public class ConnectToRMIBean {
 		return "sig_in";
 	}
 
-	public String getListProjects() throws RemoteException {
+	public String listProjects(int option) throws RemoteException {
 
-		System.out.println("lalalal");
+		System.out.println("[ConnectToRMI]List Projects");
 
 		this.dataToSend = new Object[2];
-		this.dataToSend[1] = 0;
+		this.dataToSend[1] = option;
 
 		this.postCard = new ClientRequest("2", this.dataToSend, "tempo");
-		
-		try{
+
+		try {
 			this.postCard = this.connectToRMI.getActualProjects(this.postCard);
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		actualProjects = (Object[]) this.postCard.getResponse()[0];
+		return "sucesso";
+
+	}
+
+	public Object[] getActualProjects() {
+		System.out.println("[ConnectToRMI]Returning Projects");
 		
-
-		return "Hello";
-
+		
+		return this.actualProjects;
 	}
 
 	public void setUsername(String username) {

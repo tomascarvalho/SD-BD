@@ -13,9 +13,22 @@
 
 	<h1>Projectos Actuais</h1>
 
-	<h2>${RMIBean.listProjects}</h2>
+	<c:choose>
+		<c:when test="${RMIBean.actualProjects == null}">
+			<p>No Projects to present</p>
+		</c:when>
+		<c:otherwise>
+			<c:forEach items="${RMIBean.actualProjects }" var="value">
+
+				<h3>Item: ${value }</h3>
+				<br>
+			</c:forEach>
+		</c:otherwise>
+	</c:choose>
 
 
-	
+
+
+
 </body>
 </html>
