@@ -107,6 +107,24 @@ public class ConnectToRMIBean {
 		return "Hello";
 
 	}
+	
+	public String getSaldo() throws RemoteException{
+		System.out.println("Vê saldo");
+		
+		this.dataToSend = new Object[1];
+		this.dataToSend[0] = this.userID;
+
+		this.postCard = new ClientRequest("2", this.dataToSend, "tempo");
+		
+		try{
+			this.postCard = this.connectToRMI.getUserSaldo(this.postCard);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return (String)this.postCard.getResponse()[0];
+	}
+	
 
 	public void setUsername(String username) {
 		this.username = username;

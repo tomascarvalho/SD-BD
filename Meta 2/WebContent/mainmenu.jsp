@@ -14,5 +14,9 @@
 	<s:form action="ListActProj" method="post">
 		<s:submit value="Listar Projectos Antigos" />
 	</s:form>
+		<s:form action="CheckSaldo" method="post">
+		<s:submit value="Consultar Saldo" />
+	</s:form>
+	
 </body>
 </html>
