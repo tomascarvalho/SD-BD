@@ -25,6 +25,10 @@
 	<s:form action="CheckSaldo" method="post">
 		<s:submit value="Consultar Saldo" />
 	</s:form>
+	
+	<s:form action="CancelarProj" method="post">
+		<s:submit value="Cancelar Projecto" />
+	</s:form>
 
 </body>
 </html>

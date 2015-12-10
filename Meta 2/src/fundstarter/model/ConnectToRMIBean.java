@@ -300,6 +300,17 @@ public class ConnectToRMIBean {
 		formatProjectDetails((Object[]) this.postCard.getResponse()[0]);
 
 	}
+	
+	public String cancelarProj(int projectId) throws RemoteException{
+		System.out.println("[ConnectoToRMI] Cancelar um projecto");
+		this.dataToSend[1] = projectId;
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+		this.postCard = connectToRMI.apagaProjecto(this.postCard);
+		
+		return (String) this.postCard.getResponse()[0];
+		
+		
+	}
 
 	public ArrayList<HashMap<String, Object>> getProjects() {
 		System.out.println("[ConnectToRMI]Returning Projects");

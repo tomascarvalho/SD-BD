@@ -57,6 +57,13 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     <action name="CheckSaldo">
     	<result >/checksaldo.jsp</result>
     </action>
+    
+    <!-- 'CancelarProj' action call 'execute' in 'ListDetailsAction' -->
+    <action name="CancelarProj">
+    	<result>/cancelarproj.jsp</result>
+    </action>
+    
+    
   </package>
 
 </struts>
