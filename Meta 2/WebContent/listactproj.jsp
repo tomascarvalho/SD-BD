@@ -25,11 +25,14 @@
 			<p>No Projects to present</p>
 		</c:when>
 		<c:otherwise>
-			<c:forEach items="${RMIBean.projects }" var="value">
+			<s:form action="listDetails" method="post">
+				<c:forEach items="${RMIBean.projects }" var="value">
 
-				<h3>Item: ${value.get("Titulo") }</h3>
+				<input type="checkbox" name="selectedProject" method="post" value="${value.get('ID') }">${value.get("Titulo") }
 				<br>
-			</c:forEach>
+				</c:forEach>
+				<s:submit value="Show Details"/>
+			</s:form>
 		</c:otherwise>
 	</c:choose>
 

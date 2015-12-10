@@ -22,6 +22,7 @@ public class ConnectToRMIBean {
 	private int userID;
 	private ArrayList<HashMap<String, Object>> projects;
 	private String storedProjects;
+	private HashMap<String, Object> projectDetails;
 
 	public ConnectToRMIBean() {
 
@@ -174,12 +175,139 @@ public class ConnectToRMIBean {
 			e.printStackTrace();
 		}
 
-		return (int)this.postCard.getResponse()[0];
+		return (int) this.postCard.getResponse()[0];
+	}
+
+	public void formatProjectDetails(Object[] project) {
+
+		if (project.equals("no_project_to_show")) {
+
+			this.projectDetails = null;
+
+		} else {
+
+			this.projectDetails = new HashMap<String, Object>();
+
+			int i = 0;
+			int rewardCounter;
+			int levelsCounter;
+			int productCounter;
+			HashMap<String, Object> auxMap;
+			ArrayList<HashMap<String, Object>> auxArray;
+
+			this.projectDetails.put("Titulo", project[i]);
+			i++;
+
+			this.projectDetails.put("Descricao", project[i]);
+			i++;
+
+			this.projectDetails.put("ValorPretendido", project[i]);
+			i++;
+
+			this.projectDetails.put("ValorActual", project[i]);
+			i++;
+
+			this.projectDetails.put("DataLimite", project[i]);
+			i++;
+
+			rewardCounter = Integer.parseInt((String) project[i]);
+			i++;
+
+			if (rewardCounter != 0) {
+				
+				auxArray = new ArrayList<HashMap<String, Object>>();
+				
+				for (int j = 0; j < (rewardCounter / 2); j++) {
+					
+					auxMap = new HashMap<String, Object>();
+
+					auxMap.put("TituloRecompensa", project[i]);
+					i++;
+
+					auxMap.put("ValorRecompensa", project[i]);
+					i++;
+					
+					auxArray.add(auxMap);
+				}
+				
+				this.projectDetails.put("Rewards", auxArray);
+
+			}
+
+			levelsCounter = Integer.parseInt((String) project[i]);
+			i++;
+
+			if (levelsCounter != 0) {
+				
+				auxArray = new ArrayList<HashMap<String, Object>>();
+
+				for (int j = 0; j < (levelsCounter / 2); j++) {
+					
+					auxMap = new HashMap<String, Object>();
+
+					auxMap.put("DescNivel", project[i]);
+					i++;
+
+					auxMap.put("ValorNivel", project[i]);
+					i++;
+
+					auxArray.add(auxMap);
+				}
+				
+				this.projectDetails.put("Levels", auxArray);
+
+			}
+
+			productCounter = Integer.parseInt((String) project[i]);
+			i++;
+
+			if (productCounter != 0) {
+				
+				auxArray = new ArrayList<HashMap<String, Object>>();
+
+				for (int j = 0; j < (productCounter / 2); j++) {
+					
+					auxMap = new HashMap<String, Object>();
+
+					auxMap.put("DescProduct", project[i]);
+					i++;
+
+					auxMap.put("Contador", project[i]);
+					i++;
+					
+					auxArray.add(auxMap);
+				}
+				
+				this.projectDetails.put("Products", auxArray);
+
+			}
+
+		}
+		
+	}
+
+	public void listProjectDetails(int projectId) throws RemoteException {
+
+		System.out.println("[ConnectToRMI]List project details");
+
+		this.dataToSend = new Object[2];
+		this.dataToSend[1] = projectId;
+
+		this.postCard = new ClientRequest("2", this.dataToSend, "tempo");
+
+		this.postCard = connectToRMI.getProjectDetails(this.postCard);
+
+		formatProjectDetails((Object[]) this.postCard.getResponse()[0]);
+
 	}
 
 	public ArrayList<HashMap<String, Object>> getProjects() {
 		System.out.println("[ConnectToRMI]Returning Projects");
 		return this.projects;
+	}
+
+	public HashMap<String, Object> getProjectDetails() {
+		return this.projectDetails;
 	}
 
 	public void setUsername(String username) {

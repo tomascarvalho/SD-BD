@@ -48,7 +48,10 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     	<result name="success">/listactproj.jsp</result>
     </action>
     
-    
+    <!-- 'listDetails' action call 'execute' in 'ListDetailsAction' -->
+    <action name="listDetails" class="fundstarter.action.ListDetailsAction">
+    	<result name="success">/listprojdetails.jsp</result>
+    </action>
 
 	<!-- 'CheckSaldo' action call 'execute' in 'ListProjAction' -->
     <action name="CheckSaldo">
