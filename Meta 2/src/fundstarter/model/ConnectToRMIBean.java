@@ -108,6 +108,24 @@ public class ConnectToRMIBean {
 		return "sucesso";
 
 	}
+	
+	public String getSaldo() throws RemoteException{
+		System.out.println("Vê saldo");
+		
+		this.dataToSend = new Object[1];
+		this.dataToSend[0] = this.userID;
+
+		this.postCard = new ClientRequest("2", this.dataToSend, "tempo");
+		
+		try{
+			this.postCard = this.connectToRMI.getUserSaldo(this.postCard);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return (String)this.postCard.getResponse()[0];
+	}
+	
 
 	public Object[] getActualProjects() {
 		System.out.println("[ConnectToRMI]Returning Projects");

@@ -52,6 +52,10 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     
     
 
+	<!-- 'CheckSaldo' action call 'execute' in 'ListProjAction' -->
+    <action name="signIn" class="checksaldo.jsp" method="post">
+    	<result name="success">/listactproj.jsp</result>
+    </action>
   </package>
 
 </struts>
