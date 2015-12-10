@@ -11,16 +11,23 @@
 </head>
 <body>
 
-	<h1>Projectos Actuais</h1>
+	<c:choose>
+		<c:when test="${RMIBean.storedProjects == 'actual' }">
+			<h1>Projectos Actuais</h1>
+		</c:when>
+		<c:otherwise>
+			<h1>Projectos Antigos</h1>
+		</c:otherwise>
+	</c:choose>
 
 	<c:choose>
-		<c:when test="${RMIBean.actualProjects == null}">
+		<c:when test="${RMIBean.projects == null}">
 			<p>No Projects to present</p>
 		</c:when>
 		<c:otherwise>
-			<c:forEach items="${RMIBean.actualProjects }" var="value">
+			<c:forEach items="${RMIBean.projects }" var="value">
 
-				<h3>Item: ${value }</h3>
+				<h3>Item: ${value.get("Titulo") }</h3>
 				<br>
 			</c:forEach>
 		</c:otherwise>

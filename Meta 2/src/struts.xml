@@ -43,18 +43,16 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result name="login">/index.jsp</result>
     </action>
 
-    <!-- 'ListActProj' action call 'execute' in 'ListProjAction' -->
-    <action name="listActProj" class="fundstarter.action.ListProjAction" method="execute">
+    <!-- 'ListProj' action call 'execute' in 'ListProjAction' -->
+    <action name="listProj" class="fundstarter.action.ListProjAction">
     	<result name="success">/listactproj.jsp</result>
-    	<!-- <result name="success">/mainmenu.jsp</result>
-    	<result name="no_projects">/index.jsp</result>   mudar depois para dizer que não há projectos-->
     </action>
     
     
 
 	<!-- 'CheckSaldo' action call 'execute' in 'ListProjAction' -->
-    <action name="signIn" class="checksaldo.jsp" method="post">
-    	<result name="success">/listactproj.jsp</result>
+    <action name="CheckSaldo">
+    	<result >/checksaldo.jsp</result>
     </action>
   </package>
 

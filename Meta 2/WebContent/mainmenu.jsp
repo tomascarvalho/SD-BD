@@ -11,12 +11,19 @@
 
 	<p>Menu Inicial</p>
 
-	<s:form action="listActProj" method="post">
+	<s:form action="listProj" method="post">
+		<s:hidden name="option" value="0" />
+		<s:submit value="Listar Projectos Actuais" />
+	</s:form>
+
+	<s:form action="listProj" method="post">
+		<s:hidden name="option" value="1" />
 		<s:submit value="Listar Projectos Antigos" />
 	</s:form>
-		<s:form action="CheckSaldo" method="post">
+
+	<s:form action="CheckSaldo" method="post">
 		<s:submit value="Consultar Saldo" />
 	</s:form>
-	
+
 </body>
 </html>
