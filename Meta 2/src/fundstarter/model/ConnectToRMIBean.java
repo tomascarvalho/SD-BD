@@ -214,11 +214,11 @@ public class ConnectToRMIBean {
 			i++;
 
 			if (rewardCounter != 0) {
-				
+
 				auxArray = new ArrayList<HashMap<String, Object>>();
-				
+
 				for (int j = 0; j < (rewardCounter / 2); j++) {
-					
+
 					auxMap = new HashMap<String, Object>();
 
 					auxMap.put("TituloRecompensa", project[i]);
@@ -226,10 +226,10 @@ public class ConnectToRMIBean {
 
 					auxMap.put("ValorRecompensa", project[i]);
 					i++;
-					
+
 					auxArray.add(auxMap);
 				}
-				
+
 				this.projectDetails.put("Rewards", auxArray);
 
 			}
@@ -238,11 +238,11 @@ public class ConnectToRMIBean {
 			i++;
 
 			if (levelsCounter != 0) {
-				
+
 				auxArray = new ArrayList<HashMap<String, Object>>();
 
 				for (int j = 0; j < (levelsCounter / 2); j++) {
-					
+
 					auxMap = new HashMap<String, Object>();
 
 					auxMap.put("DescNivel", project[i]);
@@ -253,7 +253,7 @@ public class ConnectToRMIBean {
 
 					auxArray.add(auxMap);
 				}
-				
+
 				this.projectDetails.put("Levels", auxArray);
 
 			}
@@ -262,29 +262,29 @@ public class ConnectToRMIBean {
 			i++;
 
 			if (productCounter != 0) {
-				
+
 				auxArray = new ArrayList<HashMap<String, Object>>();
 
 				for (int j = 0; j < (productCounter / 2); j++) {
-					
+
 					auxMap = new HashMap<String, Object>();
 
-					System.out.println("[ConnectToRMI]Product Type:"+(String)project[i]);
+					System.out.println("[ConnectToRMI]Product Type:" + (String) project[i]);
 					auxMap.put("DescProduct", project[i]);
 					i++;
 
 					auxMap.put("Contador", project[i]);
 					i++;
-					
+
 					auxArray.add(auxMap);
 				}
-				
+
 				this.projectDetails.put("Products", auxArray);
 
 			}
 
 		}
-		
+
 	}
 
 	public void listProjectDetails(int projectId) throws RemoteException {
@@ -301,6 +301,8 @@ public class ConnectToRMIBean {
 		formatProjectDetails((Object[]) this.postCard.getResponse()[0]);
 
 	}
+
+	public void addProject(String name,String description,String limitDate,String productType)
 
 	public ArrayList<HashMap<String, Object>> getProjects() {
 		System.out.println("[ConnectToRMI]Returning Projects");

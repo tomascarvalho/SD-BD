@@ -57,6 +57,17 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     <action name="CheckSaldo">
     	<result >/checksaldo.jsp</result>
     </action>
+    
+    <!-- 'callAdd' action call 'addproj.jsp' -->
+    <action name="callAdd">
+    	<result>/addproj.jsp</result>
+    </action>
+    
+    <!-- 'addProject' action call 'execute' in 'AddProjectAction' -->
+    <action name="addProject" class="fundstarter.action.AddProjactAction" method="execute">
+    	<result >/checksaldo.jsp</result>
+    </action> 
+    
   </package>
 
 </struts>
