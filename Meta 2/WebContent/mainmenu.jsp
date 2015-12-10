@@ -26,13 +26,12 @@
 		<s:submit value="Consultar Saldo" />
 	</s:form>
 	
-<<<<<<< HEAD
 	<s:form action="callAdd" method="post">
 		<s:submit value="Criar Projecto"/>
-=======
+	</s:form>
+	
 	<s:form action="CancelarProj" method="post">
 		<s:submit value="Cancelar Projecto" />
->>>>>>> 265f5e233b22cbc789e3b0072ab1ac36a85ab349
 	</s:form>
 
 </body>
