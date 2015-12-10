@@ -9,7 +9,7 @@
 </head>
 <body>
 
-	<p>Menu Inicial</p>
+	<p>Main Menu</p>
 
 	<s:form action="listProj" method="post">
 		<s:hidden name="option" value="0" />
@@ -20,7 +20,8 @@
 		<s:hidden name="option" value="1" />
 		<s:submit value="Listar Projectos Antigos" />
 	</s:form>
-
+	
+	<!-- Este botão só pode aparecer quando o user estiver logado -->
 	<s:form action="CheckSaldo" method="post">
 		<s:submit value="Consultar Saldo" />
 	</s:form>

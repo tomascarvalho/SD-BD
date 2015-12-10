@@ -7,12 +7,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>FundStarter</title>
 </head>
 <body>
 	
-	<h1>Saldo</h1>
-	<h2>${RMIBean.Saldo}</h2>
+	<h1>Balance</h1>
+	<h2>${RMIBean.balance}</h2>
 	
 </body>
 </html>

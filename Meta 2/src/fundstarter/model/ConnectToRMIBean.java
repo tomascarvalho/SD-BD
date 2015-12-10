@@ -111,7 +111,7 @@ public class ConnectToRMIBean {
 			} else {
 				this.storedProjects = "old";
 			}
-			
+
 			this.projects = new ArrayList<HashMap<String, Object>>();
 
 			int i = 0;
@@ -159,11 +159,12 @@ public class ConnectToRMIBean {
 
 	}
 
-	public String getSaldo() throws RemoteException {
-		System.out.println("V� saldo");
+	public int getBalance() throws RemoteException {
 
-		this.dataToSend = new Object[1];
-		this.dataToSend[0] = this.userID;
+		System.out.println("[ConnectToRMI]Get balance");
+
+		this.dataToSend = new Object[2];
+		this.dataToSend[1] = this.userID;
 
 		this.postCard = new ClientRequest("2", this.dataToSend, "tempo");
 
@@ -173,7 +174,7 @@ public class ConnectToRMIBean {
 			e.printStackTrace();
 		}
 
-		return (String) this.postCard.getResponse()[0];
+		return (int)this.postCard.getResponse()[0];
 	}
 
 	public ArrayList<HashMap<String, Object>> getProjects() {
@@ -188,8 +189,8 @@ public class ConnectToRMIBean {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	public String getStoredProjects(){
+
+	public String getStoredProjects() {
 		return this.storedProjects;
 	}
 }
