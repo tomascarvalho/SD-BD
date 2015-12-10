@@ -13,22 +13,9 @@
 
 	<h1>Projectos Actuais</h1>
 
-	<h2>${connectoToRMIBean.getListProjects}</h2>
+	<h2>${RMIBean.listProjects}</h2>
 
 
-	<!-- Não posso user codigo java nos jsp's
-	<h1>Projectos Actuais</h1>
-
-	<h2>
-		"<%/*try {
-				fundstarter.model.ConnectToRMIBean aux = new fundstarter.model.ConnectToRMIBean();
-			
-				//Send result into generated HTML page with out.print!
-				out.print(aux.getListProjects());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}*/%>
-
-	</h2>		 -->
+	
 </body>
 </html>
