@@ -14,27 +14,34 @@
 	<c:choose>
 		<c:when test="${RMIBean.storedProjects == 'actual' }">
 			<h1>Projectos Actuais</h1>
+
+			<c:choose>
+				<c:when test="${RMIBean.projects == null}">
+					<p>No Projects to present</p>
+				</c:when>
+				<c:otherwise>
+					<s:form action="listDetails" method="post">
+						<c:forEach items="${RMIBean.projects }" var="value">
+
+							<input type="checkbox" name="selectedProject" method="post"
+								value="${value.get('ID') }">${value.get("Titulo") }
+				<br>
+						</c:forEach>
+						<s:submit value="Show Details" />
+					</s:form>
+				</c:otherwise>
+			</c:choose>
 		</c:when>
 		<c:otherwise>
 			<h1>Projectos Antigos</h1>
+
+			<c:forEach items="${RMIBean.projects }" var="value">
+				<p>${value.get("Titulo") }</p>
+			</c:forEach>
 		</c:otherwise>
 	</c:choose>
 
-	<c:choose>
-		<c:when test="${RMIBean.projects == null}">
-			<p>No Projects to present</p>
-		</c:when>
-		<c:otherwise>
-			<s:form action="listDetails" method="post">
-				<c:forEach items="${RMIBean.projects }" var="value">
 
-				<input type="checkbox" name="selectedProject" method="post" value="${value.get('ID') }">${value.get("Titulo") }
-				<br>
-				</c:forEach>
-				<s:submit value="Show Details"/>
-			</s:form>
-		</c:otherwise>
-	</c:choose>
 
 
 

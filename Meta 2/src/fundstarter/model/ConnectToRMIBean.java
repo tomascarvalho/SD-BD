@@ -269,6 +269,7 @@ public class ConnectToRMIBean {
 					
 					auxMap = new HashMap<String, Object>();
 
+					System.out.println("[ConnectToRMI]Product Type:"+(String)project[i]);
 					auxMap.put("DescProduct", project[i]);
 					i++;
 
