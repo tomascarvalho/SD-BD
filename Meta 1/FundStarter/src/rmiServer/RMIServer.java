@@ -283,6 +283,7 @@ package rmiServer;
               }
 
               resposta[0] = "infosave";
+              resposta[1] = id;
 
               clrqst.setResponse(resposta);
               clrqst.setStage(3);
@@ -1164,7 +1165,7 @@ package rmiServer;
 
                           } catch (SQLException ex) {
                               System.err.print("SQLException 909: " + ex);
-                          }
+                          }*/
 
 
                           try{

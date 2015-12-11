@@ -9,24 +9,43 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class ListProjAction extends ActionSupport implements SessionAware  {
-
+public class AddProjectAction extends ActionSupport implements SessionAware {
+	
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
-	private int option;
+	private String name;
+	private String projDescription;
+	private String goalValue;
+	private String limitDate;
+	private String productType;
 	
 	@Override
 	public String execute() throws RemoteException{
 		
-		System.out.println("[ListProj]User option:" + this.option);
-		this.getConnectToRMIBean().listProjects(this.option);//ver se quando dá excepção faz o throw
+		this.getConnectToRMIBean().addProject(this.name, this.projDescription, this.goalValue, this.limitDate, this.productType);
 		
 		return SUCCESS;
-		
 	}
 	
-	public void setOption(int option){
-		this.option=option;
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setProjDescription(String projDescription) {
+		this.projDescription = projDescription;
+	}
+	
+	public void setGoalValue(String goalValue) {
+		this.goalValue = goalValue;
+	}
+
+	public void setLimitDate(String limitDate) {
+		this.limitDate = limitDate;
+	}
+
+	public void setProductType(String productType) {
+		this.productType = productType;
 	}
 	
 	public ConnectToRMIBean getConnectToRMIBean() {
@@ -36,7 +55,7 @@ public class ListProjAction extends ActionSupport implements SessionAware  {
 		}
 		return (ConnectToRMIBean) session.get("RMIBean");
 	}
-
+	
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
 		this.session.put("RMIBean", RMIBean);
 	}

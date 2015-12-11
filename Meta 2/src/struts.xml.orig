@@ -58,20 +58,23 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     	<result >/checksaldo.jsp</result>
     </action>
     
+<<<<<<< HEAD
     <!-- 'callAdd' action call 'addproj.jsp' -->
     <action name="callAdd">
     	<result>/addproj.jsp</result>
     </action>
     
     <!-- 'addProject' action call 'execute' in 'AddProjectAction' -->
-    <action name="addProject" class="fundstarter.action.AddProjectAction" method="execute">
-    	<result name="success" >/mainmenu.jsp</result>
+    <action name="addProject" class="fundstarter.action.AddProjactAction" method="execute">
+    	<result >/checksaldo.jsp</result>
     </action> 
-
+=======
     <!-- 'CancelarProj' action call 'execute' in 'ListDetailsAction' -->
     <action name="CancelarProj">
     	<result>/cancelarproj.jsp</result>
     </action>
+    
+>>>>>>> 265f5e233b22cbc789e3b0072ab1ac36a85ab349
     
   </package>
 

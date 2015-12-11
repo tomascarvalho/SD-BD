@@ -31,7 +31,7 @@ public class PropertiesReaderClient {
         Properties prop=new java.util.Properties();
 
         try{
-            input=new FileInputStream("src/code/configClient.properties");
+            input=new FileInputStream("code/configClient.properties");
 
             if(input==null){
                 System.out.println("[Client]Não encontrei ficheiro de configurações!");

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>FundStarter</title>
+<title></title>
 </head>
 <body>
 	<h1>Say what again, Say what again</h1><br>
