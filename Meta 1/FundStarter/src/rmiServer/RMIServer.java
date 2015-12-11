@@ -283,6 +283,7 @@ package rmiServer;
               }
 
               resposta[0] = "infosave";
+              resposta[1] = id;
 
               clrqst.setResponse(resposta);
               clrqst.setStage(3);
@@ -1151,7 +1152,7 @@ package rmiServer;
                               System.err.print("SQLException 732: " + ex);
                           }
 
-                          try{
+                          /*try{
                               query = "SELECT id_user FROM projecto_user WHERE id_projecto = "+projectID+" ORDER BY id"; //Vamos então ver quem é o responsável pelo projecto
                               preparedstatement = connection.prepareStatement(query);
                               rs = preparedstatement.executeQuery();
@@ -1164,7 +1165,7 @@ package rmiServer;
 
                           } catch (SQLException ex) {
                               System.err.print("SQLException 909: " + ex);
-                          }
+                          }*/
 
 
                           try{

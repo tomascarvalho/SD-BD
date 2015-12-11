@@ -39,7 +39,7 @@ public class PropertiesReaderServer {
         Properties prop = new java.util.Properties();
 
         try {
-            input = new FileInputStream("src/code/configServer.properties");
+            input = new FileInputStream("code/configServer.properties");
 
             if (input == null) {
                 System.out.println("[Server]Não encontrei o ficheiro de configurações!");
