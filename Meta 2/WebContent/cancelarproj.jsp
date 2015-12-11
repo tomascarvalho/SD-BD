@@ -15,14 +15,14 @@
 	<h2>Os meus projectos:</h2>
 	
 	<s:form action="CancelarProj" method="post">
-	<%--
+	
 	<c:choose>
 		 
 		<c:when test="${RMIBean.projects == null}">
 			<p>No Projects to present</p>
 		</c:when>
 		<c:otherwise>
-		--%>
+		
 			<s:form action="listDetails" method="post">
 				<c:forEach items="${RMIBean.projects }" var="value">
 
@@ -32,10 +32,10 @@
 				<s:submit value="Cancelar Projecto"/>
 			
 			</s:form>
-			<%--
+			
 		</c:otherwise>
 		</c:choose>
-		--%>
+		
 	</s:form>
 	
 </body>
