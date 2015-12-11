@@ -1143,15 +1143,15 @@ package rmiServer;
 
                       if(valor_actual >= valor_pretendido){ //Se o projecto tiver angariado o dinheiro necessário, então foi concluído com sucesso
                           try{
-                              query = "UPDATE projecto SET over = TRUE"; //Então pomos over a TRUE. O over sinaliza se o projecto foi concluido com sucesso ou não
-                              preparedstatement = connection.prepareStatement(query);
-
+                              query = "UPDATE projecto SET over = TRUE WHERE id="+projectID; //Então pomos over a TRUE. O over sinaliza se o projecto foi concluido com sucesso ou não
+                              preparedstatement = connection.prepareStatement(query); // ESTE UPDATE VAI DESPOLETAR O TRIGGER DA BASE DE DADOS
+                              // O TRIGGER VAI EXECUTAR TODAS AS QUERIES QUE ESTAO COMENTADAS DAQUI PARA BAIXO
                               preparedstatement.executeUpdate();
                           } catch (SQLException ex) {
                               System.err.print("SQLException 732: " + ex);
                           }
 
-                          try{
+                          /*try{
                               query = "SELECT id_user FROM projecto_user WHERE id_projecto = "+projectID+" ORDER BY id"; //Vamos então ver quem é o responsável pelo projecto
                               preparedstatement = connection.prepareStatement(query);
                               rs = preparedstatement.executeQuery();
@@ -1208,7 +1208,7 @@ package rmiServer;
                               System.err.print("SQLException 748:  " + ex);
                           }
 
-
+						
                           try{
                               query = "UPDATE niveis_extra SET status = TRUE WHERE valor < "+valor_actual; //Vamos ver a que recompensas extra é que chegámos
 
@@ -1218,6 +1218,7 @@ package rmiServer;
                           } catch (SQLException ex) {
                               System.err.print("SQLException 748:  " + ex);
                           }
+                          */
                           try {
                               query = "SELECT descricao FROM niveis_extra WHERE status = TRUE";   //Os alcançados são marcados a TRUE
                               preparedstatement = connection.prepareStatement(query);
