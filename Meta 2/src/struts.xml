@@ -65,12 +65,19 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     
     <!-- 'addProject' action call 'execute' in 'AddProjectAction' -->
     <action name="addProject" class="fundstarter.action.AddProjectAction" method="execute">
-    	<result name="success" >/mainmenu.jsp</result>
+    	<result name="success" >/auxaddproj.jsp</result>
+    	
     </action> 
 
     <!-- 'CancelarProj' action call 'execute' in 'ListDetailsAction' -->
     <action name="CancelarProj">
     	<result>/cancelarproj.jsp</result>
+    </action>
+    
+    <!-- 'addLevel' action call 'execute' in 'AddLevelAction' -->
+    <action name="newLevel" class="fundstarter.action.NewLevelAction" method="execute">
+    	<result name="success" >/addlevel.jsp</result>
+    	
     </action>
     
   </package>
