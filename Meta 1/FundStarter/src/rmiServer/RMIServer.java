@@ -1165,7 +1165,7 @@ package rmiServer;
 
                           } catch (SQLException ex) {
                               System.err.print("SQLException 909: " + ex);
-                          }*/
+                          }
 
 
                           try{
@@ -1208,7 +1208,7 @@ package rmiServer;
                           } catch (SQLException ex) {
                               System.err.print("SQLException 748:  " + ex);
                           }
-
+							*/
 						
                           try{
                               query = "UPDATE niveis_extra SET status = TRUE WHERE valor < "+valor_actual; //Vamos ver a que recompensas extra é que chegámos
@@ -1219,7 +1219,7 @@ package rmiServer;
                           } catch (SQLException ex) {
                               System.err.print("SQLException 748:  " + ex);
                           }
-                          */
+                          
                           try {
                               query = "SELECT descricao FROM niveis_extra WHERE status = TRUE";   //Os alcançados são marcados a TRUE
                               preparedstatement = connection.prepareStatement(query);
