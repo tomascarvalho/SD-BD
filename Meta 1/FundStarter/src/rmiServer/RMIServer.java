@@ -1208,7 +1208,7 @@ package rmiServer;
                           } catch (SQLException ex) {
                               System.err.print("SQLException 748:  " + ex);
                           }
-							*/
+							
 						
                           try{
                               query = "UPDATE niveis_extra SET status = TRUE WHERE valor < "+valor_actual; //Vamos ver a que recompensas extra é que chegámos
