@@ -976,15 +976,6 @@ package rmiServer;
           } catch (SQLException ex) {
               System.err.print("SQLException 511: " + ex);
           }
-
-          try {
-              query = "DELETE FROM projecto WHERE id =" + projectID;
-              request = connection.createStatement();
-              request.executeUpdate(query);
-
-          } catch (SQLException ex) {
-              System.err.println("SQLException 418:" + ex);
-          }
           try {
               query = "DELETE FROM projecto_user WHERE id_projecto =" + projectID;
               request = connection.createStatement();
@@ -1034,6 +1025,15 @@ package rmiServer;
           } catch (SQLException ex) {
               System.err.println("Erro:" + ex);
           }
+          try {
+              query = "DELETE FROM projecto WHERE id =" + projectID;
+              request = connection.createStatement();
+              request.executeUpdate(query);
+
+          } catch (SQLException ex) {
+              System.err.println("SQLException 418:" + ex);
+          }
+
 
           resposta[0] = "projecto apagado";
           clrqst.setResponse(resposta);
@@ -1166,7 +1166,7 @@ package rmiServer;
                           } catch (SQLException ex) {
                               System.err.print("SQLException 909: " + ex);
                           }
-*/
+
 
                           try{
                               query = "SELECT id, titulo FROM recompensas WHERE id_projecto="+projectID; //Temos também que dar as recompensas a quem doou
@@ -1209,7 +1209,7 @@ package rmiServer;
                               System.err.print("SQLException 748:  " + ex);
                           }
 							*/
-						
+
                           try{
                               query = "UPDATE niveis_extra SET status = TRUE WHERE valor < "+valor_actual; //Vamos ver a que recompensas extra é que chegámos
 
@@ -1219,7 +1219,7 @@ package rmiServer;
                           } catch (SQLException ex) {
                               System.err.print("SQLException 748:  " + ex);
                           }
-                          
+
                           try {
                               query = "SELECT descricao FROM niveis_extra WHERE status = TRUE";   //Os alcançados são marcados a TRUE
                               preparedstatement = connection.prepareStatement(query);
