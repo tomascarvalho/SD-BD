@@ -1151,8 +1151,13 @@ package rmiServer;
                           } catch (SQLException ex) {
                               System.err.print("SQLException 732: " + ex);
                           }
+<<<<<<< HEAD
 /*
+                          try{
+=======
+
                           /*try{
+>>>>>>> e09da7e484e34056bd4bd200b7f665bd28a9b297
                               query = "SELECT id_user FROM projecto_user WHERE id_projecto = "+projectID+" ORDER BY id"; //Vamos então ver quem é o responsável pelo projecto
                               preparedstatement = connection.prepareStatement(query);
                               rs = preparedstatement.executeQuery();
@@ -1165,8 +1170,8 @@ package rmiServer;
 
                           } catch (SQLException ex) {
                               System.err.print("SQLException 909: " + ex);
-                          }
-*/
+                          }*/
+
 
                           try{
                               query = "SELECT id, titulo FROM recompensas WHERE id_projecto="+projectID; //Temos também que dar as recompensas a quem doou

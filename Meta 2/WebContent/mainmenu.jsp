@@ -30,7 +30,7 @@
 		<s:submit value="Criar Projecto"/>
 	</s:form>
 	
-	<s:form action="CancelarProj" method="post">
+	<s:form action="ListCancel" method="post">
 		<s:submit value="Cancelar Projecto" />
 	</s:form>
 

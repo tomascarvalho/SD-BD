@@ -15,7 +15,7 @@
 		<input type="text" name="name">
 		<br>
 		Descrição:
-		<input type="text" name="description">
+		<input type="text" name="projDescription">
 		<br>
 		Valor Pretendido:
 		<input type="text" name="goalValue">

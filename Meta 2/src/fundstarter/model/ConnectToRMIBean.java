@@ -310,11 +310,32 @@ public class ConnectToRMIBean {
 		
 		return (String) this.postCard.getResponse()[0];
 		
-		
 	}
 
-	public void addProject(String name,String description,String limitDate,String productType){
+	public void addProject(String name,String description,String goalValue,String limitDate,String productType) throws RemoteException{
 		
+		String[] projectInfo = new String[8];
+		this.dataToSend = new Object[2];
+		
+		projectInfo[0] = name;
+		projectInfo[1] = description;
+		projectInfo[2] = goalValue;
+		projectInfo[3] = limitDate;
+		projectInfo[4] = "0";
+		projectInfo[5] = "0";
+		projectInfo[6] = "1";
+		projectInfo[7] = productType;
+		
+		
+		this.dataToSend[0] = Integer.toString(this.userID);
+		this.dataToSend[1] = projectInfo;
+		this.postCard = new ClientRequest("",this.dataToSend,"");
+		
+		this.postCard = this.connectToRMI.novoProjecto(this.postCard);
+		
+		System.out.println(this.postCard.getResponse()[1]);//está a dar null pointer, por causa de um erro no insert do project user ou assim
+		
+		//arranjar maneira de saber o id do projecto para o caso do user adicionar mais cenas
 	}
 
 	public ArrayList<HashMap<String, Object>> getProjects() {
