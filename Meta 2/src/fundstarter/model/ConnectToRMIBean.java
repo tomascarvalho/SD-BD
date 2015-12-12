@@ -23,6 +23,7 @@ public class ConnectToRMIBean {
 	private ArrayList<HashMap<String, Object>> projects;
 	private String storedProjects;
 	private HashMap<String, Object> projectDetails;
+	private int newProjectID;
 
 	public ConnectToRMIBean() {
 
@@ -301,22 +302,22 @@ public class ConnectToRMIBean {
 		formatProjectDetails((Object[]) this.postCard.getResponse()[0]);
 
 	}
-	
-	public String cancelarProj(int projectId) throws RemoteException{
+
+	public String cancelarProj(int projectId) throws RemoteException {
 		System.out.println("[ConnectoToRMI] Cancelar um projecto");
 		this.dataToSend[1] = projectId;
 		this.postCard = new ClientRequest("", this.dataToSend, "");
 		this.postCard = connectToRMI.apagaProjecto(this.postCard);
-		
+
 		return (String) this.postCard.getResponse()[0];
-		
+
 	}
 
-	public void addProject(String name,String description,String goalValue,String limitDate,String productType) throws RemoteException{
-		
+	public String addProject(String name, String description, String goalValue, String limitDate, String productType) throws RemoteException {
+
 		String[] projectInfo = new String[8];
 		this.dataToSend = new Object[2];
-		
+
 		projectInfo[0] = name;
 		projectInfo[1] = description;
 		projectInfo[2] = goalValue;
@@ -325,17 +326,26 @@ public class ConnectToRMIBean {
 		projectInfo[5] = "0";
 		projectInfo[6] = "1";
 		projectInfo[7] = productType;
-		
-		
+
 		this.dataToSend[0] = Integer.toString(this.userID);
 		this.dataToSend[1] = projectInfo;
-		this.postCard = new ClientRequest("",this.dataToSend,"");
-		
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+
 		this.postCard = this.connectToRMI.novoProjecto(this.postCard);
+
+		if(this.postCard.getResponse()[0].equals("infosave")){
+			System.out.println("[ConnectToRMI]New project stored");
+			this.newProjectID = (int) this.postCard.getResponse()[1];
+			return "success";
+		}
+		else{
+			return "error";
+		}
+	}
+	
+	public void listLevels(String projectID){
 		
-		System.out.println(this.postCard.getResponse()[1]);//está a dar null pointer, por causa de um erro no insert do project user ou assim
 		
-		//arranjar maneira de saber o id do projecto para o caso do user adicionar mais cenas
 	}
 
 	public ArrayList<HashMap<String, Object>> getProjects() {
@@ -357,5 +367,9 @@ public class ConnectToRMIBean {
 
 	public String getStoredProjects() {
 		return this.storedProjects;
+	}
+	
+	public int getNewProjectID(){
+		return this.newProjectID;
 	}
 }

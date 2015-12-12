@@ -25,9 +25,11 @@
 		<br> 
 		Tipo de Produto:
 		<input type="text" name="productType">
-		<br> 
-		<s:submit value="Criar"/>
+		<br>
+
+		<s:submit value="Criar" />
 	</s:form>
+
 
 </body>
 </html>
