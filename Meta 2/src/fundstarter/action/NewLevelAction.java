@@ -13,17 +13,17 @@ public class NewLevelAction extends ActionSupport implements SessionAware  {
 
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
-	private String projectID;
+	private int projectID;
 	
 	public String execute() throws RemoteException{
 		
-		//listar nives de um dado projecto
+		this.getConnectToRMIBean().listProjectDetails(this.projectID);
 		
 		return SUCCESS;
 	}
 	
 	public void setProjectID(String projectID){
-		this.projectID = projectID;
+		this.projectID = Integer.parseInt(projectID);
 	}
 	
 	public ConnectToRMIBean getConnectToRMIBean() {

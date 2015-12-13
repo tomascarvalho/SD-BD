@@ -9,10 +9,16 @@
 <title>FundStarter</title>
 </head>
 <body>
+
+	
 	
 	<!-- imprime niveis existentes -->
-	
-	
+	<c:forEach items="${RMIBean.projectDetails.get('Levels')}" var="value">
+		<p>lalalalalalala</p>
+		<p>${value.get("DescNivel")}</p>
+		
+	</c:forEach>
+	<h1>É um pisso de todo o tamanha por não saberes que quando um valor é nulo não faz o for</h1>
 	<!-- recebe dados -->
 	
 	<!-- volta a chamar a página -->

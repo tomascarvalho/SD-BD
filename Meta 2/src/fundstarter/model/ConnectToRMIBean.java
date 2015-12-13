@@ -314,7 +314,7 @@ public class ConnectToRMIBean {
 	}
 
 	public String addProject(String name, String description, String goalValue, String limitDate, String productType) throws RemoteException {
-
+		
 		String[] projectInfo = new String[8];
 		this.dataToSend = new Object[2];
 
@@ -332,21 +332,21 @@ public class ConnectToRMIBean {
 		this.postCard = new ClientRequest("", this.dataToSend, "");
 
 		this.postCard = this.connectToRMI.novoProjecto(this.postCard);
-
+		
+		System.out.println("MErdas"+(String) this.postCard.getResponse()[0])
+		;
 		if(this.postCard.getResponse()[0].equals("infosave")){
 			System.out.println("[ConnectToRMI]New project stored");
 			this.newProjectID = (int) this.postCard.getResponse()[1];
 			return "success";
 		}
 		else{
+			System.out.println("ESTA MERDA DEU ERRO");
 			return "error";
 		}
 	}
 	
-	public void listLevels(String projectID){
-		
-		
-	}
+	
 
 	public ArrayList<HashMap<String, Object>> getProjects() {
 		System.out.println("[ConnectToRMI]Returning Projects");

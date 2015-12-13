@@ -11,17 +11,17 @@
 <body>
 
 	<s:form action="newLevel" method="post">
-		<input type="hidden" name="projectId" value="${session.RMIBean.newProjectID}" />
+		<input type="hidden" name="projectID" value="${session.RMIBean.newProjectID}" />
 		<s:submit value="Adicionar Nível Extra" />
 	</s:form>
 
 	<s:form action="newReward" method="post">
-		<input type="hidden" name="projectId" value="${session.RMIBean.newProjectID}" />
+		<input type="hidden" name="projectID" value="${session.RMIBean.newProjectID}" />
 		<s:submit value="Adicionar Recompensa" />
 	</s:form>
 	
 	<s:form action="newProduct" method="post">
-		<input type="hidden" name="projectId" value="${session.RMIBean.newProjectID}" />
+		<input type="hidden" name="projectID" value="${session.RMIBean.newProjectID}" />
 		<s:submit value="Adicionar Tipo de Producto" />
 	</s:form>
 
