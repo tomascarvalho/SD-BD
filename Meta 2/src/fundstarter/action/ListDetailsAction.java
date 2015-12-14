@@ -19,15 +19,17 @@ public class ListDetailsAction extends ActionSupport implements SessionAware {
 	public String execute() throws RemoteException{
 
 		this.getConnectToRMIBean().listProjectDetails(this.selectedProject);
+		this.session.put("aux", 0);
 		
 		return SUCCESS;
 	}
 	
 	public ConnectToRMIBean getConnectToRMIBean() {
-
+		
 		if (!session.containsKey("RMIBean")) {
 			this.setConnectToRMIBean(new ConnectToRMIBean());
 		}
+		
 		return (ConnectToRMIBean) session.get("RMIBean");
 	}
 	
@@ -37,7 +39,7 @@ public class ListDetailsAction extends ActionSupport implements SessionAware {
 
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
 		this.session.put("RMIBean", RMIBean);
-		this.session.put("aux", 1);
+		
 	}
 
 	@Override
