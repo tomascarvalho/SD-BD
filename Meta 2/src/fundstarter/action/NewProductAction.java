@@ -9,10 +9,11 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class NewLevelAction extends ActionSupport implements SessionAware  {
 
+public class NewProductAction extends ActionSupport implements SessionAware{
+	
 	private static final long serialVersionUID = 1L;
-	private Map<String, Object> session;
+	private Map<String, Object>session;
 	private int projectID;
 	
 	public String execute() throws RemoteException{

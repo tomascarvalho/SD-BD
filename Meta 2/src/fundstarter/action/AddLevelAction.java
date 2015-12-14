@@ -9,21 +9,25 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class NewLevelAction extends ActionSupport implements SessionAware  {
+public class AddLevelAction extends ActionSupport implements SessionAware {
 
 	private static final long serialVersionUID = 1L;
-	private Map<String, Object> session;
+	private Map<String, Object>session;
+	private String levelDesc;
+	private int valueDesc;
 	private int projectID;
+
 	
+	@Override
 	public String execute() throws RemoteException{
 		
-		this.getConnectToRMIBean().listProjectDetails(this.projectID);
-		
-		return SUCCESS;
-	}
-	
-	public void setProjectID(String projectID){
-		this.projectID = Integer.parseInt(projectID);
+		if(this.getConnectToRMIBean().addLevel(this.projectID, this.levelDesc, this.valueDesc).equals("success")){
+			this.getConnectToRMIBean().listProjectDetails(this.projectID);
+			return SUCCESS;
+		}
+		else{
+			return ERROR;
+		}
 	}
 	
 	public ConnectToRMIBean getConnectToRMIBean() {
@@ -33,9 +37,21 @@ public class NewLevelAction extends ActionSupport implements SessionAware  {
 		}
 		return (ConnectToRMIBean) session.get("RMIBean");
 	}
-
+	
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
 		this.session.put("RMIBean", RMIBean);
+	}
+	
+	public void setProjectID(String projectID){
+		this.projectID = Integer.parseInt(projectID);
+	}
+	
+	public void setLevelDesc(String levelDesc){
+		this.levelDesc = levelDesc;
+	}
+	
+	public void setValueDesc(String valueDesc){
+		this.valueDesc = Integer.parseInt(valueDesc);
 	}
 	
 	@Override
@@ -43,5 +59,6 @@ public class NewLevelAction extends ActionSupport implements SessionAware  {
 		// TODO Auto-generated method stub
 		this.session = arg0;
 	}
+	
 
 }

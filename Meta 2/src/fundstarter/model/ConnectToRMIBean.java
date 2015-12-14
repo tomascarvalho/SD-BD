@@ -314,7 +314,8 @@ public class ConnectToRMIBean {
 
 	}
 
-	public String addProject(String name, String description, String goalValue, String limitDate, String productType) throws RemoteException {
+	public String addProject(String name, String description, String goalValue, String limitDate, String productType)
+			throws RemoteException {
 
 		String[] projectInfo = new String[8];
 		this.dataToSend = new Object[2];
@@ -334,7 +335,8 @@ public class ConnectToRMIBean {
 
 		this.postCard = this.connectToRMI.novoProjecto(this.postCard);
 
-		if(this.postCard.getResponse()[0].equals("infosave")){
+		System.out.println("MErdas" + (String) this.postCard.getResponse()[0]);
+		if (this.postCard.getResponse()[0].equals("infosave")) {
 			System.out.println("[ConnectToRMI]New project stored");
 			this.newProjectID =  (int) this.postCard.getResponse()[1];
 			return "success";
@@ -364,8 +366,31 @@ public class ConnectToRMIBean {
 			System.out.println("[ConnectToRMI]Reward stored");
 			this.newProjectID = (int) this.postCard.getResponse()[1];
 			return "success";
+		} else {
+			System.out.println("ESTA MERDA DEU ERRO");
+			return "error";
 		}
-		else{
+	}
+
+	public String addLevel(int projectID, String description, int value) throws RemoteException {
+
+		this.dataToSend = new Object[5];
+
+		this.newProjectID = projectID;
+
+		dataToSend[0] = this.userID;
+		dataToSend[1] = projectID;
+		dataToSend[2] = description;
+		dataToSend[3] = value;
+		dataToSend[4] = 1;
+
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+
+		this.postCard = this.connectToRMI.addReward(this.postCard);
+
+		if ((int) this.postCard.getResponse()[1] == 1) {
+			return "success";
+		} else {
 			return "error";
 		}
 	}
@@ -385,10 +410,24 @@ public class ConnectToRMIBean {
 		
 	}
 	
-	
-	public void listLevels(String projectID){
-		
-		
+
+	public String addProduct(int projectID, String productType) throws RemoteException {
+
+		this.dataToSend = new Object[2];
+
+		this.newProjectID = projectID;
+
+		dataToSend[0] = projectID;
+		dataToSend[1] = productType;
+
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+
+		if(this.connectToRMI.addProductType(this.postCard).equals("product_save")){
+			return "success";
+		}
+		else{
+			return "error";
+		}
 	}
 
 	public ArrayList<HashMap<String, Object>> getProjects() {
@@ -411,8 +450,8 @@ public class ConnectToRMIBean {
 	public String getStoredProjects() {
 		return this.storedProjects;
 	}
-	
-	public int getNewProjectID(){
+
+	public int getNewProjectID() {
 		return this.newProjectID;
 	}
 }

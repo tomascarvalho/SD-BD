@@ -39,18 +39,10 @@
 								<h1>CHEGOU AQUI, SIM</h1>
 								<input type="checkbox" name="selectedProject" method="post"
 									value="${value.get('ID') }">${value.get("Titulo") }
-					<br>
+							<br>
 							</c:forEach>
 							<s:submit value="Remover Rewards" />
-						
 						</s:form>
-					<!--  
-					<s:form action="CancelarProj" method="post">
-						<s:submit value="Cancelar Projecto" />
-						
-					</s:form>
-					-->
-					
 					</c:otherwise>
 
 				</c:otherwise>

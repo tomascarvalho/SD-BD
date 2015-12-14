@@ -1831,6 +1831,29 @@ package rmiServer;
 
       }
 
+      public String addProductType(ClientRequest clrqst) throws RemoteException{
+
+        int projectId = (int)clrqst.getRequest()[0];
+        String productDesc = (String)clrqst.getRequest()[1];
+        try{
+          query = "INSERT INTO product_type (descricao, id_projecto, contador) VALUES (?,?,?)";
+          preparedstatement = connection.prepareStatement(query);
+          preparedstatement.setString(1, productDesc);
+          preparedstatement.setInt(2, projectId);
+          preparedstatement.setInt(3, 0);
+          preparedstatement.executeUpdate();
+
+        } catch (SQLException e) {
+
+            System.out.println("Connection Failed! Check output console");
+            e.printStackTrace();
+            return "";
+
+        }
+        return "product_save";
+
+      }
+
 
 
   }

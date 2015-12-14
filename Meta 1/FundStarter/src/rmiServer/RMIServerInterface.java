@@ -64,6 +64,7 @@ public interface RMIServerInterface extends Remote {
 
     public String checkDataBaseConection() throws RemoteException;
 
+    public String addProductType(ClientRequest clrqst) throws RemoteException;
 
 
 

@@ -88,6 +88,26 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     <action name="createReward" class="fundstarter.action.addRewardAction" method="execute">
     	<result name="success" >/rewardcriado.jsp</result>  	
     </action>
+    
+    <!-- 'newLevel' action call 'execute' in 'NewLevelAction' -->
+    <action name="newLevel" class="fundstarter.action.NewLevelAction" method="execute">
+    	<result name="success" >/addlevel.jsp</result>
+    </action>
+    
+    <!-- 'addLevel' action call 'execute' in 'AddLevelAction' -->
+    <action name="addLevel" class="fundstarter.action.AddLevelAction" method="execute">
+    	<result name="success" >/addlevel.jsp</result>
+    </action>
+    
+    <!-- 'newProduct' action call 'execute' in 'NewProductAction' -->
+    <action name="newProduct" class="fundstarter.action.NewProductAction" method="execute">
+    	<result name="success" >/addproduct.jsp</result>
+    </action>
+    
+    <!-- 'addProduct' action call 'execute' in 'AddProductAction' -->
+    <action name="addProduct" class="fundstarter.action.AddProductAction" method="execute">
+    	<result name="success" >/addproduct.jsp</result>
+    </action>
  	 
     
   </package>

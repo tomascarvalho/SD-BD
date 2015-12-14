@@ -11,26 +11,23 @@
 <body>
 
 	<c:choose>
-		<c:when test="${RMIBean.projectDetails.get('Levels')!=null}">
-			<c:forEach items="${RMIBean.projectDetails.get('Levels')}"
+		<c:when test="${RMIBean.projectDetails.get('Products')!=null}">
+			<c:forEach items="${RMIBean.projectDetails.get('Products')}"
 				var="value">
-				<h3>- ${value.get("DescNivel")}</h3>
+				<h3>- ${value.get("DescProduct")}</h3>
 
 			</c:forEach>
 		</c:when>
 		<c:otherwise>
 			<h3>Este projecto não tem níveis extra</h3>
 		</c:otherwise>
-	</c:choose>
+	</c:choose> 
 	
-	<h3>Novo Nível</h3>
-	<s:form action='addLevel' method='post'> 
+	<h3>Novo Tipo de Produto</h3>
+	<s:form action='addProduct' method='post'> 
 		<input type="hidden" name="projectID" value="${session.RMIBean.newProjectID}">
 		Descrição:
-		<input type='text' name='levelDesc'><br>
-		Valor:
-		<input type='text' name='valueDesc'><br>
-		<s:submit value='Adicionar Nível'/>
+		<input type='text' name='productType'><br>
 	</s:form>
 
 
