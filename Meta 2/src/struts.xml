@@ -65,8 +65,7 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     
     <!-- 'addProject' action call 'execute' in 'AddProjectAction' -->
     <action name="addProject" class="fundstarter.action.AddProjectAction" method="execute">
-    	<result name="success" >/auxaddproj.jsp</result>
-    	
+    	<result name="success" >/auxaddproj.jsp</result>	
     </action> 
     
 	<action name="CancelarProj" class="fundstarter.action.cancelarProjAction">
@@ -77,13 +76,19 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     	<result name="success">/listcancel.jsp</result>
     </action>
 
-
-    
     <!-- 'addLevel' action call 'execute' in 'AddLevelAction' -->
     <action name="newLevel" class="fundstarter.action.NewLevelAction" method="execute">
-    	<result name="success" >/addlevel.jsp</result>
-    	
+    	<result name="success" >/addlevel.jsp</result>  	
     </action>
+    
+    <action name="newReward" class="fundstarter.action.NewRewardAction" method="execute">
+    	<result name="success">/addreward.jsp</result>  	
+    </action>
+    
+    <action name="createReward" class="fundstarter.action.addRewardAction" method="execute">
+    	<result name="success" >/rewardcriado.jsp</result>  	
+    </action>
+ 	 
     
   </package>
 

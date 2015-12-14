@@ -9,19 +9,21 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class ListDetailsAction extends ActionSupport implements SessionAware {
-
+public class NewRewardAction extends ActionSupport implements SessionAware{
+	
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
-	private int selectedProject;
-
-	@Override
-	public String execute() throws RemoteException{
-
-		this.getConnectToRMIBean().listProjectDetails(this.selectedProject);
-		
+	private int projectID;
+	
+	public String execute() throws RemoteException {
+		this.getConnectToRMIBean().listProjectDetails(this.projectID);
 		return SUCCESS;
 	}
+
+	public void setProjectID(int projectID) {
+		this.projectID = projectID;
+	}
+
 	
 	public ConnectToRMIBean getConnectToRMIBean() {
 
@@ -30,14 +32,9 @@ public class ListDetailsAction extends ActionSupport implements SessionAware {
 		}
 		return (ConnectToRMIBean) session.get("RMIBean");
 	}
-	
-	public void setSelectedProject(String selectedProject){
-		this.selectedProject = Integer.parseInt(selectedProject);
-	}
 
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
 		this.session.put("RMIBean", RMIBean);
-		this.session.put("aux", 1);
 	}
 
 	@Override

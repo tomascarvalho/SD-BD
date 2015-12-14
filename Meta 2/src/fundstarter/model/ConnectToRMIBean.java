@@ -139,6 +139,8 @@ public class ConnectToRMIBean {
 			}
 		}
 	}
+	
+	
 
 	public String listProjects(int option) throws RemoteException {
 
@@ -154,7 +156,6 @@ public class ConnectToRMIBean {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		formatProjects((Object[]) this.postCard.getResponse(), option);
 
 		return "sucesso";
@@ -335,6 +336,32 @@ public class ConnectToRMIBean {
 
 		if(this.postCard.getResponse()[0].equals("infosave")){
 			System.out.println("[ConnectToRMI]New project stored");
+			this.newProjectID =  (int) this.postCard.getResponse()[1];
+			return "success";
+		}
+		else{
+			return "error";
+		}
+	}
+	
+	public String addReward(String valor, String id_proj, String titulo, String status) throws RemoteException{
+		String[] projectInfo = new String[4];
+		this.dataToSend = new Object[2];
+
+		projectInfo[0] = valor;
+		projectInfo[1] = id_proj;
+		projectInfo[2] = titulo;
+		projectInfo[3] = status;
+
+
+		this.dataToSend[0] = Integer.toString(this.userID);
+		this.dataToSend[1] = projectInfo;
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+
+		this.postCard = this.connectToRMI.addReward(this.postCard);
+
+		if(this.postCard.getResponse()[0].equals("infosave")){
+			System.out.println("[ConnectToRMI]Reward stored");
 			this.newProjectID = (int) this.postCard.getResponse()[1];
 			return "success";
 		}
@@ -342,6 +369,22 @@ public class ConnectToRMIBean {
 			return "error";
 		}
 	}
+	
+	public void listRewards(int id_proj) throws RemoteException{
+		System.out.println("[ConnectToRMI]List Rewards");
+
+		this.dataToSend = new Object[2];
+		this.dataToSend[1] = id_proj;
+
+		this.postCard = new ClientRequest("2", this.dataToSend, "tempo");
+
+		this.postCard = connectToRMI.getProjectDetails(this.postCard);
+
+		formatProjectDetails((Object[]) this.postCard.getResponse()[0]);
+		
+		
+	}
+	
 	
 	public void listLevels(String projectID){
 		

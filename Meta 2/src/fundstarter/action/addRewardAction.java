@@ -9,20 +9,41 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class ListDetailsAction extends ActionSupport implements SessionAware {
+public class addRewardAction extends ActionSupport implements SessionAware  {
 
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
-	private int selectedProject;
-
-	@Override
+	
+	private String valor;
+	private String projectID;
+	private String titulo;
+	private String status = "0";
+	
 	public String execute() throws RemoteException{
+		if(this.getConnectToRMIBean().addReward(this.valor, this.projectID, this.titulo, this.status).equals("success")){
+			return SUCCESS;
+		}	
+		else{
+			return ERROR;
+		}
+	}
 
-		this.getConnectToRMIBean().listProjectDetails(this.selectedProject);
-		
-		return SUCCESS;
+	public void setValor(String valor) {
+		this.valor = valor;
+	}
+
+	public void setProjectID(String projectID) {
+		this.projectID= projectID;
 	}
 	
+	public void setTitulo(String titulo) {
+		this.titulo= titulo;
+	}
+/*
+	public void setStatus() {
+		this.status= "false";
+	}
+*/
 	public ConnectToRMIBean getConnectToRMIBean() {
 
 		if (!session.containsKey("RMIBean")) {
@@ -30,16 +51,11 @@ public class ListDetailsAction extends ActionSupport implements SessionAware {
 		}
 		return (ConnectToRMIBean) session.get("RMIBean");
 	}
-	
-	public void setSelectedProject(String selectedProject){
-		this.selectedProject = Integer.parseInt(selectedProject);
-	}
 
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
 		this.session.put("RMIBean", RMIBean);
-		this.session.put("aux", 1);
 	}
-
+	
 	@Override
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub

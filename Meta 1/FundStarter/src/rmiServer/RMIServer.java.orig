@@ -183,7 +183,7 @@ package rmiServer;
 
       public ClientRequest novoProjecto(ClientRequest clrqst) throws RemoteException { //Verificar Erro
 
-          System.out.println("[RMI Server] Funcao <novoProjecto> chamada!");
+          System.out.println("[RMI Server] Função <novoProjecto> chamada!");
 
           requestCheck = checkRequest(clrqst);
 
@@ -284,7 +284,7 @@ package rmiServer;
 
               resposta[0] = "infosave";
               resposta[1] = id;
-              System.out.println("\n\nO ID E ESTE: " + id + "    " + resposta[1]);
+
               clrqst.setResponse(resposta);
               clrqst.setStage(3);
 
@@ -497,21 +497,11 @@ package rmiServer;
           clrqst.setStage(2);
           myRequests.add(clrqst);
 
-          int userID = Integer.parseInt((String)clrqst.getRequest()[0]);
-          String[] projectInfo = (String[]) clrqst.getRequest()[1];
-          
-          
-          int valor = Integer.parseInt(projectInfo[0]);
-          int projectID = Integer.parseInt(projectInfo[1]);
-          System.out.println("O TESTE " + projectID + "          " + projectInfo[1]);
-          String titulo = projectInfo[2];
-          int flag = Integer.parseInt(projectInfo[3]);
-          /*
+          int userID = (int) clrqst.getRequest()[0];
           int projectID = (int)clrqst.getRequest()[1];
           String titulo = (String)clrqst.getRequest()[2];
           int valor = (int)clrqst.getRequest()[3];
           int flag = (int) clrqst.getRequest()[4];
-          */
           int is_it_mine = 0;
           if (flag == 0){
               try{
@@ -574,16 +564,11 @@ package rmiServer;
               }
 
           }
-          
-          resposta[0] = "infosave";
-          
           clrqst.setResponse(resposta);
           clrqst.setStage(3);
 
           updateRequest(clrqst);
-          return clrqst;         
-          
-          
+          return clrqst;
       }
 
       public ClientRequest deleteReward(ClientRequest clrqst) throws RemoteException{
@@ -1166,8 +1151,7 @@ package rmiServer;
                           } catch (SQLException ex) {
                               System.err.print("SQLException 732: " + ex);
                           }
- /*                     
-
+/*
                           /*try{
                               query = "SELECT id_user FROM projecto_user WHERE id_projecto = "+projectID+" ORDER BY id"; //Vamos então ver quem é o responsável pelo projecto
                               preparedstatement = connection.prepareStatement(query);
@@ -1224,8 +1208,13 @@ package rmiServer;
                           } catch (SQLException ex) {
                               System.err.print("SQLException 748:  " + ex);
                           }
+<<<<<<< HEAD
+							
+						
+=======
 							*/
 
+>>>>>>> 687183b7ab1d75c924409d023800cd9d0d1d248d
                           try{
                               query = "UPDATE niveis_extra SET status = TRUE WHERE valor < "+valor_actual; //Vamos ver a que recompensas extra é que chegámos
 
