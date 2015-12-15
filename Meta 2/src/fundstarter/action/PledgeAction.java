@@ -9,37 +9,50 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class ListDetailsAction extends ActionSupport implements SessionAware {
+public class PledgeAction extends ActionSupport implements SessionAware {
 
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
-	private int selectedProject;
+	private int projectID;
+	private int amount;
 
-	@Override
 	public String execute() throws RemoteException{
-
-		this.getConnectToRMIBean().listProjectDetails(this.selectedProject);
-		this.session.put("listedProjectID", selectedProject);
 		
-		return SUCCESS;
+		String result = this.getConnectToRMIBean().pledgeToProject(this.projectID, this.amount);
+		
+		if(result.equals("success")){
+			return SUCCESS;
+		}
+		else if(result.equals("error")){
+			return ERROR;
+		}
+		else{
+			this.session.put("Reward", result);
+			return SUCCESS;
+		}
+		
+	}
+	
+	public void setProjectID(String projectID){
+		this.projectID = Integer.parseInt(projectID);
+	}
+	
+	public void setAmount(String amount){
+		this.amount = Integer.parseInt(amount);
 	}
 	
 	public ConnectToRMIBean getConnectToRMIBean() {
-		
+
 		if (!session.containsKey("RMIBean")) {
 			this.setConnectToRMIBean(new ConnectToRMIBean());
 		}
-		
+
 		return (ConnectToRMIBean) session.get("RMIBean");
-	}
-	
-	public void setSelectedProject(String selectedProject){
-		this.selectedProject = Integer.parseInt(selectedProject);
 	}
 
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
 		this.session.put("RMIBean", RMIBean);
-		
+
 	}
 
 	@Override

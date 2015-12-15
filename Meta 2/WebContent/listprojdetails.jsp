@@ -42,7 +42,8 @@
 			</c:choose>
 
 			<c:choose>
-				<c:when test="${RMIBean.projectDetails.containsKey('Levels') == true}">
+				<c:when
+					test="${RMIBean.projectDetails.containsKey('Levels') == true}">
 
 					<h2>Níveis Extra:</h2>
 
@@ -60,7 +61,8 @@
 			</c:choose>
 
 			<c:choose>
-				<c:when test="${RMIBean.projectDetails.containsKey('Products') == true}">
+				<c:when
+					test="${RMIBean.projectDetails.containsKey('Products') == true}">
 
 					<h2>Produtos:</h2>
 
@@ -76,6 +78,12 @@
 					<h2>Este projecto não tem produtos</h2>
 				</c:otherwise>
 			</c:choose>
+			
+			<s:form action="pledge" method="post">
+				<input type="text" name="amount">
+				<input type="hidden" name="projectID" value=${session.listedProjectID}>
+				<s:submit value="Pledge to Project" />
+			</s:form>
 		</c:otherwise>
 	</c:choose>
 
