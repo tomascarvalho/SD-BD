@@ -519,7 +519,7 @@ public class ConnectToRMIBean {
 			System.out.println("[ConnectToRMI]Pledged");
 			System.out.println("\tResult -> " + this.postCard.getResponse()[3]);
 		
-			if(((String) this.postCard.getRequest()[3]).equals("No Reward") == false){
+			if(this.postCard.getResponse()[3].equals("No Reward") == false){
 				System.out.println("[ConnectToRMIBean<plrdgeToProject>]Got Rewards!");
 				return (String)this.postCard.getResponse()[3];
 			}

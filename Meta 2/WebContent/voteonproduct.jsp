@@ -14,19 +14,32 @@
 	<c:choose>
 		<c:when test="${Reward != null}">
 			<h4>Ganhou um Recompensa:</h4>
-			<br>
-			<h4>${session.Reward}</h4>
+			<p>${session.Reward}</p>
 		</c:when>
 	</c:choose>
-	
-	<:forEach items="${RMIBean.projectDetails.get('Procucts')}" var="products">
-	
-		<h3>${products}</h3>
-		
-	</:forEach>
-	
-	
-	
+
+	<c:choose>
+		<c:when
+			test="${RMIBean.projectDetails.containsKey('Products') == true}">
+			<h3>Produtos:</h3>
+			<br>
+			<s:form action="voteonproduct" method="post">
+				<c:forEach items="${RMIBean.projectDetails.get('Products')}"
+					var="tokens">
+
+					<input type="radio" value="${tokens.get('DescProduct')}" name="productDescription"> ${tokens.get('DescProduct')}
+				<br>
+
+				</c:forEach>
+
+				<s:submit value="Votar" />
+			</s:form>
+		</c:when>
+	</c:choose>
+
+
+
+	<h1>Fim da pagina</h1>
 
 </body>
 </html>

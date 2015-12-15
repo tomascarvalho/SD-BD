@@ -28,8 +28,8 @@ public class PledgeAction extends ActionSupport implements SessionAware {
 			return ERROR;
 		}
 		else{
-			this.session.put("Reward", result);
 			this.getConnectToRMIBean().listProjectDetails(this.projectID);
+			this.session.put("Reward", result);
 			return SUCCESS;
 		}
 		
