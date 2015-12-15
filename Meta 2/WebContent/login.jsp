@@ -10,15 +10,13 @@
 	<link rel="icon" href="../../favicon.ico"/>
 	<title>FundStarter LogIn</title>
 	
-    <!-- Bootstrap Core CSS -->
-    <link href="https://student.dei.uc.pt/~tmdcc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    
 
-    <!-- Custom CSS -->
-    <link href="https://student.dei.uc.pt/~tmdcc/css/shop-homepage.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="https://student.dei.uc.pt/~tmdcc/css/signin.css" rel="stylesheet">
-
-    <script src="https://student.dei.uc.pt/~tmdcc/js/ie-emulation-modes-warning.js"></script>
+    <link href="${pageContext.request.contextPath}/css/shop-homepage.css"  rel="stylesheet" type="text/css"/>
+    <link href="${pageContext.request.contextPath}/css/signin.css"  rel="stylesheet" type="text/css"/>
+    <script src="${pageContext.request.contextPath}/js/ie-emulation-modes-warning.js"></script>
+    
 </head>
 <body>
 
@@ -52,7 +50,7 @@
 
 	<div class="container">
 		<form class="form-signin" action="logIn" method="post">
-			<h2 class="form-signin-heading">Please log in</h2>
+			<h2 class="form-signin-heading">Please Log In</h2>
 			<label for="inputEmail" class="sr-only">Username</label>
        		<input name = "username" id="inputEmail" class="form-control" placeholder="Username" required autofocus>	
 			<label for="inputPassword" class="sr-only">Password</label>

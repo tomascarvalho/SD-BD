@@ -20,6 +20,7 @@ public class SignInAction extends ActionSupport implements SessionAware {
 		this.getConnectToRMIBean().setPassword(this.password);
 
 		if (this.getConnectToRMIBean().signIn().equals("main_menu")) {
+			this.session.put("logged",true);
 			return SUCCESS;
 		}
 
