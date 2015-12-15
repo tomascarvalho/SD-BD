@@ -19,6 +19,13 @@
 		</c:when>
 	</c:choose>
 	
+	<:forEach items="${RMIBean.projectDetails.get('Procucts')}" var="products">
+	
+		<h3>${products}</h3>
+		
+	</:forEach>
+	
+	
 	
 
 </body>

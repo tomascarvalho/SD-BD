@@ -21,6 +21,7 @@ public class PledgeAction extends ActionSupport implements SessionAware {
 		String result = this.getConnectToRMIBean().pledgeToProject(this.projectID, this.amount);
 		
 		if(result.equals("success")){
+			this.getConnectToRMIBean().listProjectDetails(this.projectID);
 			return SUCCESS;
 		}
 		else if(result.equals("error")){
@@ -28,6 +29,7 @@ public class PledgeAction extends ActionSupport implements SessionAware {
 		}
 		else{
 			this.session.put("Reward", result);
+			this.getConnectToRMIBean().listProjectDetails(this.projectID);
 			return SUCCESS;
 		}
 		
