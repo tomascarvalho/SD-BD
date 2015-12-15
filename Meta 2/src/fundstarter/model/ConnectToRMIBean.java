@@ -5,6 +5,7 @@ import java.rmi.NotBoundException;
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 //import com.sun.javafx.collections.HashMaopingChange.HashMao;
@@ -140,6 +141,67 @@ public class ConnectToRMIBean {
 		}
 	}
 	
+	/*public void formatArrayProjects(ArrayList<String> projects, int option) {
+
+		HashMap<String, String> auxProject;
+		//Object[] listOfProjects = (Object[]) projects[0];
+		ArrayList<Object> listOfProjects = new ArrayList <Object>();
+		listOfProjects.add(projects.get(0));
+		
+		if (projects.isEmpty()) {
+
+			this.projects = null;
+
+		} else {
+
+			if (option == 0) {
+				this.storedProjects = "actual";
+			} else {
+				this.storedProjects = "old";
+			}
+
+			this.projects = new ArrayList<HashMap<String, Object>>();
+
+			int i,j = 0;
+
+			while (projects.isEmpty()== false) {
+
+				auxProject = new HashMap<String, String>();
+				
+				auxProject.put("ValorActual", projects.get(i));
+				i++;
+
+				auxProject.put("ID", projects.get(i));
+				i++;
+
+				auxProject.put("Titulo", projects.get(i));
+				i++;
+
+				auxProject.put("ValorPretendido", projects.get(i));
+				i++;
+
+
+			}
+		}
+	}
+	*/
+	
+
+	public Object[] listUserProjects(int option) throws RemoteException {
+		System.out.println("[ConnectToRMI]List User Projects");
+
+		this.dataToSend = new Object[2];
+		System.out.println(this.userID);
+		this.dataToSend[1] = this.userID;
+
+		this.postCard = new ClientRequest("2", this.dataToSend, "tempo");
+
+		
+		this.postCard = this.connectToRMI.getUserProjects(this.postCard);
+		//formatProjects((Object[]) this.postCard.getResponse(), option);
+		System.out.println(((ArrayList<Integer>) this.postCard.getResponse()[0]).get(0));
+		return this.postCard.getResponse();
+	}
 	
 
 	public String listProjects(int option) throws RemoteException {
@@ -196,6 +258,8 @@ public class ConnectToRMIBean {
 			int productCounter;
 			HashMap<String, Object> auxMap;
 			ArrayList<HashMap<String, Object>> auxArray;
+			
+			System.out.println((String)project[0]);
 
 			this.projectDetails.put("Titulo", project[i]);
 			i++;
@@ -211,7 +275,8 @@ public class ConnectToRMIBean {
 
 			this.projectDetails.put("DataLimite", project[i]);
 			i++;
-
+			
+			System.out.println(project[i]);
 			rewardCounter = Integer.parseInt((String) project[i]);
 			i++;
 

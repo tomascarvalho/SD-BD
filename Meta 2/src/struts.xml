@@ -108,7 +108,15 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     <action name="addProduct" class="fundstarter.action.AddProductAction" method="execute">
     	<result name="success" >/addproduct.jsp</result>
     </action>
- 	 
+    
+    <action name="AdminMode" class="fundstarter.action.AdminModeAction">
+    	<result name="success">/adminmode.jsp</result>
+    </action>
+ 	
+    
+    <action name="editProject">
+    	<result >/editproject.jsp</result>
+    </action>
     
   </package>
 

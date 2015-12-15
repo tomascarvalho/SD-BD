@@ -20,33 +20,15 @@
 					<p>No Projects to present</p>
 				</c:when>
 				<c:otherwise>
-					<c:choose>
-						<c:when test="${aux == 1}">
-						<s:form action="listDetails" method="post">
-								<c:forEach items="${RMIBean.projects }" var="value">
-
-									<input type="checkbox" name="selectedProject" method="post"
-										value="${value.get('ID') }">${value.get("Titulo") }
-					<br>
-								</c:forEach>
-								<s:submit value="Show Details" />
-
-							</s:form>
-
-						</c:when>
-						<c:otherwise>
-							<s:form action="listRewards" method="post">
-								<c:forEach items="${RMIBean.projects }" var="value">
-									<h1>CHEGOU AQUI, SIM</h1>
-									<input type="checkbox" name="selectedProject" method="post"
-										value="${value.get('ID') }">${value.get("Titulo") }
-							<br>
-								</c:forEach>
-								<s:submit value="Remover Rewards" />
-							</s:form>
-						</c:otherwise>
-					</c:choose>
-
+					<s:form action="listDetails" method="post">
+						<c:forEach items="${RMIBean.projects }" var="value">
+							<input type="radio" name="selectedProject"
+								value="${value.get('ID') }">${value.get("Titulo") }</input>
+	
+								<br>
+						</c:forEach>
+						<s:submit value="Show Details" />
+					</s:form>
 				</c:otherwise>
 			</c:choose>
 		</c:when>
