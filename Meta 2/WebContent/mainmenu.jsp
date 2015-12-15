@@ -289,9 +289,15 @@
 	<s:form action="callAdd" method="post">
 		<s:submit value="Criar Projecto"/>
 	</s:form>
-	
+
+<!-- 	
 	<s:form action="ListCancel" method="post">
 		<s:submit value="Cancelar Projecto" />
+	</s:form> -->
+	
+	<s:form action="AdminMode" method="post">
+		<s:hidden name="option" value="0" />
+		<s:submit value="Meus Projectos" />
 	</s:form>
 
 </body>
