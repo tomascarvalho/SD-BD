@@ -499,8 +499,8 @@ package rmiServer;
 
           int userID = Integer.parseInt((String)clrqst.getRequest()[0]);
           String[] projectInfo = (String[]) clrqst.getRequest()[1];
-          
-          
+
+
           int valor = Integer.parseInt(projectInfo[0]);
           int projectID = Integer.parseInt(projectInfo[1]);
           System.out.println("O TESTE " + projectID + "          " + projectInfo[1]);
@@ -574,16 +574,16 @@ package rmiServer;
               }
 
           }
-          
+
           resposta[0] = "infosave";
-          
+
           clrqst.setResponse(resposta);
           clrqst.setStage(3);
 
           updateRequest(clrqst);
-          return clrqst;         
-          
-          
+          return clrqst;
+
+
       }
 
       public ClientRequest deleteReward(ClientRequest clrqst) throws RemoteException{
@@ -1166,7 +1166,7 @@ package rmiServer;
                           } catch (SQLException ex) {
                               System.err.print("SQLException 732: " + ex);
                           }
- /*                     
+ /*
 
                           /*try{
                               query = "SELECT id_user FROM projecto_user WHERE id_projecto = "+projectID+" ORDER BY id"; //Vamos então ver quem é o responsável pelo projecto

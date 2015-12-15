@@ -429,6 +429,43 @@ public class ConnectToRMIBean {
 			return "error";
 		}
 	}
+	
+	public String pledgeToProject(int projectID,int amount) throws RemoteException{
+		
+		int[] pledgeInfo = new int[2];
+		this.dataToSend = new Object[2];
+		
+		System.out.println("[ConnectToRMI]Ready to pledge to project with:");
+		System.out.println("\tID -> " + projectID);
+		System.out.println("\tAmount -> " + amount);
+		System.out.println("\tUser ID -> " + this.userID);
+		
+		pledgeInfo[0] = amount;
+		pledgeInfo[1] = projectID;
+		
+		this.dataToSend[0] = this.userID;
+		this.dataToSend[1] = pledgeInfo;
+		
+		this.postCard = new ClientRequest("",this.dataToSend,"");
+		
+		this.postCard = this.connectToRMI.pledgeToProject(this.postCard);
+		
+		if(this.postCard.getResponse()[0].equals("pledged")){
+			System.out.println("[ConnectToRMI]Pledged");
+			System.out.println("\tResult -> " + this.postCard.getResponse()[3]);
+		
+			if(((String) this.postCard.getRequest()[3]).equals("No Reward") == false){
+				System.out.println("[ConnectToRMIBean<plrdgeToProject>]Got Rewards!");
+				return (String)this.postCard.getResponse()[3];
+			}
+			else{
+				return "success";
+			}
+		}
+		else{
+			return "error";
+		}
+	}
 
 	public ArrayList<HashMap<String, Object>> getProjects() {
 		System.out.println("[ConnectToRMI]Returning Projects");
