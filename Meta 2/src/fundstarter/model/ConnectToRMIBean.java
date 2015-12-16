@@ -531,6 +531,56 @@ public class ConnectToRMIBean {
 			return "error";
 		}
 	}
+	
+	public String donateReward(int projectID, String username, String reward) throws RemoteException{
+		
+		this.dataToSend = new Object[4];
+		
+		this.dataToSend[1] = projectID;
+		this.dataToSend[2] = username;
+		this.dataToSend[3] = reward;
+		
+		
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+		
+		this.postCard = this.connectToRMI.donateReward(this.postCard);
+		
+		return (String) this.postCard.getResponse()[0];
+		
+	}
+	
+	public void voteOnProject(String description) throws RemoteException{
+		
+		this.dataToSend = new Object[2];
+		
+		this.dataToSend[1] = description;
+		
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+		
+		this.postCard = this.connectToRMI.voteForProduct(this.postCard);
+		
+	}
+	
+	public String sendMessage(int projectID, String message) throws RemoteException{
+		
+		this.dataToSend = new Object[3];
+		
+		this.dataToSend[0] = this.userID;
+		this.dataToSend[1] = projectID;
+		this.dataToSend[2] = message;
+		
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+		
+		this.postCard = this.connectToRMI.enviaMensagem(this.postCard);
+		
+		if(this.postCard.getResponse()[0].equals("Mensagem enviada")){
+			return "success";
+		}
+		else{
+			return "error";
+		}
+		
+	}
 
 	public ArrayList<HashMap<String, Object>> getProjects() {
 		System.out.println("[ConnectToRMI]Returning Projects");

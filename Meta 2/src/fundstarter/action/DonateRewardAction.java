@@ -9,39 +9,30 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class PledgeAction extends ActionSupport implements SessionAware {
+public class DonateRewardAction extends ActionSupport implements SessionAware {
 
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
-	private int projectID;
-	private int amount;
-
+	private String username;
+	
+	@Override
 	public String execute() throws RemoteException{
 		
-		String result = this.getConnectToRMIBean().pledgeToProject(this.projectID, this.amount);
+		System.out.println("[Donate<execute>]\n\tUsername:" + this.username);
+		System.out.println("\tReward:" + this.session.get("Reward"));
+		System.out.println("\tProjectID:" + this.session.get("pledgedProjectID"));
 		
-		if(result.equals("success")){
-			this.getConnectToRMIBean().listProjectDetails(this.projectID);
+		if(this.getConnectToRMIBean().donateReward((int)this.session.get("pledgedProjectID"), this.username, (String)this.session.get("Reward")).equals("success")){
 			return SUCCESS;
-		}
-		else if(result.equals("error")){
-			return ERROR;
 		}
 		else{
-			this.getConnectToRMIBean().listProjectDetails(this.projectID);
-			this.session.put("Reward", result);
-			this.session.put("pledgedProjectID", this.projectID);
-			return SUCCESS;
+			return ERROR;
 		}
 		
 	}
 	
-	public void setProjectID(String projectID){
-		this.projectID = Integer.parseInt(projectID);
-	}
-	
-	public void setAmount(String amount){
-		this.amount = Integer.parseInt(amount);
+	public void setUsername(String username){
+		this.username = username;
 	}
 	
 	public ConnectToRMIBean getConnectToRMIBean() {

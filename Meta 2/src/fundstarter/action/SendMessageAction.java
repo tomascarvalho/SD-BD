@@ -9,39 +9,33 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class PledgeAction extends ActionSupport implements SessionAware {
+public class SendMessageAction extends ActionSupport implements SessionAware{
 
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
+	private String message;
 	private int projectID;
-	private int amount;
-
+	
 	public String execute() throws RemoteException{
 		
-		String result = this.getConnectToRMIBean().pledgeToProject(this.projectID, this.amount);
-		
-		if(result.equals("success")){
-			this.getConnectToRMIBean().listProjectDetails(this.projectID);
+		System.out.println("[SendMessageAction<execute>]\n\tMessage -> "+this.message);
+		System.out.println("\tProjectID -> "+this.projectID);
+			
+		if(this.getConnectToRMIBean().sendMessage(this.projectID,this.message).equals("success")){
 			return SUCCESS;
-		}
-		else if(result.equals("error")){
-			return ERROR;
 		}
 		else{
-			this.getConnectToRMIBean().listProjectDetails(this.projectID);
-			this.session.put("Reward", result);
-			this.session.put("pledgedProjectID", this.projectID);
-			return SUCCESS;
+			return ERROR;
 		}
 		
+	}
+	
+	public void setMessage(String message){
+		this.message = message;
 	}
 	
 	public void setProjectID(String projectID){
 		this.projectID = Integer.parseInt(projectID);
-	}
-	
-	public void setAmount(String amount){
-		this.amount = Integer.parseInt(amount);
 	}
 	
 	public ConnectToRMIBean getConnectToRMIBean() {
@@ -57,7 +51,7 @@ public class PledgeAction extends ActionSupport implements SessionAware {
 		this.session.put("RMIBean", RMIBean);
 
 	}
-
+	
 	@Override
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub
