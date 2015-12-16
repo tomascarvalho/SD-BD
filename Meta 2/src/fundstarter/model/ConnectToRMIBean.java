@@ -24,6 +24,7 @@ public class ConnectToRMIBean {
 	private ArrayList<HashMap<String, Object>> projects;
 	private String storedProjects;
 	private HashMap<String, Object> projectDetails;
+	private HashMap<String, Object> projectRewards;
 	private int newProjectID;
 
 	public ConnectToRMIBean() {
@@ -241,6 +242,71 @@ public class ConnectToRMIBean {
 
 		return (int) this.postCard.getResponse()[0];
 	}
+	
+	public void formatRewards(Object[] project) {
+
+		if (project.equals("no_project_to_show")) {
+
+			this.projectRewards = null;
+
+		} else {
+
+			this.projectRewards = new HashMap<String, Object>();
+
+			int i = 0;
+			int rewardCounter;
+			HashMap<String, Object> auxMap;
+			ArrayList<HashMap<String, Object>> auxArray;
+			
+			System.out.println((String)project[0]);
+
+			i=i+5;
+			
+			System.out.println(project[i]);
+			rewardCounter = Integer.parseInt((String) project[i]);
+			i++;
+
+			if (rewardCounter != 0) {
+
+				auxArray = new ArrayList<HashMap<String, Object>>();
+
+				for (int j = 0; j < (rewardCounter / 2); j++) {
+
+					auxMap = new HashMap<String, Object>();
+
+					auxMap.put("TituloRecompensa", project[i]);
+					i++;
+
+					auxMap.put("ValorRecompensa", project[i]);
+					i++;
+
+					auxArray.add(auxMap);
+				}
+
+				this.projectDetails.put("Rewards", auxArray);
+
+			}			
+
+		}
+	}
+	
+	public void listProjectRewards(int projectId) throws RemoteException {
+
+		System.out.println("[ConnectToRMI]List project details");
+
+		this.dataToSend = new Object[2];
+		this.dataToSend[1] = projectId;
+
+		this.postCard = new ClientRequest("2", this.dataToSend, "tempo");
+
+		this.postCard = connectToRMI.getProjectDetails(this.postCard);
+
+		formatRewards((Object[]) this.postCard.getResponse()[0]);
+
+	}
+
+	
+	
 
 	public void formatProjectDetails(Object[] project) {
 
@@ -432,7 +498,7 @@ public class ConnectToRMIBean {
 			this.newProjectID = (int) this.postCard.getResponse()[1];
 			return "success";
 		} else {
-			System.out.println("ESTA MERDA DEU ERRO");
+			System.out.println(this.postCard.getResponse()[0]);
 			return "error";
 		}
 	}

@@ -68,10 +68,6 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     	<result name="success" >/auxaddproj.jsp</result>	
     </action> 
     
-	<action name="CancelarProj" class="fundstarter.action.cancelarProjAction">
-    	<result name="success">/cancelarproj.jsp</result>
-    </action>
-
     <action name="ListCancel" class="fundstarter.action.ListProjAction">
     	<result name="success">/listcancel.jsp</result>
     </action>
@@ -115,7 +111,7 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     </action>
  	
     
-    <action name="editProject">
+    <action name="editProject" class="fundstarter.action.EditProjectAction">
     	<result >/editproject.jsp</result>
     </action>
     
@@ -127,6 +123,15 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     <action name="voteonproduct" class="fundstarter.action.VoteOnProduct" method="execute" >
     	<result name="success">/mainmenu.jsp</result>
     </action>
+    
+    <action name="cancelarProj" class="fundstarter.action.cancelarProjAction">
+    	<result name="success">/cancelarproj.jsp</result>
+    </action>
+    
+    <action name="showRewards" class="fundstarter.action.ListRewardsAction">
+    	<result name="success">/listrewards.jsp</result>
+    </action>
+    
   </package>
 
 </struts>
