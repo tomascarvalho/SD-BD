@@ -28,7 +28,6 @@
 	<s:form action="showRewards" method="post">
 		<s:submit value="Remover Recompensa" />
 		<input type= "hidden" name="option" value="${ProjectID}">
-		
 	</s:form>
 	
 	<s:form action="cancelarProj" method="post">

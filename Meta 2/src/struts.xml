@@ -127,11 +127,11 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     <action name="voteonproduct" class="fundstarter.action.VoteOnProductAction" method="execute" >
     	<result name="success">/mainmenu.jsp</result>
     </action>
-    
+
     <action name="sendMessage" class="fundstarter.action.SendMessageAction" method="execute">
     	<result name="success">/listprojdetails.jsp</result>
 	</action>
-	
+    
     <action name="cancelarProj" class="fundstarter.action.cancelarProjAction">
     	<result name="success">/cancelarproj.jsp</result>
     </action>
@@ -140,10 +140,14 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     	<result name="success">/listrewards.jsp</result>
     </action>
     
+    <action name="deleteReward" class="fundstarter.action.DeleteRewardAction">
+    	<result name="success">/mainmenu.jsp</result>
+    </action>
+    
     <action name="seeInbox" class="fundstarter.action.SeeInboxAction">
     	<result name="success">/listmymessages.jsp</result>
     </action>
     
-  </package>
+  </package> 
 
 </struts>

@@ -10,22 +10,21 @@
 <title>FundStarter</title>
 </head>
 <body>
-
-	<h1>${RMIBean.projectDetails.get("Titulo") }</h1>
 	<h1>Rewards:</h1>
 	<c:choose>
-		<c:when test="${listedRewards == null}">
+		<c:when test="${RMIBean.projectRewards == null}">
 			<p>No Rewards Found</p>
 		</c:when>
 		<c:otherwise>
-				<c:forEach items="${RMIBean.projectDetails}"
-					var="tokens">
 
-					<p>Titulo:${tokens.get("TituloRecompensa") }</p>
-					<p>Valor:${tokens.get("ValorRecompensa") }</p>
-
-				</c:forEach>
-
+			<c:forEach items="${RMIBean.projectRewards}" var="tokens">
+				<h4>${tokens}</h4>
+			</c:forEach>
+			
+			<form action="deleteReward" method="post">
+				ID Reward:<input type="text" name="rewardID"/>
+				<s:submit value="Eleminar" />
+			</form>
 		</c:otherwise>
 	</c:choose>
 

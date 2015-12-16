@@ -136,28 +136,24 @@ class cronoThread extends Thread {
 
     public void run() {
 
-        Date time = new Date();
-
         while (true) {
-            if (time.getHours() == 17) {
-                try {
-                    System.out.println("Estou a correr");
-                    remoteConection.terminaProjecto();
-                } catch (RemoteException ex) {
-                    System.out.println("Houve um erro com o RMI.");
-                    while (true) {
-                        try {
-                            System.out.println("[CronoThread]Vou tentar ligar ao RMI!");
-                            remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
-                            System.out.println("[CronoThread]Voltei a ligar ao RMI!");
-                            break;
-                        } catch (NotBoundException e) {
-                            System.out.println("[CronoThread]Não me consigo ligar ao RMI!");
-                        } catch (MalformedURLException e) {
-                            System.out.println("[CronoThread]MalformedRLException");
-                        } catch (RemoteException e) {
-                            System.out.println("[CronoThread]RemoteException");
-                        }
+            try {
+                System.out.println("Estou a correr");
+                remoteConection.terminaProjecto();
+            } catch (RemoteException ex) {
+                System.out.println("Houve um erro com o RMI.");
+                while (true) {
+                    try {
+                        System.out.println("[CronoThread]Vou tentar ligar ao RMI!");
+                        remoteConection = (RMIServerInterface) Naming.lookup(rmiLocation);
+                        System.out.println("[CronoThread]Voltei a ligar ao RMI!");
+                        break;
+                    } catch (NotBoundException e) {
+                        System.out.println("[CronoThread]Não me consigo ligar ao RMI!");
+                    } catch (MalformedURLException e) {
+                        System.out.println("[CronoThread]MalformedRLException");
+                    } catch (RemoteException e) {
+                        System.out.println("[CronoThread]RemoteException");
                     }
                 }
             }

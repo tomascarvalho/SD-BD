@@ -24,7 +24,7 @@ public class ConnectToRMIBean {
 	private ArrayList<HashMap<String, Object>> projects;
 	private String storedProjects;
 	private HashMap<String, Object> projectDetails;
-	private HashMap<String, Object> projectRewards;
+	private ArrayList<String> projectRewards;
 	private int newProjectID;
 	private ArrayList<HashMap<String, Object>> myMessages;
 
@@ -143,51 +143,6 @@ public class ConnectToRMIBean {
 		}
 	}
 	
-	/*public void formatArrayProjects(ArrayList<String> projects, int option) {
-
-		HashMap<String, String> auxProject;
-		//Object[] listOfProjects = (Object[]) projects[0];
-		ArrayList<Object> listOfProjects = new ArrayList <Object>();
-		listOfProjects.add(projects.get(0));
-		
-		if (projects.isEmpty()) {
-
-			this.projects = null;
-
-		} else {
-
-			if (option == 0) {
-				this.storedProjects = "actual";
-			} else {
-				this.storedProjects = "old";
-			}
-
-			this.projects = new ArrayList<HashMap<String, Object>>();
-
-			int i,j = 0;
-
-			while (projects.isEmpty()== false) {
-
-				auxProject = new HashMap<String, String>();
-				
-				auxProject.put("ValorActual", projects.get(i));
-				i++;
-
-				auxProject.put("ID", projects.get(i));
-				i++;
-
-				auxProject.put("Titulo", projects.get(i));
-				i++;
-
-				auxProject.put("ValorPretendido", projects.get(i));
-				i++;
-
-
-			}
-		}
-	}
-	*/
-	
 
 	public Object[] listUserProjects(int option) throws RemoteException {
 		System.out.println("[ConnectToRMI]List User Projects");
@@ -244,66 +199,22 @@ public class ConnectToRMIBean {
 		return (int) this.postCard.getResponse()[0];
 	}
 	
-	public void formatRewards(Object[] project) {
-
-		if (project.equals("no_project_to_show")) {
-
-			this.projectRewards = null;
-
-		} else {
-
-			this.projectRewards = new HashMap<String, Object>();
-
-			int i = 0;
-			int rewardCounter;
-			HashMap<String, Object> auxMap;
-			ArrayList<HashMap<String, Object>> auxArray;
-			
-			System.out.println((String)project[0]);
-
-			i=i+5;
-			
-			System.out.println(project[i]);
-			rewardCounter = Integer.parseInt((String) project[i]);
-			i++;
-
-			if (rewardCounter != 0) {
-
-				auxArray = new ArrayList<HashMap<String, Object>>();
-
-				for (int j = 0; j < (rewardCounter / 2); j++) {
-
-					auxMap = new HashMap<String, Object>();
-
-					auxMap.put("TituloRecompensa", project[i]);
-					i++;
-
-					auxMap.put("ValorRecompensa", project[i]);
-					i++;
-
-					auxArray.add(auxMap);
-				}
-
-				this.projectDetails.put("Rewards", auxArray);
-
-			}			
-
-		}
-	}
 	
-	public void listProjectRewards(int projectId) throws RemoteException {
+	public void listProjectRewards(int projectID) throws RemoteException {
 
 		System.out.println("[ConnectToRMI]List project details");
 
-		this.dataToSend = new Object[2];
-		this.dataToSend[1] = projectId;
+		this.dataToSend = new Object[3];
+		
+		this.dataToSend[0] = projectID;
+		this.dataToSend[1] = this.userID;
+		this.dataToSend[2] = 1;
 
 		this.postCard = new ClientRequest("2", this.dataToSend, "tempo");
 
-		this.postCard = connectToRMI.getProjectDetails(this.postCard);
+		this.postCard = connectToRMI.listarRecompensas(this.postCard);
 
-		formatRewards((Object[]) this.postCard.getResponse()[0]);
-
+		this.projectRewards = (ArrayList<String>)this.postCard.getResponse()[3];
 	}
 
 	
@@ -658,6 +569,10 @@ public class ConnectToRMIBean {
 		HashMap<String,Object> auxMessage;
 		this.myMessages = new ArrayList<HashMap<String,Object>>();
 		
+		System.out.println("[ConnectToRMI]<formatMessages>: listOfIds size -> " + listOfIds.size());
+		
+		System.out.println("[ConnectToRMI]<formatMessages>: listOfMessagess size -> " + listOfMessages.size());
+		
 		for(int i=0; i<listOfIds.size(); i++){
 			
 			auxMap = new HashMap<String, Object>();
@@ -668,6 +583,8 @@ public class ConnectToRMIBean {
 			for(int j=1; j<listOfIds.get(i).size(); j++){
 				
 				auxMessage = new HashMap<String, Object>();
+				
+				System.out.println("[ConnectToRMI]<formatMessages>: message " + j + " -> " + listOfMessages.get(j));
 				
 				auxMessage.put("MessageID", listOfIds.get(j));
 				auxMessage.put("Message", listOfMessages.get(j));
@@ -689,9 +606,30 @@ public class ConnectToRMIBean {
 		
 		this.postCard = new ClientRequest("", this.dataToSend, "");
 		
+		System.out.println("[ConnectToRMI]<seeMyInbox> User ID -> " + this.userID);
 		this.postCard = this.connectToRMI.caixaCorreio(this.postCard);
 		
 		formatMessages(this.postCard.getResponse());
+	}
+	
+	public String deleteReward(int rewardID) throws RemoteException{
+		
+		this.dataToSend = new Object[4];
+		
+		this.dataToSend[1] = rewardID;
+		this.dataToSend[2] = 0;
+		this.dataToSend[3] = this.userID;
+		
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+		
+		this.postCard = this.connectToRMI.deleteReward(this.postCard);
+		
+		if(this.postCard.getResponse()[1].equals("not_yours")){
+			return "error";
+		}
+		else{
+			return "success";
+		}
 	}
 
 	public ArrayList<HashMap<String, Object>> getProjects() {
@@ -705,6 +643,10 @@ public class ConnectToRMIBean {
 
 	public HashMap<String, Object> getProjectDetails() {
 		return this.projectDetails;
+	}
+	
+	public ArrayList<String> getProjectRewards(){
+		return this.projectRewards;
 	}
 
 	public void setUsername(String username) {
