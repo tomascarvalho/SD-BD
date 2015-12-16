@@ -283,7 +283,7 @@ public class ConnectToRMIBean {
 					auxArray.add(auxMap);
 				}
 
-				this.projectDetails.put("Rewards", auxArray);
+				this.projectRewards.put("Rewards", auxArray);
 
 			}			
 

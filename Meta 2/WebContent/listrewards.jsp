@@ -10,15 +10,13 @@
 <title>FundStarter</title>
 </head>
 <body>
-
-	<h1>${RMIBean.projectDetails.get("Titulo") }</h1>
 	<h1>Rewards:</h1>
 	<c:choose>
-		<c:when test="${listedRewards == null}">
+		<c:when test="${RMIBean.projectRewards == null}">
 			<p>No Rewards Found</p>
 		</c:when>
 		<c:otherwise>
-				<c:forEach items="${RMIBean.projectDetails}"
+				<c:forEach items="${RMIBean.projectRewards.get('Rewards')}"
 					var="tokens">
 
 					<p>Titulo:${tokens.get("TituloRecompensa") }</p>

@@ -14,14 +14,17 @@ package rmiServer;
  */
 
   import java.awt.BorderLayout;
-  import java.rmi.*;
+import java.net.MalformedURLException;
+import java.rmi.*;
   import java.rmi.registry.LocateRegistry;
   import java.rmi.server.UnicastRemoteObject;
   import java.sql.*;
   import java.util.*;
   import java.util.logging.Level;
   import java.util.logging.Logger;
-  import java.util.Date;
+
+
+import java.util.Date;
 
   public class RMIServer extends UnicastRemoteObject implements RMIServerInterface {
 
@@ -32,6 +35,7 @@ package rmiServer;
           String bdName;
 
           //cronoThread;
+          
           PropertiesReaderRMI properties = new PropertiesReaderRMI();
 
           rmiPort = properties.getPort();
@@ -1166,66 +1170,6 @@ package rmiServer;
                           } catch (SQLException ex) {
                               System.err.print("SQLException 732: " + ex);
                           }
- /*
-
-                          /*try{
-                              query = "SELECT id_user FROM projecto_user WHERE id_projecto = "+projectID+" ORDER BY id"; //Vamos então ver quem é o responsável pelo projecto
-                              preparedstatement = connection.prepareStatement(query);
-                              rs = preparedstatement.executeQuery();
-                              if (rs.next()){
-                                  query = "UPDATE utilizador SET saldo = saldo +"+valor_actual+" WHERE id= "+userID; // E dar-lhe o dinheiro que o projecto angariou
-
-                                  preparedstatement = connection.prepareStatement(query);
-                                  preparedstatement.executeUpdate();
-                              }
-
-                          } catch (SQLException ex) {
-                              System.err.print("SQLException 909: " + ex);
-                          }
-
-
-                          try{
-                              query = "SELECT id, titulo FROM recompensas WHERE id_projecto="+projectID; //Temos também que dar as recompensas a quem doou
-                              preparedstatement = connection.prepareStatement(query);
-                              rs = preparedstatement.executeQuery();
-
-                              while(rs.next()){
-                                  descricao_reward = "Ganhou a recompensa: "+rs.getString("titulo")+" -- Por ter doado ao projecto ID: "+projectID;
-                                  try{
-                                      query = "UPDATE recompensa_user SET status = TRUE WHERE id_recompensa = "+rs.getInt("id"); //E mudar a flag na tabela, para que saibamos que o projecto já acabou e arecompensa é definitiva
-
-                                      preparedstatement = connection.prepareStatement(query);
-                                      preparedstatement.executeUpdate();
-                                  } catch (SQLException ex) {
-                                      System.err.print("SQLException 746:  " + ex);
-                                  }
-
-                                  try{
-                                      query = "SELECT id_user FROM recompensa_user WHERE id_recompensa = "+rs.getInt("id"); //Enviamos mensagem a quem ganhou rewards
-                                      preparedstatement = connection.prepareStatement(query);
-                                      ResultSet result = preparedstatement.executeQuery();
-                                      while (result.next()){
-
-                                          Object[] objecto = new Object[3];
-                                          // 0 flag 1 User 2 Mensagem
-                                          objecto[0] = 1;
-
-                                          objecto[1] = result.getInt("id_user");
-                                          objecto[2] = descricao_reward;
-                                          ClientRequest request = new ClientRequest("", objecto, "");
-
-                                          respMensagem(request);
-
-                                      }
-                                  } catch (SQLException ex) {
-                                      System.err.print("SQLException 1178:  " + ex);
-                                  }
-                              }
-                          } catch (SQLException ex) {
-                              System.err.print("SQLException 748:  " + ex);
-                          }
-							*/
-
                           try{
                               query = "UPDATE niveis_extra SET status = TRUE WHERE valor < "+valor_actual; //Vamos ver a que recompensas extra é que chegámos
 
@@ -1239,12 +1183,12 @@ package rmiServer;
                           try {
                               query = "SELECT descricao FROM niveis_extra WHERE status = TRUE";   //Os alcançados são marcados a TRUE
                               preparedstatement = connection.prepareStatement(query);
-                              rs = preparedstatement.executeQuery();
-                              if (rs.next()) {
+                              ResultSet rs1 = preparedstatement.executeQuery();
+                              if (rs1.next()) {
                                   fim_projecto.add("extra_levels");
-                                  fim_projecto.add(rs.getString("descricao"));
-                                  while (rs.next()) {
-                                      fim_projecto.add(rs.getString("descricao"));
+                                  fim_projecto.add(rs1.getString("descricao"));
+                                  while (rs1.next()) {
+                                      fim_projecto.add(rs1.getString("descricao"));
                                   }
                               } else {
                                   fim_projecto.add("no_extra_levels");
@@ -1257,13 +1201,13 @@ package rmiServer;
 
                               query = "SELECT contador, descricao FROM product_type WHERE id_projecto = "+projectID; //Vamos ver se o projecto tinha algum tipo de produto entre o qual escolher
                               preparedstatement = connection.prepareStatement(query);
-                              rs = preparedstatement.executeQuery();
-                              while (rs.next()){
-                                  if (contador < rs.getInt("contador"))
+                              ResultSet rs1 = preparedstatement.executeQuery();
+                              while (rs1.next()){
+                                  if (contador < rs1.getInt("contador"))
                                   {
-                                      contador = rs.getInt("contador");  //Apenas queremos o que tem mais votos!
+                                      contador = rs1.getInt("contador");  //Apenas queremos o que tem mais votos!
 
-                                      descricao_produto = rs.getString("descricao");
+                                      descricao_produto = rs1.getString("descricao");
 
                                   }
 
@@ -1294,10 +1238,10 @@ package rmiServer;
                       try {
                           query = "SELECT valor, id_user from pledge_user WHERE id_projecto = "+projectID; //Temos então que devolver todo o dinheiro a quem doou ao projecto
                           request = connection.createStatement();                                         // Aqui vemos quem doou e quanto doou
-                          rs = request.executeQuery(query);
-                          while (rs.next()){
-                              valor_a_devolver = rs.getInt("valor");
-                              userID = rs.getInt("id_user");
+                          ResultSet rs1 = request.executeQuery(query);
+                          while (rs1.next()){
+                              valor_a_devolver = rs1.getInt("valor");
+                              userID = rs1.getInt("id_user");
 
                               try{
                                   query = "UPDATE utilizador SET saldo = saldo+"+valor_a_devolver+" WHERE id = "+userID; //Aqui damos o dinheiro a quem doou
@@ -1326,9 +1270,9 @@ package rmiServer;
                                                                                               //Aqui vemos quais as recompensas associadas ao projecto
 
                           request = connection.createStatement();
-                          rs = request.executeQuery(query);
-                          while (rs.next()){
-                              rewardID = rs.getInt("id");
+                          ResultSet rs1 = request.executeQuery(query);
+                          while (rs1.next()){
+                              rewardID = rs1.getInt("id");
                               try{
                                   query = "DELETE FROM recompensa_user WHERE id_recompensa= "+rewardID; //Aqui removemos a recompensa ao user
                                   request = connection.createStatement();
@@ -1807,6 +1751,8 @@ package rmiServer;
           } else {
               System.out.println("Failed to make connection!");
           }
+          
+          new cronoThread(this);
 
       }
 
@@ -1857,3 +1803,33 @@ package rmiServer;
 
 
   }
+  
+  
+  
+class cronoThread extends Thread {
+
+	private RMIServer rmi;
+	    public cronoThread(RMIServer rmi) {
+	    	this.rmi = rmi;
+	        this.start();
+
+	    }
+
+	    public void run() {
+
+	        while (true) {
+	        	System.out.println("Estou a correr");
+	        	try {
+					rmi.terminaProjecto();
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+	            try {
+	                Thread.sleep(3600000);
+	            } catch (InterruptedException ex) {
+	                ex.printStackTrace();
+	            }
+	        }
+	    }
+
+	}
