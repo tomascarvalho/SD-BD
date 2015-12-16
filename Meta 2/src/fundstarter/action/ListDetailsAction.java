@@ -13,13 +13,13 @@ public class ListDetailsAction extends ActionSupport implements SessionAware {
 
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
-	private int selectedProject;
+	private int option;
 
 	@Override
 	public String execute() throws RemoteException{
 
-		this.getConnectToRMIBean().listProjectDetails(this.selectedProject);
-		this.session.put("listedProjectID", selectedProject);
+		this.getConnectToRMIBean().listProjectDetails(this.option);
+		this.session.put("listedProjectID", option);
 		
 		return SUCCESS;
 	}
@@ -33,8 +33,8 @@ public class ListDetailsAction extends ActionSupport implements SessionAware {
 		return (ConnectToRMIBean) session.get("RMIBean");
 	}
 	
-	public void setSelectedProject(String selectedProject){
-		this.selectedProject = Integer.parseInt(selectedProject);
+	public void setOption(String option){
+		this.option = Integer.parseInt(option);
 	}
 
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {

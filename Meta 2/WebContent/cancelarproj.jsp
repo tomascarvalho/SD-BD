@@ -10,7 +10,7 @@
 <title>FundStarter</title>
 </head>
 <body>
-	<h3>Projecto Cancelado:</h3>
+	<h3>Projecto Cancelado!</h3>
 	<h2>${RMIBean.projectDetails.get("Titulo") }</h2>
 
 <!-- 

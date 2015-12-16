@@ -128,20 +128,17 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     	<result name="success">/mainmenu.jsp</result>
     </action>
     
+<<<<<<< HEAD
     <action name="sendMessage" class="fundstarter.action.SendMessageAction" method="execute">
     	<result name="success">/listprojdetails.jsp</result>
-	</action>
-	
+=======
     <action name="cancelarProj" class="fundstarter.action.cancelarProjAction">
     	<result name="success">/cancelarproj.jsp</result>
     </action>
     
     <action name="showRewards" class="fundstarter.action.ListRewardsAction">
     	<result name="success">/listrewards.jsp</result>
-    </action>
-    
-    <action name="seeInbox" class="fundstarter.action.SeeInboxAction">
-    	<result name="success">/listmymessages.jsp</result>
+>>>>>>> f75f4b71a449360d93e4927299da23664a6804ee
     </action>
     
   </package>
