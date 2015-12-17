@@ -148,6 +148,10 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     	<result name="success">/listmymessages.jsp</result>
     </action>
     
+    <action name="replyMessage" class="fundstarter.action.ReplyMessageAction">
+    	<result name="success">/mainmenu.jsp</result>
+    </action>
+    
   </package> 
 
 </struts>
