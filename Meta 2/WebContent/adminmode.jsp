@@ -10,12 +10,17 @@
 <title>Fundstarter</title>
 </head>
 <body>
+
+<h2>${tamMyProject}</h2>
+
 	<c:choose>
-		<c:when test="${MyProjects == null}">
+		<c:when test="${tamMyProject == 0}">
+		
 			<h4>Não tem projectos</h4>
+
 		</c:when>
 		<c:otherwise>
-			<s:form action="editProject" method="post">
+					<s:form action="editProject" method="post">
 			<c:forEach var = "i" begin = "0" end ="${tamMyProject}"> 
 				<input type="radio" name="option" value="${MyProjectIDs[i]}"/> 
 				${MyProjectIDs[i]}
@@ -26,6 +31,29 @@
 			</s:form>
 		</c:otherwise>
 	</c:choose>
+
+
+
+<!-- 	<c:choose>
+		<c:when test="${tamMyProject>0}">
+			<s:form action="editProject" method="post">
+			<c:forEach var = "i" begin = "0" end ="${tamMyProject}"> 
+				<input type="radio" name="option" value="${MyProjectIDs[i]}"/> 
+				${MyProjectIDs[i]}
+				${MyProjects[i]}
+				<br>
+			</c:forEach>
+			<s:submit value="Gerir Projecto" />
+			</s:form>
+		</c:when>
+		<c:otherwise>
+			<h4>Não tem projectos</h4>
+		</c:otherwise>
+	</c:choose> -->
+	
+	<s:form action="seeInbox" method="post">
+		<s:submit value="Caixa de Correio"/>
+	</s:form>
 	
 </body>
 </html>

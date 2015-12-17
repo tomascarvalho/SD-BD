@@ -13,15 +13,15 @@ public class NewRewardAction extends ActionSupport implements SessionAware{
 	
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
-	private int projectID;
+	private int option;
 	
 	public String execute() throws RemoteException {
-		this.getConnectToRMIBean().listProjectDetails(this.projectID);
+		this.getConnectToRMIBean().listProjectDetails(this.option);
 		return SUCCESS;
 	}
 
-	public void setProjectID(int projectID) {
-		this.projectID = projectID;
+	public void setOption(String option) {
+		this.option = Integer.parseInt(option);
 	}
 
 	

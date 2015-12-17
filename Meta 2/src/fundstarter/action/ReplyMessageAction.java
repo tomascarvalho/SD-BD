@@ -9,23 +9,33 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class NewLevelAction extends ActionSupport implements SessionAware  {
+public class ReplyMessageAction extends ActionSupport implements SessionAware {
 
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
-	private int option;
-	
-	public String execute() throws RemoteException{
-		
-		this.getConnectToRMIBean().listProjectDetails(this.option);
-		
-		return SUCCESS;
+	private int messageID;
+	private String reply;
+
+	public String execute() throws RemoteException {
+
+		System.out.println("[SeeMessageAction]<execute>:\n\tMessage ID -> " + this.messageID);
+		System.out.println("\tReply Message -> " + this.reply);
+		if (this.getConnectToRMIBean().replyMessage(this.messageID, this.reply).equals("success")) {
+			return SUCCESS;
+		} else {
+			return ERROR;
+		}
+
 	}
-	
-	public void setOption(String option){
-		this.option = Integer.parseInt(option);
+
+	public void setMessageID(String messageID) {
+		this.messageID = Integer.parseInt(messageID);
 	}
-	
+
+	public void setReply(String reply) {
+		this.reply = reply;
+	}
+
 	public ConnectToRMIBean getConnectToRMIBean() {
 
 		if (!session.containsKey("RMIBean")) {
@@ -37,7 +47,7 @@ public class NewLevelAction extends ActionSupport implements SessionAware  {
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
 		this.session.put("RMIBean", RMIBean);
 	}
-	
+
 	@Override
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub

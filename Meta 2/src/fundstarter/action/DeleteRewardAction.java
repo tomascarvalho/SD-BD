@@ -9,33 +9,39 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class NewLevelAction extends ActionSupport implements SessionAware  {
+public class DeleteRewardAction extends ActionSupport implements SessionAware{
 
+	
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
-	private int option;
+	private int rewardID;
 	
+	@Override
 	public String execute() throws RemoteException{
 		
-		this.getConnectToRMIBean().listProjectDetails(this.option);
+		System.out.println("[DeleteRewardAction]<execute> Reward ID -> " + this.rewardID);
+		
+		this.getConnectToRMIBean().deleteReward(rewardID);
 		
 		return SUCCESS;
 	}
 	
-	public void setOption(String option){
-		this.option = Integer.parseInt(option);
+	public void setRewardID(String rewardID){
+		this.rewardID = Integer.parseInt(rewardID);
 	}
 	
 	public ConnectToRMIBean getConnectToRMIBean() {
-
+		
 		if (!session.containsKey("RMIBean")) {
 			this.setConnectToRMIBean(new ConnectToRMIBean());
 		}
+		
 		return (ConnectToRMIBean) session.get("RMIBean");
 	}
-
+	
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
 		this.session.put("RMIBean", RMIBean);
+		
 	}
 	
 	@Override

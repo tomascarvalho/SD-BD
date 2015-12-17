@@ -14,15 +14,15 @@ public class AddLevelAction extends ActionSupport implements SessionAware {
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object>session;
 	private String levelDesc;
-	private int valueDesc;
-	private int projectID;
+	private String valueDesc;
+	private String option;
 
 	
 	@Override
 	public String execute() throws RemoteException{
 		
-		if(this.getConnectToRMIBean().addLevel(this.projectID, this.levelDesc, this.valueDesc).equals("success")){
-			this.getConnectToRMIBean().listProjectDetails(this.projectID);
+		if(this.getConnectToRMIBean().addLevel(this.option, this.levelDesc, this.valueDesc).equals("success")){
+			this.getConnectToRMIBean().listProjectDetails(Integer.parseInt(this.option));
 			return SUCCESS;
 		}
 		else{
@@ -42,8 +42,8 @@ public class AddLevelAction extends ActionSupport implements SessionAware {
 		this.session.put("RMIBean", RMIBean);
 	}
 	
-	public void setProjectID(String projectID){
-		this.projectID = Integer.parseInt(projectID);
+	public void setOption(String option){
+		this.option = option;
 	}
 	
 	public void setLevelDesc(String levelDesc){
@@ -51,7 +51,7 @@ public class AddLevelAction extends ActionSupport implements SessionAware {
 	}
 	
 	public void setValueDesc(String valueDesc){
-		this.valueDesc = Integer.parseInt(valueDesc);
+		this.valueDesc = valueDesc;
 	}
 	
 	@Override

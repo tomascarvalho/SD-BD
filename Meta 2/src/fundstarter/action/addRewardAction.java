@@ -15,12 +15,12 @@ public class addRewardAction extends ActionSupport implements SessionAware  {
 	private Map<String, Object> session;
 	
 	private String valor;
-	private String projectID;
+	private String option;
 	private String titulo;
 	private String status = "0";
 	
 	public String execute() throws RemoteException{
-		if(this.getConnectToRMIBean().addReward(this.valor, this.projectID, this.titulo, this.status).equals("success")){
+		if(this.getConnectToRMIBean().addReward(this.valor, this.option, this.titulo, this.status).equals("success")){
 			return SUCCESS;
 		}	
 		else{
@@ -32,8 +32,8 @@ public class addRewardAction extends ActionSupport implements SessionAware  {
 		this.valor = valor;
 	}
 
-	public void setProjectID(String projectID) {
-		this.projectID= projectID;
+	public void setOption(String option) {
+		this.option= option;
 	}
 	
 	public void setTitulo(String titulo) {

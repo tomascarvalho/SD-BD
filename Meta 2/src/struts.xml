@@ -85,10 +85,6 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     	<result name="success" >/auxaddproj.jsp</result>	
     </action> 
     
-	<action name="CancelarProj" class="fundstarter.action.cancelarProjAction">
-    	<result name="success">/cancelarproj.jsp</result>
-    </action>
-
     <action name="ListCancel" class="fundstarter.action.ListProjAction">
     	<result name="success">/listcancel.jsp</result>
     </action>
@@ -132,16 +128,47 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     </action>
  	
     
-    <action name="editProject">
+    <action name="editProject" class="fundstarter.action.EditProjectAction">
     	<result >/editproject.jsp</result>
     </action>
     
     <!-- 'pledge' action call 'execute' in 'PledgeAction' -->
     <action name="pledge" class="fundstarter.action.PledgeAction" method="execute" >
-    	<result name="success" >voteonproduct.jsp</result>
+    	<result name="success" >/voteonproduct.jsp</result>
     </action>
     
+    <action name="donateReward" class="fundstarter.action.DonateRewardAction" method="execute">
+    	<result name="success">/voteonproduct.jsp</result>
+    </action>
     
-  </package>
+    <action name="voteonproduct" class="fundstarter.action.VoteOnProductAction" method="execute" >
+    	<result name="success">/mainmenu.jsp</result>
+    </action>
+
+    <action name="sendMessage" class="fundstarter.action.SendMessageAction" method="execute">
+    	<result name="success">/listprojdetails.jsp</result>
+	</action>
+    
+    <action name="cancelarProj" class="fundstarter.action.cancelarProjAction">
+    	<result name="success">/cancelarproj.jsp</result>
+    </action>
+    
+    <action name="showRewards" class="fundstarter.action.ListRewardsAction">
+    	<result name="success">/listrewards.jsp</result>
+    </action>
+    
+    <action name="deleteReward" class="fundstarter.action.DeleteRewardAction">
+    	<result name="success">/mainmenu.jsp</result>
+    </action>
+    
+    <action name="seeInbox" class="fundstarter.action.SeeInboxAction">
+    	<result name="success">/listmymessages.jsp</result>
+    </action>
+    
+    <action name="replyMessage" class="fundstarter.action.ReplyMessageAction">
+    	<result name="success">/mainmenu.jsp</result>
+    </action>
+    
+  </package> 
 
 </struts>

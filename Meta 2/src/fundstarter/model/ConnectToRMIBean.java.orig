@@ -26,8 +26,12 @@ public class ConnectToRMIBean {
 	private HashMap<String, Object> projectDetails;
 	private ArrayList<String> projectRewards;
 	private int newProjectID;
-	private ArrayList<HashMap<String, Object>> myMessages;
+<<<<<<< HEAD
 	
+=======
+	private ArrayList<HashMap<String, Object>> myMessages;
+
+>>>>>>> 26a4c7db1781afef23a93918cc2808a882eb702b
 	public ConnectToRMIBean() {
 
 		try {
@@ -153,8 +157,13 @@ public class ConnectToRMIBean {
 		this.postCard = new ClientRequest("2", this.dataToSend, "tempo");
 
 		this.postCard = this.connectToRMI.getUserProjects(this.postCard);
-		// formatProjects((Object[]) this.postCard.getResponse(), option);
+<<<<<<< HEAD
+		//formatProjects((Object[]) this.postCard.getResponse(), option);
 		
+=======
+		// formatProjects((Object[]) this.postCard.getResponse(), option);
+		System.out.println(((ArrayList<Integer>) this.postCard.getResponse()[0]).get(0));
+>>>>>>> 26a4c7db1781afef23a93918cc2808a882eb702b
 		return this.postCard.getResponse();
 	}
 

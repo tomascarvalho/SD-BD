@@ -9,21 +9,17 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class NewLevelAction extends ActionSupport implements SessionAware  {
+public class SeeInboxAction extends ActionSupport implements SessionAware {
 
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
-	private int option;
 	
 	public String execute() throws RemoteException{
 		
-		this.getConnectToRMIBean().listProjectDetails(this.option);
+		System.out.println("[SeeInboxAction<execute>]");
+		this.getConnectToRMIBean().seeMyInbox();
 		
 		return SUCCESS;
-	}
-	
-	public void setOption(String option){
-		this.option = Integer.parseInt(option);
 	}
 	
 	public ConnectToRMIBean getConnectToRMIBean() {
@@ -33,7 +29,7 @@ public class NewLevelAction extends ActionSupport implements SessionAware  {
 		}
 		return (ConnectToRMIBean) session.get("RMIBean");
 	}
-
+	
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
 		this.session.put("RMIBean", RMIBean);
 	}
@@ -43,5 +39,7 @@ public class NewLevelAction extends ActionSupport implements SessionAware  {
 		// TODO Auto-generated method stub
 		this.session = arg0;
 	}
+	
+	
 
 }
