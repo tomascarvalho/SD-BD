@@ -9,38 +9,43 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class ListRewardsAction extends ActionSupport implements SessionAware {
+public class ReplyMessageAction extends ActionSupport implements SessionAware {
 
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
-	private int option;
+	private int messageID;
+	private String reply;
 
-	@Override
-	public String execute() throws RemoteException{
+	public String execute() throws RemoteException {
 
-		System.out.println("[ListRewardsAction]<execute>");
-		this.getConnectToRMIBean().listProjectRewards(this.option);
-		this.session.put("selectedProject", option);
-		
-		return SUCCESS;
+		System.out.println("[SeeMessageAction]<execute>:\n\tMessage ID -> " + this.messageID);
+		System.out.println("\tReply Message -> " + this.reply);
+		if (this.getConnectToRMIBean().replyMessage(this.messageID, this.reply).equals("success")) {
+			return SUCCESS;
+		} else {
+			return ERROR;
+		}
+
 	}
-	
+
+	public void setMessageID(String messageID) {
+		this.messageID = Integer.parseInt(messageID);
+	}
+
+	public void setReply(String reply) {
+		this.reply = reply;
+	}
+
 	public ConnectToRMIBean getConnectToRMIBean() {
-		
+
 		if (!session.containsKey("RMIBean")) {
 			this.setConnectToRMIBean(new ConnectToRMIBean());
 		}
-		
 		return (ConnectToRMIBean) session.get("RMIBean");
-	}
-	
-	public void setOption(String option){
-		this.option = Integer.parseInt(option);
 	}
 
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
 		this.session.put("RMIBean", RMIBean);
-		
 	}
 
 	@Override

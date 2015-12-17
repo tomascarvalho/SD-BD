@@ -16,14 +16,15 @@
 			<p>No Rewards Found</p>
 		</c:when>
 		<c:otherwise>
-				<c:forEach items="${RMIBean.projectRewards.get('Rewards')}"
-					var="tokens">
 
-					<p>Titulo:${tokens.get("TituloRecompensa") }</p>
-					<p>Valor:${tokens.get("ValorRecompensa") }</p>
-
-				</c:forEach>
-
+			<c:forEach items="${RMIBean.projectRewards}" var="tokens">
+				<h4>${tokens}</h4>
+			</c:forEach>
+			
+			<form action="deleteReward" method="post">
+				ID Reward:<input type="text" name="rewardID"/>
+				<s:submit value="Eleminar" />
+			</form>
 		</c:otherwise>
 	</c:choose>
 

@@ -35,7 +35,7 @@ import java.util.Date;
           String bdName;
 
           //cronoThread;
-          
+
           PropertiesReaderRMI properties = new PropertiesReaderRMI();
 
           rmiPort = properties.getPort();
@@ -392,6 +392,7 @@ import java.util.Date;
 
           System.out.println("Função <listarRecompensas> chamada!");
           int userID = (int) clrqst.getRequest()[1];
+          int myProject;
           boolean status;
           int rewardID;
           int projectID = 0;
@@ -400,9 +401,21 @@ import java.util.Date;
           ArrayList<String> projecto = new ArrayList();
           int flag = (int) clrqst.getRequest()[2];
 
+          if(clrqst.getRequest()[0].equals("listar_recompensas")){
+            myProject=0;
+          }
+          else{
+            myProject = (int) clrqst.getRequest()[0];
+          }
+
           if (flag == 1) {
               try {
-                  query = "SELECT id_projecto FROM projecto_user WHERE id_user = " + userID;
+                  if(myProject != 0){
+                    query = "SELECT id_projecto FROM projecto_user WHERE id_projecto = " + myProject;
+                  }
+                  else{
+                    query = "SELECT id_projecto FROM projecto_user WHERE id_user = " + userID;
+                  }
                   preparedstatement = connection.prepareStatement(query);
                   rs = preparedstatement.executeQuery();
                   while (rs.next()) {
@@ -1751,7 +1764,7 @@ import java.util.Date;
           } else {
               System.out.println("Failed to make connection!");
           }
-          
+
           new cronoThread(this);
 
       }
@@ -1802,10 +1815,12 @@ import java.util.Date;
 
 
 
+
+
   }
-  
-  
-  
+
+
+
 class cronoThread extends Thread {
 
 	private RMIServer rmi;

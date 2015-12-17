@@ -23,12 +23,12 @@
 		<s:submit value="Adicionar Recompensa" />
 		<input type= "hidden" name="option" value="${newProjectID}">
 	</s:form>
-	<!--
+	
 	<s:form action="showRewards" method="post">
 		<s:submit value="Remover Recompensa" />
 		<input type= "hidden" name="option" value="${ProjectID}">
 	</s:form>
-	-->
+	
 	<s:form action="cancelarProj" method="post">
 		<s:submit value="Cancelar Projecto" />
 		<input type= "hidden" name="option" value="${newProjectID}">

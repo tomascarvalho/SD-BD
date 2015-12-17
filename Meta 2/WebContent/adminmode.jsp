@@ -51,5 +51,9 @@
 		</c:otherwise>
 	</c:choose> -->
 	
+	<s:form action="seeInbox" method="post">
+		<s:submit value="Caixa de Correio"/>
+	</s:form>
+	
 </body>
 </html>
