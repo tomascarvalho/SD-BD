@@ -15,6 +15,7 @@ public class AdminModeAction extends ActionSupport implements SessionAware  {
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
 	private int option;
+	private int aux_tam;
 	private Object[] aux;
 	
 	@Override
@@ -25,9 +26,22 @@ public class AdminModeAction extends ActionSupport implements SessionAware  {
 		System.out.println(aux[0]);
 		this.session.put("MyProjectIDs", aux[0]);
 		this.session.put("MyProjects", aux[1]);
-		this.session.put("projectos", aux[1]);
-		this.session.put("tamMyProject", ((ArrayList<String>) aux[1]).size());
-		System.out.println(this.session.get("tamMyProject"));
+		
+		
+		aux_tam =  aux[1].toString().length();
+		System.out.println("O TAMANHO E ESTE: " + aux_tam);
+		//aux_tam = ((ArrayList<String>) aux[1]).size();
+		//TESTE
+		ArrayList<String> projectos = (ArrayList<String>)(aux[1]);
+		System.out.println(projectos);
+		int tam = ((ArrayList<String>) aux[1]).size();
+		if( ((ArrayList<String>) aux[1]).isEmpty()){
+			tam = 0;
+		}
+		
+		//this.session.put("tamMyProject", ((ArrayList<String>) aux[1]).size());
+		this.session.put("tamMyProject", tam);
+		System.out.println("O TAMANHO E ESTE TAMMY" + this.session.get("tamMyProject"));
 		System.out.println(this.session.get("MyProjectIDs"));
 		return SUCCESS;
 	}

@@ -16,21 +16,11 @@
 		<br>
 		<h1>O que vai ser inserido:</h1>
 		
-		<input type="hidden" name="projectID" value=${session.RMIBean.newProjectID} >
-		<h2>${session.RMIBean.newProjectID} </h2>
-		<br>
-		
+		<input type="text" name="option" value="${session.newProjectID}" >
 		
 		Recompensa:
 		<input type="text" name="titulo">
 		<br>
-
-		<!-- 
-		Status:
-		<input type="text" name="status">
-		<br>  -->
-		
-
 		<s:submit value="Adicionar" />
 	</s:form>
 

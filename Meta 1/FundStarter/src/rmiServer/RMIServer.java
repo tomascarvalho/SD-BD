@@ -492,7 +492,6 @@ import java.util.Date;
 
 
       public ClientRequest addReward(ClientRequest clrqst) throws RemoteException{
-
           requestCheck = checkRequest(clrqst);
 
           if (requestCheck != null) {
@@ -500,14 +499,11 @@ import java.util.Date;
           }
           clrqst.setStage(2);
           myRequests.add(clrqst);
-
-          int userID = Integer.parseInt((String)clrqst.getRequest()[0]);
+          int userID = Integer.parseInt((String) clrqst.getRequest()[0]);
           String[] projectInfo = (String[]) clrqst.getRequest()[1];
-
 
           int valor = Integer.parseInt(projectInfo[0]);
           int projectID = Integer.parseInt(projectInfo[1]);
-          System.out.println("O TESTE " + projectID + "          " + projectInfo[1]);
           String titulo = projectInfo[2];
           int flag = Integer.parseInt(projectInfo[3]);
           /*
@@ -537,6 +533,7 @@ import java.util.Date;
                       preparedstatement = connection.prepareStatement(query);
                       preparedstatement.executeUpdate();
                       resposta[1] = is_it_mine;
+                      resposta[0] = "infosave";
 
                   } catch(SQLException ex){
                       System.err.print("SQLException 464: "+ex);
@@ -545,6 +542,7 @@ import java.util.Date;
               else{
                   is_it_mine = 0;
                   resposta[1] = is_it_mine;
+                  resposta[0] = "infosave";
               }
 
           }
@@ -567,6 +565,7 @@ import java.util.Date;
                       preparedstatement = connection.prepareStatement(query);
                       preparedstatement.executeUpdate();
                       resposta[1] = is_it_mine;
+                      resposta[0] = "infosave";
 
                   } catch(SQLException ex){
                       System.err.print("SQLException 464: "+ex);
@@ -575,11 +574,11 @@ import java.util.Date;
               else{
                   is_it_mine = 0;
                   resposta[1] = is_it_mine;
+                  resposta[0] = "infosave";
               }
-
           }
 
-          resposta[0] = "infosave";
+          //resposta[0] = "infosave";
 
           clrqst.setResponse(resposta);
           clrqst.setStage(3);
@@ -1425,8 +1424,8 @@ import java.util.Date;
           try {
               query = "SELECT titulo, descricao, valorpretendido, valoractual, data_limite "
                       + "FROM projecto "
-                      + "WHERE projecto.id =" + id_projecto + " "
-                      + "AND status =TRUE";
+                      + "WHERE projecto.id =" + id_projecto
+                      + " AND status = TRUE";
 
               request = connection.createStatement();
               rs = request.executeQuery(query);
@@ -1486,6 +1485,7 @@ import java.util.Date;
                   pointer = j;
 
                   try {
+                	  System.out.println("O ID-PROJ E " + id_projecto);
                       query = "SELECT descricao, contador FROM product_type WHERE id_projecto=" + id_projecto;
                       request = connection.createStatement();
                       rs = request.executeQuery(query);

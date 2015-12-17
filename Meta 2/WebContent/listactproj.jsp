@@ -22,7 +22,7 @@
 				<c:otherwise>
 					<s:form action="listDetails" method="post">
 						<c:forEach items="${RMIBean.projects }" var="value">
-							<input type="radio" name="selectedProject"
+							<input type="radio" name="option"
 								value="${value.get('ID') }">${value.get("Titulo") }</input>
 	
 								<br>

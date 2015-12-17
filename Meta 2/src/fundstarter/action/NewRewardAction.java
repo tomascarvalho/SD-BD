@@ -20,8 +20,8 @@ public class NewRewardAction extends ActionSupport implements SessionAware{
 		return SUCCESS;
 	}
 
-	public void setOption(int option) {
-		this.option = option;
+	public void setOption(String option) {
+		this.option = Integer.parseInt(option);
 	}
 
 	

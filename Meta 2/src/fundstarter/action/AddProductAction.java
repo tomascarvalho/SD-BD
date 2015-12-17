@@ -13,13 +13,13 @@ public class AddProductAction extends ActionSupport implements SessionAware {
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
 	private String productType;
-	private int projectID;
+	private int option;
 
 	@Override
 	public String execute() throws RemoteException {
 
-		if (this.getConnectToRMIBean().addProduct(this.projectID,this.productType).equals("success")) {
-			this.getConnectToRMIBean().listProjectDetails(this.projectID);
+		if (this.getConnectToRMIBean().addProduct(this.option,this.productType).equals("success")) {
+			this.getConnectToRMIBean().listProjectDetails(this.option);
 			return SUCCESS;
 		} else {
 			return ERROR;
@@ -38,8 +38,8 @@ public class AddProductAction extends ActionSupport implements SessionAware {
 		this.session.put("RMIBean", RMIBean);
 	}
 
-	public void setProjectID(String projectID) {
-		this.projectID = Integer.parseInt(projectID);
+	public void setOption(String option) {
+		this.option = Integer.parseInt(option);
 	}
 
 	public void setProductType(String productType) {

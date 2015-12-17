@@ -17,7 +17,8 @@ public class ListDetailsAction extends ActionSupport implements SessionAware {
 
 	@Override
 	public String execute() throws RemoteException{
-
+		
+		System.out.println("Project ID -> " + this.option);
 		this.getConnectToRMIBean().listProjectDetails(this.option);
 		this.session.put("listedProjectID", option);
 		

@@ -26,7 +26,7 @@ public class ConnectToRMIBean {
 	private HashMap<String, Object> projectDetails;
 	private HashMap<String, Object> projectRewards;
 	private int newProjectID;
-
+	
 	public ConnectToRMIBean() {
 
 		try {
@@ -200,7 +200,7 @@ public class ConnectToRMIBean {
 		
 		this.postCard = this.connectToRMI.getUserProjects(this.postCard);
 		//formatProjects((Object[]) this.postCard.getResponse(), option);
-		System.out.println(((ArrayList<Integer>) this.postCard.getResponse()[0]).get(0));
+		
 		return this.postCard.getResponse();
 	}
 	
@@ -313,6 +313,7 @@ public class ConnectToRMIBean {
 		if (project.equals("no_project_to_show")) {
 
 			this.projectDetails = null;
+			
 
 		} else {
 
@@ -427,10 +428,9 @@ public class ConnectToRMIBean {
 		this.dataToSend = new Object[2];
 		this.dataToSend[1] = projectId;
 
-		this.postCard = new ClientRequest("2", this.dataToSend, "tempo");
+		this.postCard = new ClientRequest("", this.dataToSend, "");
 
 		this.postCard = connectToRMI.getProjectDetails(this.postCard);
-
 		formatProjectDetails((Object[]) this.postCard.getResponse()[0]);
 
 	}
@@ -466,7 +466,7 @@ public class ConnectToRMIBean {
 
 		this.postCard = this.connectToRMI.novoProjecto(this.postCard);
 
-		System.out.println("MErdas" + (String) this.postCard.getResponse()[0]);
+	
 		if (this.postCard.getResponse()[0].equals("infosave")) {
 			System.out.println("[ConnectToRMI]New project stored");
 			this.newProjectID =  (int) this.postCard.getResponse()[1];
@@ -486,7 +486,6 @@ public class ConnectToRMIBean {
 		projectInfo[2] = titulo;
 		projectInfo[3] = status;
 
-
 		this.dataToSend[0] = Integer.toString(this.userID);
 		this.dataToSend[1] = projectInfo;
 		this.postCard = new ClientRequest("", this.dataToSend, "");
@@ -503,17 +502,21 @@ public class ConnectToRMIBean {
 		}
 	}
 
-	public String addLevel(int projectID, String description, int value) throws RemoteException {
+	public String addLevel(String projectID, String description, String value) throws RemoteException {
 
-		this.dataToSend = new Object[5];
-
-		this.newProjectID = projectID;
+		this.dataToSend = new Object[2];
+		String[] array_aux= new String[4];
+		this.newProjectID = Integer.parseInt(projectID);
 
 		dataToSend[0] = this.userID;
-		dataToSend[1] = projectID;
-		dataToSend[2] = description;
-		dataToSend[3] = value;
-		dataToSend[4] = 1;
+		
+		array_aux[0] = projectID;
+		array_aux[1] = description;
+		array_aux[2] = value;
+		array_aux[3] = "1";
+	
+		
+		dataToSend[1] = array_aux;
 
 		this.postCard = new ClientRequest("", this.dataToSend, "");
 
@@ -622,4 +625,5 @@ public class ConnectToRMIBean {
 	public int getNewProjectID() {
 		return this.newProjectID;
 	}
+	
 }

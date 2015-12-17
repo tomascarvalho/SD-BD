@@ -17,8 +17,8 @@ public class EditProjectAction extends ActionSupport implements SessionAware {
 
 	@Override
 	public String execute() throws RemoteException{
-		this.session.put("ProjectID", option);
-		
+		this.session.put("newProjectID", option);
+		//this.getConnectToRMIBean().setNewProjectID(option);
 		return SUCCESS;
 	}
 	

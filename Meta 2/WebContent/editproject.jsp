@@ -15,14 +15,13 @@
 
 	<s:form action="listDetails" method="post">
 		<s:submit value="Ver Detalhes" />
-		<input type= "hidden" name="option" value="${ProjectID}">
+		<input type= "hidden" name="option" value="${newProjectID}">
 		
 	</s:form>
 
 	<s:form action="newReward" method="post">
 		<s:submit value="Adicionar Recompensa" />
-		<input type= "hidden" name="option" value="${ProjectID}">
-		
+		<input type= "hidden" name="option" value="${newProjectID}">
 	</s:form>
 	<!--
 	<s:form action="showRewards" method="post">
@@ -32,7 +31,7 @@
 	-->
 	<s:form action="cancelarProj" method="post">
 		<s:submit value="Cancelar Projecto" />
-		<input type= "hidden" name="option" value="${ProjectID}">
+		<input type= "hidden" name="option" value="${newProjectID}">
 	</s:form>
 
 </body>

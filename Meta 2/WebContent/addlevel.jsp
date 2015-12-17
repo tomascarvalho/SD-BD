@@ -25,7 +25,7 @@
 	
 	<h3>Novo Nível</h3>
 	<s:form action='addLevel' method='post'> 
-		<input type="hidden" name="projectID" value="${session.RMIBean.newProjectID}">
+		<input type="hidden" name="option" value="${session.RMIBean.newProjectID}">
 		Descrição:
 		<input type='text' name='levelDesc'><br>
 		Valor:
