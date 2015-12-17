@@ -11,10 +11,11 @@
 	<title>FundStarter LogIn</title>
 	
 	<link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    
-
     <link href="${pageContext.request.contextPath}/css/shop-homepage.css"  rel="stylesheet" type="text/css"/>
     <link href="${pageContext.request.contextPath}/css/signin.css"  rel="stylesheet" type="text/css"/>
+    <link href="${pageContext.request.contextPath}/css/bootstrap-social.css"  rel="stylesheet" type="text/css"/>
+    <link href="${pageContext.request.contextPath}/css/font-awesome.css"  rel="stylesheet" type="text/css"/>
+
     <script src="${pageContext.request.contextPath}/js/ie-emulation-modes-warning.js"></script>
     
 </head>
@@ -57,7 +58,11 @@
         	<input name = "password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>	
 			<br>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button> 
+			<a class="btn btn-block btn-social btn-tumblr">
+   			 <span class="fa fa-tumblr"></span> Log in with Tumblr
+			</a>
 		</form>
+		 
 	</div>
 </body>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->

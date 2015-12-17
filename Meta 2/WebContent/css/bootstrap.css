@@ -3026,7 +3026,8 @@ select[multiple].input-lg {
       -ms-user-select: none;
           user-select: none;
   background-image: none;
-  border: 1px solid transparent;
+  border: none !important;
+
   border-radius: 4px;
 }
 .btn:focus,
@@ -3068,8 +3069,10 @@ fieldset[disabled] a.btn {
 .btn-default {
   color: #333;
   background-color: #fff;
-  border-color: #ccc;
-}
+  border: none !important;
+
+  border-color: none;
+  }
 .btn-default:focus,
 .btn-default.focus {
   color: #333;
@@ -3100,11 +3103,13 @@ fieldset[disabled] a.btn {
   color: #333;
   background-color: #d4d4d4;
   border-color: #8c8c8c;
+  border:none !important;
 }
 .btn-default:active,
 .btn-default.active,
 .open > .dropdown-toggle.btn-default {
   background-image: none;
+  border:none !important;
 }
 .btn-default.disabled:hover,
 .btn-default[disabled]:hover,
