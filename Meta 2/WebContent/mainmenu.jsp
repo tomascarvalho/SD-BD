@@ -92,7 +92,7 @@
                     
                    
 					<s:form class="list-group-item" action="listProj" method="post">
-					<s:hidden name="option" value="1" />
+					<s:hidden name="option" value="0" />
 						<button class= "list-group-item" type="submit" value="Listar Projectos Actuais">Listar Projectos Actuais</button> 
 					</s:form>
 					<s:form class="list-group-item" action="listProj" method="post">
@@ -287,12 +287,12 @@
     <script src="js/bootstrap.min.js"></script>
 
 
-<!-- 	
+<!-- 
 	<s:form action="ListCancel" method="post">
 		<s:submit value="Cancelar Projecto" />
-	</s:form> -->
+	</s:form> 
 	
-
+ -->	
 
 </body>
 </html>

@@ -42,7 +42,7 @@
 				ID do Projecto:${messages.get("ProjectId")}<br>
 				<c:forEach items="${messages.get('ProjectMessages')}" var="question">
 					<input type="radio" value="${question.get('MessageID')}"
-						name="message" id="megaespecial" >${question.get("Message")}<br>
+						name="message" class="megaespecial" >${question.get("Message")}<br>
 				</c:forEach>
 				<br>
 			</c:forEach>
@@ -88,16 +88,11 @@
 	<script>
 
 	function func(){
-		x = document.getElementById("megaespecial");
-		if(x.length == null){
-			if(x.checked == true){
-				document.getElementById("iddacena").value = x.value;
-			}
-		}else{
+		x = $(".megaespecial");
+		
 			for (i = 0; i < x.length; i++) { 
-				if(x[i].checked == "true") document.getElementById("iddacena").value = x[i].value;
+				if(x[i].checked == true) document.getElementById("iddacena").value = x[i].value;
 			}
-		}
 		
 	}
 	

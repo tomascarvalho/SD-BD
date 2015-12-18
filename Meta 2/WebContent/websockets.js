@@ -1,8 +1,8 @@
 var websocket = null;
 
-window.onload = function() { // URI = ws://10.16.0.165:8080/WebSocket/ws
-	connect('ws://' + window.location.host + '/websocket/ws');
-	document.getElementById("chat").focus();
+window.onload = function() { // URI = ws://localhost:8080/FundStarterWeb/websockets
+	connect('ws://' + window.location.host + '/FundStarterWeb/ws');
+	document.getElementById("teste").focus();
 }
 
 function connect(host) { // connect to the host websocket
@@ -11,30 +11,32 @@ function connect(host) { // connect to the host websocket
 	else if ('MozWebSocket' in window)
 		websocket = new MozWebSocket(host);
 	else {
-		writeToHistory('Get a real browser which supports WebSocket.');
+		alert('Get a real browser which supports WebSocket.')
 		return;
 	}
 
-	websocket.onopen = onOpen; // set the event listeners below
+	websocket.onopen = onOpen;
 	websocket.onclose = onClose;
 	websocket.onmessage = onMessage;
 	websocket.onerror = onError;
+	
+	console.log("Cheguei ao fim da função");
 }
 
 function onOpen(event) {
-	
+	document.getElementById("teste").innerHTML = "CARALHO";
 }
 
 function onClose(event) {
 	
 }
 
-function onMessage(message) { // print the received message
+function onMessage(message) { 
 	
 }
 
 function onError(event) {
-	
+	console.log("isto está a dar um erro e eu não percebo porque");
 }
 
 function doSend() {
