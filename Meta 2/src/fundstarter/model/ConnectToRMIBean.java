@@ -646,42 +646,20 @@ public class ConnectToRMIBean {
 	public void formatMessageAns(Object[] data) {
 
 		ArrayList<ArrayList<String>> listOfMessages = (ArrayList<ArrayList<String>>) data[0];		//id_project, pergunta, resposta
-		//ArrayList<ArrayList<String>> listOfMessages = (ArrayList<ArrayList<String>>) data[1];
-		//ArrayList<ArrayList<String>> listOfAnswers = (ArrayList<ArrayList<String>>) data[2];
-
 		ArrayList<HashMap<String, Object>> auxList;
 		HashMap<String, Object> auxMap;
-		HashMap<String, Object> auxMessage;
+		
 		this.myMessages1 = new ArrayList<HashMap<String, Object>>();
 
-		for (int i = 0; i < listOfMessages.size(); i++) {
+		for(int i=0; i < listOfMessages.size(); i++){
 			
-			System.out.println("[ConnectToRMI]<formatMessageAns>: i -> " + i);
-			if (listOfMessages.get(i).size() != 0) {
-
-				auxMap = new HashMap<String, Object>();
-				auxList = new ArrayList<HashMap<String, Object>>();
-				
-				System.out.println("[ConnectToRMI]<formatMessageAns>: Project ID -> " + listOfMessages.get(i));
-				auxMap.put("ProjectID", listOfMessages.get(i).get(0));
-
-				//for (int j = 1; j < listOfMessages.get(i).size(); j++) {
-					int j=1;
-					auxMessage = new HashMap<String, Object>();
-
-					System.out.println("[ConnectToRMI]<formatMessages>: message " + j + " -> " + listOfMessages.get(i).get(j));
-
-					auxMessage.put("Pergunta", listOfMessages.get(i).get(j));
-					auxMessage.put("Resposta", listOfMessages.get(i).get(j+1));
-
-					auxList.add(auxMessage);
-
-				//}
-
-				auxMap.put("QA", auxList);		//QA - Questions and Answers
-				this.myMessages1.add(auxMap);
-				
-			}
+			auxMap = new HashMap<String, Object>();
+			
+			auxMap.put("ProjectID", listOfMessages.get(i).get(0));
+			auxMap.put("Pergunta", listOfMessages.get(i).get(1));
+			auxMap.put("Resposta", listOfMessages.get(i).get(2));
+			
+			this.myMessages1.add(auxMap);
 		}
 	}
 	

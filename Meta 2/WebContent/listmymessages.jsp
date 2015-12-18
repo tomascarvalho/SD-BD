@@ -99,10 +99,7 @@
 	</div>
 	<!-- /.container --> </nav>
 
-	<h1>Debug</h1>
-	<h3>MENSAGENS PARA MIM: "${RMIBean.myMessages}"</h3>
-	<h3>MENSAGENS RESPONDIDAS: "${RMIBean.myMessages1}"</h3>
-
+	<h2>Unread</h2>
 
 	<c:choose>
 		<c:when test="${RMIBean.myMessages != null}">
@@ -152,20 +149,25 @@
 				</div>
 			</div>
 		</c:when>
-		<c:when test="${RMIBean.myMessages1.size() != 0}">
-			<h5>Entra aqui</h5>
+		
+
+	</c:choose>
+	<br>
+	<h2>Read</h2>
+	<br>
+	<c:choose>
+		<c:when test="${RMIBean.myMessages1 != null}">
+			
 			<c:forEach items="${RMIBean.myMessages1}" var="messages1">
-				<h5>Entra aqui</h5>
+				
 				ID do Projecto:${messages1.get('ProjectID')}<br>
-				Pergunta:${messages1.get('Pergunta')}
-				Resposta:${messages1.get('Resposta')};  
+				Pergunta:${messages1.get('Pergunta')}<br>
+				Resposta:${messages1.get('Resposta')}; 
 				<br>
 			</c:forEach>
 
 		</c:when>
-
 	</c:choose>
-
 	<script>
 
 	function func(){
