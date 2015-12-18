@@ -152,20 +152,23 @@
 				</div>
 			</div>
 		</c:when>
+
+
+	</c:choose>
+	<c:choose>
 		<c:when test="${RMIBean.myMessages1.size() != 0}">
 			<h5>Entra aqui</h5>
 			<c:forEach items="${RMIBean.myMessages1}" var="messages1">
 				<h5>Entra aqui</h5>
 				ID do Projecto:${messages1.get('ProjectID')}<br>
-				Pergunta:${messages1.get('Pergunta')}
+				Pergunta:${messages1.get('Pergunta')}<br>
 				Resposta:${messages1.get('Resposta')};  
 				<br>
 			</c:forEach>
 
-		</c:when>
-
+	</c:when>
 	</c:choose>
-
+	
 	<script>
 
 	function func(){
