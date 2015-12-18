@@ -762,6 +762,8 @@ import java.util.Date;
               System.err.println("Erro:" + ex);
 
           }
+          
+          resposta[1] = "Checked!";
 
           resposta[0] = pr;
           clrqst.setResponse(resposta);

@@ -27,6 +27,7 @@ public class ConnectToRMIBean {
 	private ArrayList<String> projectRewards;
 	private int newProjectID;
 	private ArrayList<HashMap<String, Object>> myMessages;
+	private ArrayList<HashMap<String, Object>> myMessages1;
 	
 	public ConnectToRMIBean() {
 
@@ -640,7 +641,72 @@ public class ConnectToRMIBean {
 			return "error";
 		}
 	}
+	
+	
+	public void formatMessageAns(Object[] data) {
 
+		ArrayList<ArrayList<String>> listOfMessages = (ArrayList<ArrayList<String>>) data[0];		//id_project, pergunta, resposta
+		//ArrayList<ArrayList<String>> listOfMessages = (ArrayList<ArrayList<String>>) data[1];
+		//ArrayList<ArrayList<String>> listOfAnswers = (ArrayList<ArrayList<String>>) data[2];
+
+		ArrayList<HashMap<String, Object>> auxList;
+		HashMap<String, Object> auxMap;
+		HashMap<String, Object> auxMessage;
+		this.myMessages1 = new ArrayList<HashMap<String, Object>>();
+
+		for (int i = 0; i < listOfMessages.size(); i++) {
+			
+			System.out.println("[ConnectToRMI]<formatMessageAns>: i -> " + i);
+			if (listOfMessages.get(i).size() != 0) {
+
+				auxMap = new HashMap<String, Object>();
+				auxList = new ArrayList<HashMap<String, Object>>();
+				
+				System.out.println("[ConnectToRMI]<formatMessageAns>: Project ID -> " + listOfMessages.get(i));
+				auxMap.put("ProjectID", listOfMessages.get(i).get(0));
+
+				//for (int j = 1; j < listOfMessages.get(i).size(); j++) {
+					int j=1;
+					auxMessage = new HashMap<String, Object>();
+
+					System.out.println("[ConnectToRMI]<formatMessages>: message " + j + " -> " + listOfMessages.get(i).get(j));
+
+					auxMessage.put("Pergunta", listOfMessages.get(i).get(j));
+					auxMessage.put("Resposta", listOfMessages.get(i).get(j+1));
+
+					auxList.add(auxMessage);
+
+				//}
+
+				auxMap.put("QA", auxList);		//QA - Questions and Answers
+				this.myMessages1.add(auxMap);
+				
+			}
+		}
+	}
+	
+
+	public void checkAnswer() throws RemoteException{
+		
+		this.dataToSend = new Object[4];
+		
+		this.dataToSend[1] = this.userID;
+		
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+		
+		this.postCard = this.connectToRMI.veResposta(this.postCard);
+		/*
+		if(this.postCard.getResponse()[1].equals("Checked!")){
+			return "success";
+		}
+		else{
+			return "error";
+		}
+		*/
+		formatMessageAns(this.postCard.getResponse());
+
+	}
+	
 	public ArrayList<HashMap<String, Object>> getProjects() {
 		System.out.println("[ConnectToRMI]Returning Projects");
 		return this.projects;
@@ -648,6 +714,10 @@ public class ConnectToRMIBean {
 
 	public ArrayList<HashMap<String, Object>> getMyMessages() {
 		return this.myMessages;
+	}
+	
+	public ArrayList<HashMap<String, Object>> getMyMessages1() {
+		return this.myMessages1;
 	}
 
 	public HashMap<String, Object> getProjectDetails() {

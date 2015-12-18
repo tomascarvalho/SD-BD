@@ -18,6 +18,7 @@ public class SeeInboxAction extends ActionSupport implements SessionAware {
 		
 		System.out.println("[SeeInboxAction<execute>]");
 		this.getConnectToRMIBean().seeMyInbox();
+		this.getConnectToRMIBean().checkAnswer();
 		
 		return SUCCESS;
 	}
