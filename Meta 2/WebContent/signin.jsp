@@ -11,14 +11,14 @@
 	<title>FundStarter SignIn</title>
 	
     <!-- Bootstrap Core CSS -->
-    <link href="https://student.dei.uc.pt/~tmdcc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="${pageContext.request.contextPath}/css/shop-homepage.css"  rel="stylesheet" type="text/css"/>
+    <link href="${pageContext.request.contextPath}/css/signin.css"  rel="stylesheet" type="text/css"/>
+    <link href="${pageContext.request.contextPath}/css/bootstrap-social.css"  rel="stylesheet" type="text/css"/>
+    <link href="${pageContext.request.contextPath}/css/font-awesome.css"  rel="stylesheet" type="text/css"/>
 
-    <!-- Custom CSS -->
-    <link href="https://student.dei.uc.pt/~tmdcc/css/shop-homepage.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="https://student.dei.uc.pt/~tmdcc/css/signin.css" rel="stylesheet">
-
-    <script src="https://student.dei.uc.pt/~tmdcc/js/ie-emulation-modes-warning.js"></script>
+    <script src="${pageContext.request.contextPath}/js/ie-emulation-modes-warning.js"></script>
+    
 </head>
 <body>
 
@@ -51,15 +51,21 @@
     </nav>
 
 	<div class="container">
-		<form action="signIn" class="form-signin" action="logIn" method="post">
+		<form action="signIn" class="form-signin" action="signIn" method="post">
 			<h2 class="form-signin-heading">Please Sign In</h2>
 			<label for="inputEmail" class="sr-only">Username</label>
        		<input name = "username" id="username" class="form-control" placeholder="Username" required autofocus>	
 			<label for="inputPassword" class="sr-only">Password</label>
         	<input name = "password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>	
 			<br>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button> 
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button> 
+			   			 
 		</form>
+		<s:form action="tumblrSignIn" method="post">
+			<button type = "submit" class="btn btn-block btn-social btn-tumblr">
+   			 	<span class="fa fa-tumblr"></span> Sign in with Tumblr
+			</button>
+		</s:form>
 	</div>
 </body>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->

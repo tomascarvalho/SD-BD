@@ -34,6 +34,23 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result>/index.jsp</result>
     </action>
 
+	<!-- 'tumblrSignIn' action calls 'execute' in 'TumblrGrantAccess.java' -->
+	<action name='tumblrSignIn' class='tumblr.TumblrGrantAccess' method='execute'>
+		<result name="success" type="redirect">${authorizationURL}</result>
+		<result name="error">error.jsp</result>
+	</action>
+	
+	<!-- 'tumblrRedirect' action calls 'execute' in 'TumblrCallBack.java' -->
+	<action name='tumblrRedirect' class='tumblr.TumblrCallBack' method='execute'>
+		<result name ="success" type="chain">getTumblrData</result>
+		<result name ="error">/error.jsp</result>
+	</action>
+	<action name='getTumblrData' class='tumblr.GetDataFromTumblr' method='execute'>
+		<result name="success">/mainmenu.jsp</result>
+		<result name="error">/error.jsp</result>
+	</action>
+	
+
 	<!-- 'logIn' action calls 'execute' in 'LogInAction' -->
     <action name="logIn" class="fundstarter.action.LogInAction" method="execute">
       <result name="success">/mainmenu.jsp</result>

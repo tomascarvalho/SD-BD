@@ -9,5 +9,8 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/async-http-client-1.9.31.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.13.jar"/>
+	<classpathentry kind="lib" path="lib/json_simple-1.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
