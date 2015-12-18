@@ -110,7 +110,8 @@
 				ID do Projecto:${messages.get("ProjectId")}<br>
 				<c:forEach items="${messages.get('ProjectMessages')}" var="question">
 					<input type="radio" value="${question.get('MessageID')}"
-						name="message" class="megaespecial">${question.get("Message")}<br>
+						name="message" class="megaespecial" >${question.get("Message")}<br>
+
 				</c:forEach>
 				<br>
 			</c:forEach>
@@ -166,15 +167,16 @@
 	</c:choose>
 
 	<script>
-		function func() {
-			x = $(".megaespecial");
 
-			for (i = 0; i < x.length; i++) {
-				if (x[i].checked == true)
-					document.getElementById("iddacena").value = x[i].value;
+	function func(){
+		x = $(".megaespecial");
+		
+			for (i = 0; i < x.length; i++) { 
+				if(x[i].checked == true) document.getElementById("iddacena").value = x[i].value;
 			}
-
-		}
+		
+	}
+	
 	</script>
 
 </body>
