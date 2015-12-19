@@ -387,6 +387,7 @@ public class ConnectToRMIBean {
 
 		String[] projectInfo = new String[8];
 		this.dataToSend = new Object[2];
+		
 
 		projectInfo[0] = name;
 		projectInfo[1] = description;
@@ -396,6 +397,7 @@ public class ConnectToRMIBean {
 		projectInfo[5] = "0";
 		projectInfo[6] = "1";
 		projectInfo[7] = productType;
+		
 
 		this.dataToSend[0] = Integer.toString(this.userID);
 		this.dataToSend[1] = projectInfo;
@@ -403,11 +405,16 @@ public class ConnectToRMIBean {
 
 		this.postCard = this.connectToRMI.novoProjecto(this.postCard);
 
-	
+
 		if (this.postCard.getResponse()[0].equals("infosave")) {
+			
 			System.out.println("[ConnectToRMI]New project stored");
 			this.newProjectID = (int) this.postCard.getResponse()[1];
-			
+			if (this.postCard.getResponse()[3].equals("1")){
+				this.blog = (String)this.postCard.getResponse()[4];
+				return "tumblr";
+			}
+				
 			return "success";
 		} else {
 			return "error";
@@ -498,10 +505,11 @@ public class ConnectToRMIBean {
 		}
 	}
 
-	public String pledgeToProject(int projectID, int amount) throws RemoteException {
+	public String[] pledgeToProject(int projectID, int amount) throws RemoteException {
 
 		int[] pledgeInfo = new int[2];
 		this.dataToSend = new Object[2];
+		String[] info = new String[2];
 
 		System.out.println("[ConnectToRMI]Ready to pledge to project with:");
 		System.out.println("\tID -> " + projectID);
@@ -521,15 +529,22 @@ public class ConnectToRMIBean {
 		if (this.postCard.getResponse()[0].equals("pledged")) {
 			System.out.println("[ConnectToRMI]Pledged");
 			System.out.println("\tResult -> " + this.postCard.getResponse()[3]);
-
+			ArrayList<String> nova = (ArrayList <String>)this.postCard.getResponse()[5];
+			if (nova.get(0).equals("tumblr"))
+				info[1] = nova.get(1);
+			else
+				info[1] = "Lixo";
 			if (this.postCard.getResponse()[3].equals("No Reward") == false) {
 				System.out.println("[ConnectToRMIBean<plrdgeToProject>]Got Rewards!");
-				return (String) this.postCard.getResponse()[3];
+				info[0] = (String)this.postCard.getResponse()[3];
+				return info;
 			} else {
-				return "success";
+				info[0] = "Success";
+				return info;
 			}
 		} else {
-			return "error";
+			info[0] = "error";
+			return info;
 		}
 	}
 
@@ -756,6 +771,10 @@ public class ConnectToRMIBean {
 	
 	public void setBlog(String blog) {
 		this.blog = blog;
+	}
+
+	public String getBlog(){
+		return this.blog;
 	}
 	
 	public String getUsername(){

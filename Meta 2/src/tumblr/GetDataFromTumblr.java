@@ -1,13 +1,16 @@
 package tumblr;
 import com.opensymphony.xwork2.ActionSupport;
 
-import java.util.ArrayList;
+
 import java.util.Map;
 
 import org.apache.struts2.interceptor.SessionAware;
 
 import java.util.Scanner;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import com.github.scribejava.apis.TumblrApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
@@ -20,9 +23,6 @@ import com.github.scribejava.core.model.Verifier;
 import com.github.scribejava.core.oauth.OAuthService;
 import com.google.gson.Gson;
 import org.json.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 import java.rmi.RemoteException;
 import java.util.Map;
