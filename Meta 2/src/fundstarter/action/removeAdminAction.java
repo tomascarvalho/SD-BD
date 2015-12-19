@@ -9,7 +9,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class addNewAdminAction extends ActionSupport implements SessionAware {
+public class removeAdminAction extends ActionSupport implements SessionAware {
 	
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
@@ -18,8 +18,10 @@ public class addNewAdminAction extends ActionSupport implements SessionAware {
 	
 	@Override
 	public String execute() throws RemoteException{
+		//user = this.getConnectToRMIBean().getUserID();
 		session.put("newProjectID", this.getConnectToRMIBean().getNewProjectID());
-		if(this.getConnectToRMIBean().addNewAdmin(this.user, this.option).equals("success")){
+		if(this.getConnectToRMIBean().removeAdmin(this.user, this.option).equals("success")){
+
 			return SUCCESS;
 		}	
 		else{
@@ -29,7 +31,8 @@ public class addNewAdminAction extends ActionSupport implements SessionAware {
 	
 
 	public void setUser(String user) {
-		this.user= user;
+		this.user=user;
+
 	}
 
 	public void setOption(String option) {

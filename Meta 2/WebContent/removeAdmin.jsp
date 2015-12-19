@@ -6,7 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>FundStarter</title>
 
 <link href="${pageContext.request.contextPath}/css/shop-homepage.css" rel="stylesheet" type="text/css"/>
@@ -14,26 +14,19 @@
 <link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
 <link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
 
+<style>
+h1 {
+	padding-left:100px;
+}
 
+h2 {
+	padding-left:100px;
+    padding-bottom:50px;
+}
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-
-<script type="text/javascript" src="websockets.js"></script>
-
+</style>
 </head>
 <body>
-<c:choose>
-		<c:when test="${session.logged !=true}">
-			<s:form id ="cena" action='redirectLogIn' method='post'> 
-				
-				<button type = "submit" class="btn btn-block btn-social btn-tumblr">
-							</button>
-			</s:form>
-			<script>$(document).ready(function() {
-					    $("#cena").submit();
-					});</script>
-		</c:when>
-</c:choose>
 
 <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -51,13 +44,21 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">A Minha Conta</a>
+                    </li>
+                    <li>
+                        <a href="#">Os Meus Projectos</a>
+                    </li>
+                    <li>
+                        <a href="#">Mensagens</a>
+                    </li>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
 					<li><a href="#campainha"><i class="fa fa-bell"></i></a></li>
 					<li class="dropdown">
-
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${RMIBean.username}'s Actions <span class="caret"></span></a>
-
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${Username}'s Actions <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							
 							<li><s:form action="callAdd" method="post">
@@ -87,42 +88,9 @@
     </nav>
 
 
-
-<p>Modo Admin</p>
-
-	<s:form action="listDetails" method="post">
-		<s:submit value="Ver Detalhes" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-		
-	</s:form>
-<h1>${newProjectID}</h1>
-	<s:form action="newReward" method="post">
-		<s:submit value="Adicionar Recompensa" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
-	<s:form action="newLevel" method="post">
-		<input type="hidden" name="option" value="${session.RMIBean.newProjectID}" />
-		<s:submit value="Adicionar Nível Extra" />
-	</s:form>
-	<s:form action="showRewards" method="post">
-		<s:submit value="Remover Recompensa" />
-		<input type= "hidden" name="option" value= "${newProjectID}">
-	</s:form>
 	
-	<s:form action="newAdmin" method="post">
-		<s:submit value="Adicionar Novo Admin" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
-	
-	<s:form action="deleteAdmin" method="post">
-		<s:submit value="Remover Admin" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
-	
-	<s:form action="cancelarProj" method="post">
-		<s:submit value="Cancelar Projecto" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
+	<h2>Administrador desassociado!</h2>
 
+	
 </body>
 </html>

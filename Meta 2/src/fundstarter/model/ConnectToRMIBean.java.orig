@@ -775,7 +775,8 @@ public class ConnectToRMIBean implements Serializable {
 		}
 
 	}
-
+<<<<<<< HEAD
+	
 	public String removeAdmin(String user, String option) throws RemoteException{
 
 		this.dataToSend = new Object[3];
@@ -801,6 +802,8 @@ public class ConnectToRMIBean implements Serializable {
 	public int getUserID() {
 		return this.userID;
 	}
+=======
+>>>>>>> 1bdc147c758804c023337453b83d48d087696540
 
 	public ArrayList<HashMap<String, Object>> getProjects() {
 		System.out.println("[ConnectToRMI]Returning Projects");

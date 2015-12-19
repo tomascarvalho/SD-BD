@@ -186,6 +186,14 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     <action name="addNewAdmin" class="fundstarter.action.addNewAdminAction">
     	<result name="success">/addNewAdmin.jsp</result>
     </action>
+  
+    <action name="deleteAdmin" class="fundstarter.action.DeleteAdminAction">
+    	<result name="success">/deleteAdmin.jsp</result>
+    </action>
+    
+    <action name="removeAdmin" class="fundstarter.action.removeAdminAction">
+    	<result name="success">/removeAdmin.jsp</result>
+    </action>
     
   </package> 
 
