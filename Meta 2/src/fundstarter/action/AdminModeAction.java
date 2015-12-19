@@ -41,8 +41,8 @@ public class AdminModeAction extends ActionSupport implements SessionAware  {
 		
 		//this.session.put("tamMyProject", ((ArrayList<String>) aux[1]).size());
 		this.session.put("tamMyProject", tam);
-		System.out.println("O TAMANHO E ESTE TAMMY" + this.session.get("tamMyProject"));
-		System.out.println(this.session.get("MyProjectIDs"));
+		//System.out.println("O TAMANHO E ESTE TAMMY" + this.session.get("tamMyProject"));
+		//System.out.println(this.session.get("MyProjectIDs"));
 		return SUCCESS;
 	}
 	

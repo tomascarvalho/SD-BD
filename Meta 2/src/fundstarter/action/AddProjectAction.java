@@ -23,6 +23,7 @@ public class AddProjectAction extends ActionSupport implements SessionAware {
 	public String execute() throws RemoteException{
 		
 		if(this.getConnectToRMIBean().addProject(this.name, this.projDescription, this.goalValue, this.limitDate, this.productType).equals("success")){
+			session.put("newProjectID", this.getConnectToRMIBean().getNewProjectID());
 			return SUCCESS;
 		}	
 		else{
