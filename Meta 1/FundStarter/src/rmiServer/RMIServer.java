@@ -969,7 +969,7 @@ package rmiServer;
 
       public ClientRequest apagaProjecto(ClientRequest clrqst) throws RemoteException {
           System.out.println("[RMI Server] Função <apagaProjecto> chamada!");
-          
+
           requestCheck = checkRequest(clrqst);
 
           /*if (requestCheck != null) {
@@ -982,8 +982,8 @@ package rmiServer;
           int rewardID = 0;
           clrqst.setStage(2);
           myRequests.add(clrqst);
-          
-          
+
+
 
           try {
               query = "SELECT valor, id_user from pledge_user WHERE id_projecto = " + projectID;
@@ -1716,7 +1716,10 @@ package rmiServer;
                 		  System.err.print("ERRO (1695): "+ex);
                 	  }
                   }
+                  else{
+                    tumblr_like.add("no_tumblr");
 
+                  }
                   resposta[0] = "pledged";
                   resposta[1] = saldo - how_much;
                   resposta[4] = product_type;
@@ -1888,11 +1891,11 @@ package rmiServer;
 
             	  System.out.println("1");
 	        	  if (rs.getBoolean("tumblr") == false){
-	        		  
+
 	        		  System.out.println("2");
 	        		  query = "UPDATE UTILIZADOR SET tumblr = TRUE, blog = '"+blog+"' WHERE id ="+id_user;
 	        		  preparedstatement = connection.prepareStatement(query);
-	        
+
 	        		  request.executeUpdate(query);
                 	  result = "Success";
                 	  resposta[0] = result;

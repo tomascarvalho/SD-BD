@@ -53,7 +53,6 @@ public class WSEndPoint {
 		int projectID = Integer.parseInt(data[1]);
 		
 		if (data[0].equals("gotMessage")) {
-			
 			newMessage = "Tem uma mensagem nova!";
 		} else {
 			newMessage = "Recebeu uma doação de " + data[0] + " euros no Projecto com Id: " + data[1];

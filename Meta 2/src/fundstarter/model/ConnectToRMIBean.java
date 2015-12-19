@@ -530,7 +530,9 @@ public class ConnectToRMIBean implements Serializable {
 		if (this.postCard.getResponse()[0].equals("pledged")) {
 			System.out.println("[ConnectToRMI]Pledged");
 			System.out.println("\tResult -> " + this.postCard.getResponse()[3]);
+			System.out.println("Objecto na posição 5 -> " + this.postCard.getResponse()[5]);
 			ArrayList<String> nova = (ArrayList<String>) this.postCard.getResponse()[5];
+			System.out.println("Tamamho da arraylist -> " + nova.size());
 			if (nova.get(0).equals("tumblr"))
 				info[1] = nova.get(1);
 			else

@@ -37,7 +37,11 @@
 					});</script>
 		</c:when>
 </c:choose>
-
+	
+	<input type="hidden" id="amt" value="${session.pledgeAmout}"/>
+	<input type="hidden" id="projID" value="${session.plegedProject}"/>
+	
+	
 <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">

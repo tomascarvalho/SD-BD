@@ -122,11 +122,11 @@
 			</c:choose>
 
 			<s:form action="pledge" method="post">
-				<input type="text" name="amount" id="amt"/>
+				<input type="text" name="amount" id="amt" value="">
 				<input type="hidden" name="projectID" id="projID"
-					value=${session.listedProjectID}/>
-				<!--<s:submit value="Pledge to Project"/>-->
-				<button type="submit" onClick="sendPledge()">Pledge to Project</button>
+					value=${session.listedProjectID}>
+				<s:submit value="Pledge to Project"/>
+				<!--  <button type="submit" onClick="setPledgeVar()">Pledge to Project</button>-->
 			</s:form>
 
 

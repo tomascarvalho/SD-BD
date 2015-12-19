@@ -83,6 +83,9 @@ public class PledgeAction extends ActionSupport implements SessionAware {
 
 	        	response = request.send();
 	        	System.out.println(response);
+	        	
+	        	this.session.put("pledgeAmout", this.amount);
+	        	this.session.put("plegedProject", this.projectID);
 			}
 			return SUCCESS;
 		}
@@ -131,6 +134,9 @@ public class PledgeAction extends ActionSupport implements SessionAware {
 			this.getConnectToRMIBean().listProjectDetails(this.projectID);
 			this.session.put("Reward", result[0]);
 			this.session.put("pledgedProjectID", this.projectID);
+			
+			this.session.put("pledgeAmout", this.amount);
+        	this.session.put("plegedProject", this.projectID);
 			return SUCCESS;
 		}
 		

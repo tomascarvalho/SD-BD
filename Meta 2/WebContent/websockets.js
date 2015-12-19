@@ -24,6 +24,9 @@ function connect(host) {
 
 function onOpen(event) {
 	console.log("New WebSocket Connection");
+	if(window.location.href == "http://localhost:8080/FundStarterWeb/pledge.action"){
+		sendPledgeNot()
+	}
 }
 
 function onClose(event) {
@@ -38,26 +41,24 @@ function onError(event) {
 
 }
 
-function sendPledge() {
+function sendPledgeNot() {
 
-	
-	if (document.getElementById("amt").value != null) {
 		var amount = document.getElementById("amt").value;
-		var projectId = document.getElementById("projID").value;
+		var projID = document.getElementById("projID").value;
 		
-		if (amount != "") {
-
-			var dataToSend = "" + amount + "/" + projectId;
-			websocket.send(dataToSend);
-		}
-	}
+		var dataToSend = amount + "/" + projID;
+		sendMessage(dataToSend);
 
 }
 
 function sendMsgNot() {
-	
+
 	var projectId = document.getElementById("IDproject").value;
 	var dataToSend = "gotMessage/" + projectId;
-	websocket.send(dataToSend);
+	sendMessage(dataToSend);
 
+}
+
+function sendMessage(message){
+	websocket.send(message);
 }

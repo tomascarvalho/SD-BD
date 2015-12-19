@@ -40,7 +40,7 @@ public class LogInAction extends ActionSupport implements SessionAware {
 
 	public ConnectToRMIBean getConnectToRMIBean() {
 
-		System.out.println("filho da puta");
+		
 		if (!session.containsKey("RMIBean")) {
 			this.setConnectToRMIBean(new ConnectToRMIBean());
 		}
