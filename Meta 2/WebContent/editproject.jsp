@@ -100,10 +100,13 @@
 		<s:submit value="Adicionar Recompensa" />
 		<input type= "hidden" name="option" value="${newProjectID}">
 	</s:form>
-	
+	<s:form action="newLevel" method="post">
+		<input type="hidden" name="option" value="${session.RMIBean.newProjectID}" />
+		<s:submit value="Adicionar Nível Extra" />
+	</s:form>
 	<s:form action="showRewards" method="post">
 		<s:submit value="Remover Recompensa" />
-		<input type= "hidden" name="option" value="${ProjectID}">
+		<input type= "hidden" name="option" value= "${newProjectID}">
 	</s:form>
 	
 	<s:form action="newAdmin" method="post">

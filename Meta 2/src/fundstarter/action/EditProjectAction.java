@@ -35,6 +35,7 @@ public class EditProjectAction extends ActionSupport implements SessionAware {
 		this.option = Integer.parseInt(option);
 	}
 
+
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
 		this.session.put("RMIBean", RMIBean);
 		

@@ -14,12 +14,13 @@ public class ListRewardsAction extends ActionSupport implements SessionAware {
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
 	private int option;
+	private int flag;
 
 	@Override
 	public String execute() throws RemoteException{
 
 		System.out.println("[ListRewardsAction]<execute>");
-		this.getConnectToRMIBean().listProjectRewards(this.option);
+		this.getConnectToRMIBean().listProjectRewards(this.option, this.flag);
 		this.session.put("selectedProject", option);
 		
 		return SUCCESS;
@@ -47,6 +48,10 @@ public class ListRewardsAction extends ActionSupport implements SessionAware {
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub
 		this.session = arg0;
+	}
+	
+	public void setFlag(String flag){
+		this.flag = Integer.parseInt(flag);
 	}
 
 }

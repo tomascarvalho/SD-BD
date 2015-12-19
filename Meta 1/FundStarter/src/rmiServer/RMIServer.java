@@ -422,37 +422,31 @@ package rmiServer;
           ArrayList<String> projecto = new ArrayList();
           int flag = (int) clrqst.getRequest()[2];
 
+
           if(clrqst.getRequest()[0].equals("listar_recompensas")){
             myProject=0;
           }
           else{
             myProject = (int) clrqst.getRequest()[0];
+            System.out.println("Projecto: "+myProject);
           }
 
           if (flag == 1) {
               try {
-                  if(myProject != 0){
-                    query = "SELECT id_projecto FROM projecto_user WHERE id_projecto = " + myProject;
-                  }
-                  else{
-                    query = "SELECT id_projecto FROM projecto_user WHERE id_user = " + userID;
-                  }
+
+
+                  query = "SELECT titulo, id, valor FROM recompensas WHERE id_projecto = " + myProject;
                   preparedstatement = connection.prepareStatement(query);
-                  rs = preparedstatement.executeQuery();
-                  while (rs.next()) {
-                      projectID = rs.getInt("id_projecto");
-                      query = "SELECT titulo, id, valor FROM recompensas WHERE id_projecto = " + projectID;
-                      preparedstatement = connection.prepareStatement(query);
-                      ResultSet result = preparedstatement.executeQuery();
-                      while (result.next()) {
-                          projecto.add("ID: "+result.getInt("id")+ "  Titulo: " + result.getString("titulo") + "  Montante a doar: "+result.getInt("valor") +"\nPertencente ao Projecto ID: " + projectID);
-                      }
-
+                  ResultSet result = preparedstatement.executeQuery();
+                  while (result.next()) {
+                      projecto.add("ID: "+result.getInt("id")+ "  Titulo: " + result.getString("titulo") + "  Montante a doar: "+result.getInt("valor") +"\n<br>Pertencente ao Projecto ID: " + myProject);
                   }
 
-              } catch (SQLException ex) {
-                  System.err.print("SQLException 383: " + ex);
               }
+
+           catch (SQLException ex) {
+              System.err.print("SQLException 383: " + ex);
+          }
           } else if (flag == 0) {
 
               try {
@@ -1711,6 +1705,7 @@ package rmiServer;
                         	  }
                           }
                 	  }
+
 
                 	  catch(SQLException ex){
                 		  System.err.print("ERRO (1695): "+ex);
