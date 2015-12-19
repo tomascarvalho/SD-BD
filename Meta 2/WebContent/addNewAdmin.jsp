@@ -6,8 +6,16 @@
 <script type="text/javascript" src="websockets.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>FundStarter</title>
+<style>
+	h2{
+		padding-top: 50px;
+		padding-left: 30px;
+	}
+</style>
+
+
 </head>
 <body>
-
+	<h2>Novo Admin associado!</h2>
 </body>
 </html>

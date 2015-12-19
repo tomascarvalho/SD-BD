@@ -31,21 +31,13 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">A Minha Conta</a>
-                    </li>
-                    <li>
-                        <a href="#">Os Meus Projectos</a>
-                    </li>
-                    <li>
-                        <a href="#">Mensagens</a>
-                    </li>
-                </ul>
+                
                 <ul class="nav navbar-nav navbar-right">
 					<li><a href="#campainha"><i class="fa fa-bell"></i></a></li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${Username}'s Actions <span class="caret"></span></a>
+
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${RMIBean.username}'s Actions <span class="caret"></span></a>
+
 						<ul class="dropdown-menu">
 							
 							<li><s:form action="callAdd" method="post">
@@ -73,6 +65,7 @@
         </div>
         <!-- /.container -->
     </nav>
+    
 
 
 	<h1>Recompensa Criada!</h1>

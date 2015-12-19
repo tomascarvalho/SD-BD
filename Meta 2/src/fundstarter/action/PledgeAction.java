@@ -89,6 +89,9 @@ public class PledgeAction extends ActionSupport implements SessionAware {
 		else if(result[0].equals("error")){
 			return ERROR;
 		}
+		else if(result[0].equals("no_money")){
+			return "no_money";
+		}
 		else{
 			if (!result[1].equals("Lixo")){
 				

@@ -136,6 +136,7 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     <!-- 'pledge' action call 'execute' in 'PledgeAction' -->
     <action name="pledge" class="fundstarter.action.PledgeAction" method="execute" >
     	<result name="success" >/voteonproduct.jsp</result>
+    	<result name="no_money">/nomoney.jsp</result>
     </action>
     
     <action name="donateReward" class="fundstarter.action.DonateRewardAction" method="execute">
@@ -170,12 +171,12 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     	<result name="success">/mainmenu.jsp</result>
     </action>
     
-    <action name="addNewAdmin" class="fundstarter.action.addNewAdminAction">
-    	<result name="success">/addNewAdmin.jsp</result>
+    <action name="newAdmin" class="fundstarter.action.NewAdminAction">
+    	<result name="success">/newAdmin.jsp</result>
     </action>
     
-    <action name="listUsers" class="fundstarter.action.ReplyMessageAction">
-    	<result name="success">/listUsers.jsp</result>
+    <action name="addNewAdmin" class="fundstarter.action.addNewAdminAction">
+    	<result name="success">/addNewAdmin.jsp</result>
     </action>
     
   </package> 

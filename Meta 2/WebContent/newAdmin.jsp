@@ -1,35 +1,34 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>FundStarter</title>
 
-<link href="${pageContext.request.contextPath}/css/shop-homepage.css" rel="stylesheet" type="text/css"/>
-<link href="${pageContext.request.contextPath}/css/alterar.css" rel="stylesheet" type="text/css"/>
-<link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-<link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
+	<link href="${pageContext.request.contextPath}/css/shop-homepage.css" rel="stylesheet" type="text/css"/>
+	<link href="${pageContext.request.contextPath}/css/alterar.css" rel="stylesheet" type="text/css"/>
+	<link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+	<link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
+
 <style>
-	p.one {
-	    padding-right: 30px;
-	    padding-left: 50px;
+	h1 {
+		padding-left:50px;
 	}
 	
-	h1{
-		padding-left: 20px;
-		padding-bottom: 30px;
+	p.one {
+		padding-left:50px;
+	    padding-bottom:30px;
+	    padding-top:30px;
+	    
 	}
 
 </style>
-<script type="text/javascript" src="websockets.js"></script>
 </head>
 <body>
-
-<!-- Navigation -->
+	
+	<!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -45,19 +44,27 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">A Minha Conta</a>
+                    </li>
+                    <li>
+                        <a href="#">Os Meus Projectos</a>
+                    </li>
+                    <li>
+                        <a href="#">Mensagens</a>
+                    </li>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
 					<li><a href="#campainha"><i class="fa fa-bell"></i></a></li>
 					<li class="dropdown">
-
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${RMIBean.username}'s Actions <span class="caret"></span></a>
-
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${Username}'s Actions <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							
 							<li><s:form action="callAdd" method="post">
 								<button class="list-group-item" type="submit" value="Criar Projecto">Criar Projecto</button>
 							</s:form></li>
-								<!-- Este botão só pode aparecer quando o user estiver logado -->
+								<!-- Este botÃ£o sÃ³ pode aparecer quando o user estiver logado -->
 							<li><s:form action="CheckSaldo" method="post">
 								<button class="list-group-item" type="submit" value="Consultar Saldo">Consultar Saldo </button>
 							</s:form></li>
@@ -79,40 +86,18 @@
         </div>
         <!-- /.container -->
     </nav>
+	<h1>Novo Administrador</h1>
+	
+	<s:form action="addNewAdmin" method="post">
+	
+		Username:
+		<input type="text" name="user">
+		<br>
 
-
-
-	<c:choose>
-		<c:when test="${RMIBean.storedProjects == 'actual' }">
-			<h1>Projectos Actuais</h1>
-
-			<c:choose>
-				<c:when test="${RMIBean.projects == null}">
-					<p>Sem Projectos para apresentar</p>
-				</c:when>
-				<c:otherwise>
-				
-					<s:form action="listDetails" method="post">
-						<c:forEach items="${RMIBean.projects }" var="value">
-							<p class="one"><input type="radio" name="option" value="${value.get('ID') }">
-								${value.get("Titulo")}
-							</input>
-							<br>
-							</p>
-						</c:forEach>
-						<s:submit value="Show Details" />
-					</s:form>
-					
-				</c:otherwise>
-			</c:choose>
-		</c:when>
-		<c:otherwise>
-			<h1>Projectos Antigos</h1>
-			<c:forEach items="${RMIBean.projects }" var="value">
-				<p class="one">${value.get("Titulo") }</p>
-			</c:forEach>
-		</c:otherwise>
-	</c:choose>
-
+		<input type="text" name="option" value="${session.newProjectID}" >
+		
+		
+		<s:submit value="Associar" />
+	</s:form>
 </body>
 </html>

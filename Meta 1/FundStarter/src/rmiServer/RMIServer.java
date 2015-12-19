@@ -969,12 +969,12 @@ package rmiServer;
 
       public ClientRequest apagaProjecto(ClientRequest clrqst) throws RemoteException {
           System.out.println("[RMI Server] Função <apagaProjecto> chamada!");
-
+          
           requestCheck = checkRequest(clrqst);
 
-          if (requestCheck != null) {
+          /*if (requestCheck != null) {
               return requestCheck;
-          }
+          }*/
 
           int valor_a_devolver = 0;
           int userID = 0;
@@ -982,6 +982,8 @@ package rmiServer;
           int rewardID = 0;
           clrqst.setStage(2);
           myRequests.add(clrqst);
+          
+          
 
           try {
               query = "SELECT valor, id_user from pledge_user WHERE id_projecto = " + projectID;
@@ -1747,7 +1749,7 @@ package rmiServer;
 
           Object[] objecto = clrqst.getRequest();
           String user = (String) (objecto[1]);
-          int id_projecto = (int) (objecto[2]);
+          int id_projecto = Integer.parseInt((String) objecto[2]);
           int id_user = 0;
 
           try {

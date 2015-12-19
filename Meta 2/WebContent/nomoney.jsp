@@ -1,31 +1,30 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>FundStarter</title>
 
-<link href="${pageContext.request.contextPath}/css/shop-homepage.css" rel="stylesheet" type="text/css"/>
-<link href="${pageContext.request.contextPath}/css/alterar.css" rel="stylesheet" type="text/css"/>
-<link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-<link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
-<style>
-	p.one {
-	    padding-right: 30px;
-	    padding-left: 50px;
-	}
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="../../favicon.ico"/>
+	<title>FundStarter</title>
+
 	
-	h1{
-		padding-left: 20px;
-		padding-bottom: 30px;
-	}
+	<link href="${pageContext.request.contextPath}/css/shop-homepage.css" rel="stylesheet" type="text/css"/>
+	<link href="${pageContext.request.contextPath}/css/alterar.css" rel="stylesheet" type="text/css"/>
+	<link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+	<link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="websockets.js"></script>
 
-</style>
-<script type="text/javascript" src="websockets.js"></script>
+
 </head>
 <body>
 
@@ -57,7 +56,7 @@
 							<li><s:form action="callAdd" method="post">
 								<button class="list-group-item" type="submit" value="Criar Projecto">Criar Projecto</button>
 							</s:form></li>
-								<!-- Este botão só pode aparecer quando o user estiver logado -->
+								<!-- Este botÃ£o sÃ³ pode aparecer quando o user estiver logado -->
 							<li><s:form action="CheckSaldo" method="post">
 								<button class="list-group-item" type="submit" value="Consultar Saldo">Consultar Saldo </button>
 							</s:form></li>
@@ -79,40 +78,6 @@
         </div>
         <!-- /.container -->
     </nav>
-
-
-
-	<c:choose>
-		<c:when test="${RMIBean.storedProjects == 'actual' }">
-			<h1>Projectos Actuais</h1>
-
-			<c:choose>
-				<c:when test="${RMIBean.projects == null}">
-					<p>Sem Projectos para apresentar</p>
-				</c:when>
-				<c:otherwise>
-				
-					<s:form action="listDetails" method="post">
-						<c:forEach items="${RMIBean.projects }" var="value">
-							<p class="one"><input type="radio" name="option" value="${value.get('ID') }">
-								${value.get("Titulo")}
-							</input>
-							<br>
-							</p>
-						</c:forEach>
-						<s:submit value="Show Details" />
-					</s:form>
-					
-				</c:otherwise>
-			</c:choose>
-		</c:when>
-		<c:otherwise>
-			<h1>Projectos Antigos</h1>
-			<c:forEach items="${RMIBean.projects }" var="value">
-				<p class="one">${value.get("Titulo") }</p>
-			</c:forEach>
-		</c:otherwise>
-	</c:choose>
-
-</body>
-</html>
+    
+    <p> NÃ£o pode doar sem saldo</p>
+ </body>

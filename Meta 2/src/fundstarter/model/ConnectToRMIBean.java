@@ -373,9 +373,12 @@ public class ConnectToRMIBean implements Serializable {
 	public String cancelarProj(int projectId) throws RemoteException {
 		System.out.println("[ConnectoToRMI] Cancelar um projecto");
 		this.dataToSend[1] = projectId;
+		System.out.println("this");
+		System.out.println(dataToSend[0]);
+		System.out.println(dataToSend[1]);
 		this.postCard = new ClientRequest("", this.dataToSend, "");
 		this.postCard = connectToRMI.apagaProjecto(this.postCard);
-
+		System.out.println(this.postCard.getResponse()[0]);
 		return (String) this.postCard.getResponse()[0];
 
 	}
@@ -540,7 +543,12 @@ public class ConnectToRMIBean implements Serializable {
 				info[0] = "Success";
 				return info;
 			}
-		} else {
+		} 
+		else if (this.postCard.getResponse()[0].equals("Sem saldo")){
+			info[0] = "no_money";
+			return info;
+		}
+		else {
 			info[0] = "error";
 			return info;
 		}
@@ -741,9 +749,12 @@ public class ConnectToRMIBean implements Serializable {
 
 	public String addNewAdmin(String user, String option) throws RemoteException {
 
-		this.dataToSend = new Object[2];
+
+		this.dataToSend = new Object[3];
 
 		this.dataToSend[1] = user;
+		
+		System.out.println("A OPTION E ESTA, DIANA :::" + option);
 		this.dataToSend[2] = option;
 
 		this.postCard = new ClientRequest("", this.dataToSend, "");
