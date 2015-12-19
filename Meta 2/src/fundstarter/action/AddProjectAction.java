@@ -5,7 +5,27 @@ import java.util.Map;
 
 import org.apache.struts2.interceptor.SessionAware;
 
+import com.github.scribejava.core.model.OAuthRequest;
+import com.github.scribejava.core.model.Response;
+import com.github.scribejava.core.model.Token;
+import com.github.scribejava.core.model.Verb;
+import com.github.scribejava.core.oauth.OAuthService;
 import com.opensymphony.xwork2.ActionSupport;
+
+import com.github.scribejava.apis.TumblrApi;
+import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.exceptions.OAuthException;
+import com.github.scribejava.core.model.OAuthRequest;
+import com.github.scribejava.core.model.Response;
+import com.github.scribejava.core.model.Token;
+import com.github.scribejava.core.model.Verb;
+import com.github.scribejava.core.model.Verifier;
+import com.github.scribejava.core.oauth.OAuthService;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 
 import fundstarter.model.ConnectToRMIBean;
 
@@ -18,14 +38,41 @@ public class AddProjectAction extends ActionSupport implements SessionAware {
 	private String goalValue;
 	private String limitDate;
 	private String productType;
+	private String blog;
 	
 	@Override
 	public String execute() throws RemoteException{
-		
-		if(this.getConnectToRMIBean().addProject(this.name, this.projDescription, this.goalValue, this.limitDate, this.productType).equals("success")){
+		String result = this.getConnectToRMIBean().addProject(this.name, this.projDescription, this.goalValue, this.limitDate, this.productType);
+		if(result.equals("success")){
 			session.put("newProjectID", this.getConnectToRMIBean().getNewProjectID());
 			return SUCCESS;
-		}	
+		}
+		else if(result.equals("tumblr")){
+			session.put("newProjectID", this.getConnectToRMIBean().getNewProjectID());
+			
+			blog = this.getConnectToRMIBean().getBlog();
+	    	String postUri = "api.tumblr.com/v2/blog/";
+	    	
+	    	String post = "/post";
+	    	String url="https://";
+
+	    	System.out.println(url);
+	    	Token accessToken = (Token)(session.get("accessToken"));
+	        OAuthService tumblrService = (OAuthService)session.get("tumblrService");
+	        
+	        url="https://";
+    		url = url+postUri+blog+post;
+    		OAuthRequest request = new OAuthRequest(Verb.POST, url, tumblrService);
+        	request.addBodyParameter("type", "text");
+        	request.addBodyParameter("title", ""+session.get("newProjectID"));
+        	request.addBodyParameter("body", "Acabei de criar no FundStarter o meu Projecto, que se chama: "+this.name+"<br>"+this.projDescription);
+        	tumblrService.signRequest(accessToken, request);
+
+        	Response response = request.send();
+        	System.out.println(response);
+			
+			return SUCCESS;
+		}
 		else{
 			return ERROR;
 		}
