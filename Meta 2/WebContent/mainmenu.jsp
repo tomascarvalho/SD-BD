@@ -75,6 +75,10 @@
 							<li><s:form action="CheckSaldo" method="post">
 								<button class="list-group-item" type="submit" value="Consultar Saldo">Consultar Saldo </button>
 							</s:form></li>
+							<li><s:form action="showRewards" method="post">
+								<input type = "hidden" name="flag" value="0"></input>
+								<button class="list-group-item" type="submit" value="Listar Recompensas">Listar Recompensas </button>
+							</s:form></li>
 							<li><s:form action="AdminMode" method="post">
 								<button class="list-group-item" type="submit" value="Meus Projectos" name="option" value="0">Meus Projectos</button>
 							</s:form></li>

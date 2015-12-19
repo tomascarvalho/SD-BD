@@ -28,6 +28,8 @@ public class ConnectToRMIBean implements Serializable {
 	private ArrayList<String> projectRewards;
 	private int newProjectID;
 	private ArrayList<HashMap<String, Object>> myMessages;
+	private ArrayList<String> myDefinitiveRewards;
+	private ArrayList<String> myTemporaryRewards;
 
 	private String blog;
 
@@ -227,21 +229,27 @@ public class ConnectToRMIBean implements Serializable {
 		return (int) this.postCard.getResponse()[0];
 	}
 
-	public void listProjectRewards(int projectID) throws RemoteException {
+	public void listProjectRewards(int projectID, int flag) throws RemoteException {
 
 		System.out.println("[ConnectToRMI]List project details");
 
 		this.dataToSend = new Object[3];
-
-		this.dataToSend[0] = projectID;
+		if (projectID >0)
+			flag =1;
+		this.dataToSend[0] = projectID; 
 		this.dataToSend[1] = this.userID;
-		this.dataToSend[2] = 1;
+		this.dataToSend[2] = flag;
 
 		this.postCard = new ClientRequest("2", this.dataToSend, "tempo");
 
 		this.postCard = connectToRMI.listarRecompensas(this.postCard);
-
-		this.projectRewards = (ArrayList<String>) this.postCard.getResponse()[3];
+		if (flag == 1)
+			this.projectRewards = (ArrayList<String>) this.postCard.getResponse()[3];
+		else if (flag == 0)
+		{
+			this.myDefinitiveRewards = (ArrayList<String>) this.postCard.getResponse()[1];
+			this.myTemporaryRewards = (ArrayList<String>) this.postCard.getResponse()[2];
+		}
 	}
 
 	public void formatProjectDetails(Object[] project) {
@@ -820,5 +828,13 @@ public class ConnectToRMIBean implements Serializable {
 	public String getUsername() {
 		return this.username;
 	}
+	
+	public ArrayList<String> getMyDefinitiveRewards(){
+		return this.myDefinitiveRewards;
+	}
+	public ArrayList<String> getMyTemporaryRewards(){
+		return this.myTemporaryRewards;
+	}
+	
 
 }

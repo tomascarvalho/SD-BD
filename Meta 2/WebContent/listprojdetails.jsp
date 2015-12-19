@@ -7,24 +7,20 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="websockets.js"></script>
 <title>FundStarter</title>
-    <!-- Latest compiled and minified CSS -->
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link href="${pageContext.request.contextPath}/css/shop-homepage.css" rel="stylesheet" type="text/css"/>
-    <link href="${pageContext.request.contextPath}/css/alterar.css" rel="stylesheet" type="text/css"/>
-    <link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-    <link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
-    </script>
+<link href="${pageContext.request.contextPath}/css/shop-homepage.css"
+	rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/css/alterar.css"
+	rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/css/bootstrap.css"
+	rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/css/mudancas.css"
+	rel="stylesheet" type="text/css" />
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
-	
-	
-	<script type="text/javascript" src="websockets.js"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="websockets.js"></script>
 </head>
 <body>
 <c:choose>
@@ -39,6 +35,61 @@
 					});</script>
 		</c:when>
 </c:choose>
+<!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle"  data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand" href="mainmenu.jsp">FundStarter</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                
+                <ul class="nav navbar-nav navbar-right">
+					<li><a href="#campainha"><i class="fa fa-bell"></i></a></li>
+					<li class="dropdown">
+
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${RMIBean.username}'s Actions <span class="caret"></span></a>
+
+						<ul class="dropdown-menu">
+							
+							<li><s:form action="callAdd" method="post">
+								<button class="list-group-item" type="submit" value="Criar Projecto">Criar Projecto</button>
+							</s:form></li>
+								<!-- Este botão só pode aparecer quando o user estiver logado -->
+							<li><s:form action="CheckSaldo" method="post">
+								<button class="list-group-item" type="submit" value="Consultar Saldo">Consultar Saldo </button>
+							</s:form></li>
+							<li><s:form action="showRewards" method="post">
+								<input type = "hidden" name="flag" value="0"></input>
+								<button class="list-group-item" type="submit" value="Listar Recompensas">Listar Recompensas </button>
+							</s:form></li>
+							<li><s:form action="AdminMode" method="post">
+								<button class="list-group-item" type="submit" value="Meus Projectos" name="option" value="0">Meus Projectos</button>
+							</s:form></li>
+							
+							<li><s:form action="seeInbox" method="post">
+								<button class="list-group-item" type="submit" value="Caixa de Correio">Caixa de Correio </button>
+							</s:form></li>
+							
+							<li><s:form action="logOut" method="post">
+								<button class="list-group-item" type="submit" value="Log Out">Log Out </button>
+							</s:form></li>
+						</ul>
+					</li>
+				</ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
 
 	<h1>${RMIBean.projectDetails.get("Titulo") }</h1>
 
