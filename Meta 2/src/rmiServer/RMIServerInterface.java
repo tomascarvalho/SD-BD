@@ -63,6 +63,8 @@ public interface RMIServerInterface extends Remote {
     public String checkDataBaseConection() throws RemoteException;
     
     public String addProductType(ClientRequest clrqst) throws RemoteException;
+
+	public ClientRequest deleteAdmin(ClientRequest postCard) throws RemoteException;
     
     public ClientRequest getProjectAdmins(ClientRequest clrqst) throws RemoteException;
 }

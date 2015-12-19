@@ -10,6 +10,7 @@
 <script type="text/javascript" src="websockets.js"></script>
 <title>FundStarter</title>
 
+
 <link href="${pageContext.request.contextPath}/css/shop-homepage.css"
 	rel="stylesheet" type="text/css" />
 <link href="${pageContext.request.contextPath}/css/alterar.css"
