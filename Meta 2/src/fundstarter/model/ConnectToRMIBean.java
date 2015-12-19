@@ -34,13 +34,17 @@ public class ConnectToRMIBean implements Serializable {
 	private String blog;
 
 	private ArrayList<HashMap<String, Object>> myMessages1;
+	
+	private String rmiLocation;
 
 	public ConnectToRMIBean() {
 
 		try {
 
 			System.out.println("Connecting to RMI");
-			this.connectToRMI = (RMIServerInterface) Naming.lookup("//localhost:7777/fundStarter");
+			rmiLocation = "//localhost:7777/fundStarter";
+			
+			this.connectToRMI = (RMIServerInterface) Naming.lookup(rmiLocation);
 			System.out.println("Connected to RMI");
 
 		} catch (NotBoundException | MalformedURLException | RemoteException e) {
