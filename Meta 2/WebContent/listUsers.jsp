@@ -2,19 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>FundStarter</title>
 
 <link href="${pageContext.request.contextPath}/css/shop-homepage.css" rel="stylesheet" type="text/css"/>
 <link href="${pageContext.request.contextPath}/css/alterar.css" rel="stylesheet" type="text/css"/>
 <link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
 <link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
-
-
 
 </head>
 <body>
@@ -50,6 +48,7 @@
 					<li><a href="#campainha"><i class="fa fa-bell"></i></a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${Username}'s Actions <span class="caret"></span></a>
+						
 						<ul class="dropdown-menu">
 							
 							<li><s:form action="callAdd" method="post">
@@ -62,6 +61,11 @@
 							<li><s:form action="AdminMode" method="post">
 								<button class="list-group-item" type="submit" value="Meus Projectos" name="option" value="0">Meus Projectos</button>
 							</s:form></li>
+							<li><s:form action="seeInbox" method="post">
+								<button class="list-group-item" type="submit" value="Caixa de Correio">Caixa de Correio </button>
+							</s:form></li>
+							
+							
 							<!-- Temos que mandar info de logout......... -->
 							<li><a class="btn list-group-item" href="index.jsp">Log Out</a></li>
 						</ul>
@@ -75,33 +79,37 @@
 
 
 
-<p>Modo Admin</p>
+	<c:choose>
+		<c:when test="${RMIBean.storedProjects == 'actual' }">
+			<h1>Lista de Users</h1>
 
-	<s:form action="listDetails" method="post">
-		<s:submit value="Ver Detalhes" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-		
-	</s:form>
-
-	<s:form action="newReward" method="post">
-		<s:submit value="Adicionar Recompensa" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
-	
-	<s:form action="showRewards" method="post">
-		<s:submit value="Remover Recompensa" />
-		<input type= "hidden" name="option" value="${ProjectID}">
-	</s:form>
-	
-	<s:form action="addNewAdmin" method="post">
-		<s:submit value="Adicionar Novo Admin" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
-	
-	<s:form action="cancelarProj" method="post">
-		<s:submit value="Cancelar Projecto" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
+			<c:choose>
+				<c:when test="${RMIBean.projects == null}">
+					<p>Sem Projectos para apresentar</p>
+				</c:when>
+				<c:otherwise>
+				
+					<s:form action="listDetails" method="post">
+						<c:forEach items="${RMIBean.projects }" var="value">
+							<p class="one"><input type="radio" name="option" value="${value.get('ID') }">
+								${value.get("Titulo")}
+							</input>
+							<br>
+							</p>
+						</c:forEach>
+						<s:submit value="Show Details" />
+					</s:form>
+					
+				</c:otherwise>
+			</c:choose>
+		</c:when>
+		<c:otherwise>
+			<h1>Projectos Antigos</h1>
+			<c:forEach items="${RMIBean.projects }" var="value">
+				<p class="one">${value.get("Titulo") }</p>
+			</c:forEach>
+		</c:otherwise>
+	</c:choose>
 
 </body>
 </html>

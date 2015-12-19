@@ -717,6 +717,25 @@ public class ConnectToRMIBean {
 
 	}
 	
+	public String addNewAdmin(String user, String option) throws RemoteException{
+
+		this.dataToSend = new Object[2];
+		
+		this.dataToSend[1] = user;
+		this.dataToSend[2] = option;
+
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+
+		this.postCard = this.connectToRMI.addAdminToProject(this.postCard);
+		if(this.postCard.getResponse()[2].equals("done")){
+			return "success";
+		}
+		else{
+			return "error";
+		}
+		
+	}
+	
 	public ArrayList<HashMap<String, Object>> getProjects() {
 		System.out.println("[ConnectToRMI]Returning Projects");
 		return this.projects;
