@@ -1824,43 +1824,8 @@ package rmiServer;
     		  query = "SELECT id,tumblr FROM UTILIZADOR WHERE username = '"+username+"'";
 			  preparedstatement = connection.prepareStatement(query);
               rs = request.executeQuery(query);
-              if (!rs.next()){
-            	  try{
-            		  System.out.println("1");
-            		  
-            		  query = "INSERT INTO utilizador (username, pass, saldo, tumblr, blog) VALUES ('"+username+"','"+pass+"', 100, TRUE, '"+blog+"')";
-                	  preparedstatement = connection.prepareStatement(query);
-                	 
-                	  System.out.println(blog);
-                	  System.out.println(username);
-                	  System.out.println(pass);
-                	  request.executeUpdate(query);
-                	  
-                	  query = "SELECT id FROM utilizador WHERE username ='"+username+"'";
-                	  preparedstatement = connection.prepareStatement(query);
-                	  rs = request.executeQuery(query);
-                	  id = rs.getInt("id");
-                	  result = "Success";
-                	  resposta[0] = result;
-                      resposta[1] = id;
-                      clrqst.setResponse(resposta);
-                      clrqst.setStage(3);
-                      return clrqst;
-                	  
-            	  }
-            	  catch(SQLException ex){
-            		  System.err.println("ERRO: "+ex);
-            		  resposta[0] = "Insuccess";
-            		  resposta[1] = -1;
-            		  clrqst.setResponse(resposta);
-                      clrqst.setStage(3);
-                      return clrqst;
-            	  }
-            	  
-            	  
-            	  
-              }
-              else{
+              if (rs.next()){
+ 
             	  System.out.println("1");
 	        	  if (rs.getBoolean("tumblr") == false){
 	        		  System.out.println("2");
@@ -1885,6 +1850,40 @@ package rmiServer;
                       clrqst.setStage(3);
                       return clrqst;
 	        	  }
+              }
+              else{
+            	  try{
+            		  System.out.println("1");
+            		  
+            		  query = "INSERT INTO utilizador (username, pass, saldo, tumblr, blog) VALUES ('"+username+"','"+pass+"', 100, TRUE, '"+blog+"')";
+                	  preparedstatement = connection.prepareStatement(query);
+                	 
+                	  System.out.println(blog);
+                	  System.out.println(username);
+                	  System.out.println(pass);
+                	  request.executeUpdate(query);
+                	  
+                	  query = "SELECT id FROM utilizador WHERE username ='"+username+"'";
+                	  preparedstatement = connection.prepareStatement(query);
+                	  rs = request.executeQuery(query);
+                	  rs.next();
+                	  id = rs.getInt("id");
+                	  result = "Success";
+                	  resposta[0] = result;
+                      resposta[1] = id;
+                      clrqst.setResponse(resposta);
+                      clrqst.setStage(3);
+                      return clrqst;
+                	  
+            	  }
+            	  catch(SQLException ex){
+            		  System.err.println("ERRO: "+ex);
+            		  resposta[0] = "Insuccess";
+            		  resposta[1] = -1;
+            		  clrqst.setResponse(resposta);
+                      clrqst.setStage(3);
+                      return clrqst;
+            	  }
               }
              
     	  }
