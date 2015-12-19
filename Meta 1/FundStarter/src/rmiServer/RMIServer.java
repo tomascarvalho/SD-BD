@@ -1749,7 +1749,7 @@ package rmiServer;
 
           Object[] objecto = clrqst.getRequest();
           String user = (String) (objecto[1]);
-          int id_projecto = (int) (objecto[2]);
+          int id_projecto = Integer.parseInt((String) objecto[2]);
           int id_user = 0;
 
           try {

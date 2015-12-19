@@ -9,48 +9,36 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import fundstarter.model.ConnectToRMIBean;
 
-public class addNewAdminAction extends ActionSupport implements SessionAware {
-	
+public class NewAdminAction extends ActionSupport implements SessionAware {
+
 	private static final long serialVersionUID = 1L;
 	private Map<String, Object> session;
-	private String user;
-	private String option;
-	
+	private int option;
+
 	@Override
 	public String execute() throws RemoteException{
-		session.put("newProjectID", this.getConnectToRMIBean().getNewProjectID());
-		System.out.println("entro no addnewadmin!!!");
-		System.out.println("a option e:::" + option);
-		if(this.getConnectToRMIBean().addNewAdmin(this.user, this.option).equals("success")){
-			System.out.println("estou aqui outra vez");
+		this.session.put("newProjectID", option);
+		System.out.println("entro no newadminaction e a option e ::: " + option);
 
-			return SUCCESS;
-		}	
-		else{
-			return ERROR;
-		}
+		return SUCCESS;
 	}
-	
-
-	public void setUser(String user) {
-		this.user= user;
-	}
-
-	public void setOption(String option) {
-		this.option = option;
-	}
-
 	
 	public ConnectToRMIBean getConnectToRMIBean() {
-
+		
 		if (!session.containsKey("RMIBean")) {
 			this.setConnectToRMIBean(new ConnectToRMIBean());
 		}
+		
 		return (ConnectToRMIBean) session.get("RMIBean");
 	}
 	
+	public void setOption(String option){
+		this.option = Integer.parseInt(option);
+	}
+
 	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
 		this.session.put("RMIBean", RMIBean);
+		
 	}
 
 	@Override

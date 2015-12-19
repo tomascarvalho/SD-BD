@@ -1,25 +1,34 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>FundStarter</title>
 
-<link href="${pageContext.request.contextPath}/css/shop-homepage.css" rel="stylesheet" type="text/css"/>
-<link href="${pageContext.request.contextPath}/css/alterar.css" rel="stylesheet" type="text/css"/>
-<link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-<link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
+	<link href="${pageContext.request.contextPath}/css/shop-homepage.css" rel="stylesheet" type="text/css"/>
+	<link href="${pageContext.request.contextPath}/css/alterar.css" rel="stylesheet" type="text/css"/>
+	<link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+	<link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
 
+<style>
+	h1 {
+		padding-left:50px;
+	}
+	
+	p.one {
+		padding-left:50px;
+	    padding-bottom:30px;
+	    padding-top:30px;
+	    
+	}
 
-
+</style>
 </head>
 <body>
-
-<!-- Navigation -->
+	
+	<!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -35,19 +44,27 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">A Minha Conta</a>
+                    </li>
+                    <li>
+                        <a href="#">Os Meus Projectos</a>
+                    </li>
+                    <li>
+                        <a href="#">Mensagens</a>
+                    </li>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
 					<li><a href="#campainha"><i class="fa fa-bell"></i></a></li>
 					<li class="dropdown">
-
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${RMIBean.username}'s Actions <span class="caret"></span></a>
-
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${Username}'s Actions <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							
 							<li><s:form action="callAdd" method="post">
 								<button class="list-group-item" type="submit" value="Criar Projecto">Criar Projecto</button>
 							</s:form></li>
-								<!-- Este botão só pode aparecer quando o user estiver logado -->
+								<!-- Este botÃ£o sÃ³ pode aparecer quando o user estiver logado -->
 							<li><s:form action="CheckSaldo" method="post">
 								<button class="list-group-item" type="submit" value="Consultar Saldo">Consultar Saldo </button>
 							</s:form></li>
@@ -69,36 +86,18 @@
         </div>
         <!-- /.container -->
     </nav>
+	<h1>Novo Administrador</h1>
+	
+	<s:form action="addNewAdmin" method="post">
+	
+		Username:
+		<input type="text" name="user">
+		<br>
 
-
-
-<p>Modo Admin</p>
-
-	<s:form action="listDetails" method="post">
-		<s:submit value="Ver Detalhes" />
-		<input type= "hidden" name="option" value="${newProjectID}">
+		<input type="text" name="option" value="${session.newProjectID}" >
 		
+		
+		<s:submit value="Associar" />
 	</s:form>
-<h1>${newProjectID}</h1>
-	<s:form action="newReward" method="post">
-		<s:submit value="Adicionar Recompensa" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
-	
-	<s:form action="showRewards" method="post">
-		<s:submit value="Remover Recompensa" />
-		<input type= "hidden" name="option" value="${ProjectID}">
-	</s:form>
-	
-	<s:form action="newAdmin" method="post">
-		<s:submit value="Adicionar Novo Admin" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
-	
-	<s:form action="cancelarProj" method="post">
-		<s:submit value="Cancelar Projecto" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
-
 </body>
 </html>

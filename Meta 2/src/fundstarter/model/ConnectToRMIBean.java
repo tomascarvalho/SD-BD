@@ -746,9 +746,11 @@ public class ConnectToRMIBean {
 	
 	public String addNewAdmin(String user, String option) throws RemoteException{
 
-		this.dataToSend = new Object[2];
+		this.dataToSend = new Object[3];
 		
 		this.dataToSend[1] = user;
+		
+		System.out.println("A OPTION E ESTA, DIANA :::" + option);
 		this.dataToSend[2] = option;
 
 		this.postCard = new ClientRequest("", this.dataToSend, "");
