@@ -24,9 +24,11 @@ function connect(host) {
 
 function onOpen(event) {
 	console.log("New WebSocket Connection");
-	if(window.location.href == "http://localhost:8080/FundStarterWeb/pledge.action"){
+	if(window.location.href == "http://" + window.location.host + "/FundStarterWeb/pledge.action"){
 		sendPledgeNot()
 	}
+	
+		
 }
 
 function onClose(event) {
@@ -35,6 +37,12 @@ function onClose(event) {
 
 function onMessage(message) { // print the received message
 	alert(message.data);
+	
+	var tokens = message.data.split(" ");
+	
+	if(tokens[0]=="Recebeu"){
+		
+	}
 }
 
 function onError(event) {

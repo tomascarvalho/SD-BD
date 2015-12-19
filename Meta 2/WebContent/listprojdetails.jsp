@@ -9,8 +9,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="websockets.js"></script>
 <title>FundStarter</title>
-<<<<<<< HEAD
-=======
 
 <link href="${pageContext.request.contextPath}/css/shop-homepage.css"
 	rel="stylesheet" type="text/css" />
@@ -119,7 +117,7 @@
 			<p>Descrição:${RMIBean.projectDetails.get("Descricao")}</p>
 			<p>Valor
 				Pretendido:${RMIBean.projectDetails.get("ValorPretendido")}</p>
-			<p>Valor Actual:${RMIBean.projectDetails.get("ValorActual")}</p>
+			<p id="actualValeu">Valor Actual:${RMIBean.projectDetails.get("ValorActual")}</p>
 			<p>Data Limite:${RMIBean.projectDetails.get("DataLimite")}</p>
 
 			<c:choose>
