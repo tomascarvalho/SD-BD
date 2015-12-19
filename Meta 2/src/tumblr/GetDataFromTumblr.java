@@ -158,8 +158,9 @@ public class GetDataFromTumblr extends ActionSupport implements SessionAware{
 		this.getConnectToRMIBean().setBlog(blog);
 		String  result = this.getConnectToRMIBean().tumblrSignIn();
 		System.out.println(result);
-		if (result.equals("Done"))
-			return SUCCESS;
+		if (result.equals("Done")){
+			this.session.put("logged",true);
+			return SUCCESS;}
 		else
 			return ERROR;
     	

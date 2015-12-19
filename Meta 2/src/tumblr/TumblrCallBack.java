@@ -31,6 +31,7 @@ public class TumblrCallBack extends ActionSupport implements SessionAware {
     public String execute() {
     	System.out.println("Is this called");
         if (session.containsKey("accessToken") && session.get("accessToken") != null) {
+        	this.session.put("logged",true);
             return SUCCESS; //accessToken already exists!
         }
         Token requestToken = (Token) session.get("requestToken");
@@ -53,6 +54,7 @@ public class TumblrCallBack extends ActionSupport implements SessionAware {
         System.out.println(this.key);
         this.setSecret(accessToken.getSecret());//just to see something happen
         System.out.println(this.secret);
+        this.session.put("logged",true);
         return SUCCESS;
     }
 

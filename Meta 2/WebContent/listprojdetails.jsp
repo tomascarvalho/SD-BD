@@ -37,8 +37,21 @@
 
 <script type="text/javascript" src="websockets.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
 <body>
+<c:choose>
+		<c:when test="${session.logged !=true}">
+			<s:form id ="cena" action='redirectLogIn' method='post'> 
+				
+				<button type = "submit" class="btn btn-block btn-social btn-tumblr">
+							</button>
+			</s:form>
+			<script>$(document).ready(function() {
+					    $("#cena").submit();
+					});</script>
+		</c:when>
+</c:choose>
 
 	<h1>${RMIBean.projectDetails.get("Titulo") }</h1>
 

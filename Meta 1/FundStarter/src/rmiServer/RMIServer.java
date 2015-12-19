@@ -1884,17 +1884,19 @@ package rmiServer;
               rs = request.executeQuery(query);
               if (rs.next()){
 
+            	  int id_user = rs.getInt("id");
+
             	  System.out.println("1");
 	        	  if (rs.getBoolean("tumblr") == false){
+	        		  
 	        		  System.out.println("2");
-	        		  query = "UPDATE UTILIZADOR SET tumblr = TRUE and blog = ? WHERE id = ?";
+	        		  query = "UPDATE UTILIZADOR SET tumblr = TRUE, blog = '"+blog+"' WHERE id ="+id_user;
 	        		  preparedstatement = connection.prepareStatement(query);
-	        		  preparedstatement.setString(1, blog);
-	        		  preparedstatement.setInt(2, rs.getInt("id"));
+	        
 	        		  request.executeUpdate(query);
                 	  result = "Success";
                 	  resposta[0] = result;
-                      resposta[1] = rs.getInt("id");
+                      resposta[1] = id_user;
                       clrqst.setResponse(resposta);
                       clrqst.setStage(3);
                       return clrqst;
@@ -1903,7 +1905,7 @@ package rmiServer;
 	        		  System.out.println("3");
 	        		  result = "Success";
 	        		  resposta[0] = result;
-                      resposta[1] = rs.getInt("id");
+                      resposta[1] = id_user;
                       clrqst.setResponse(resposta);
                       clrqst.setStage(3);
                       return clrqst;
