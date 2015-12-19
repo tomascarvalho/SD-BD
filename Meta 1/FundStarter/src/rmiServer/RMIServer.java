@@ -533,7 +533,8 @@ package rmiServer;
           }
           clrqst.setStage(2);
           myRequests.add(clrqst);
-          int userID = Integer.parseInt((String) clrqst.getRequest()[0]);
+          int userID = (int)clrqst.getRequest()[0];
+          System.out.println("sonecas " + userID);
           String[] projectInfo = (String[]) clrqst.getRequest()[1];
 
           
@@ -581,6 +582,9 @@ package rmiServer;
               }
 
           }
+          
+          //NIVEIS EXTRA-------------------------------
+          
           else{
               try{
                   query = "SELECT id_projecto FROM projecto_user WHERE id_user = "+userID;

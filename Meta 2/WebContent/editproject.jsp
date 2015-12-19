@@ -82,7 +82,7 @@
 		<input type= "hidden" name="option" value="${newProjectID}">
 		
 	</s:form>
-
+<h1>${newProjectID}</h1>
 	<s:form action="newReward" method="post">
 		<s:submit value="Adicionar Recompensa" />
 		<input type= "hidden" name="option" value="${newProjectID}">

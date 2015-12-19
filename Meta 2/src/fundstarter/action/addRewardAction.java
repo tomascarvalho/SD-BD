@@ -20,6 +20,8 @@ public class addRewardAction extends ActionSupport implements SessionAware  {
 	private String status = "0";
 	
 	public String execute() throws RemoteException{
+		this.session.put("newProjectID", option);
+		System.out.println(this.option + ":::::");
 		if(this.getConnectToRMIBean().addReward(this.valor, this.option, this.titulo, this.status).equals("success")){
 			return SUCCESS;
 		}	

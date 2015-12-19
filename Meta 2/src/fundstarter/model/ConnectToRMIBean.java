@@ -424,14 +424,18 @@ public class ConnectToRMIBean {
 	public String addReward(String valor, String id_proj, String titulo, String status) throws RemoteException {
 		String[] projectInfo = new String[4];
 		this.dataToSend = new Object[2];
-
+	//	this.newProjectID = Integer.parseInt(id_proj);
+		
 		projectInfo[0] = valor;
 		projectInfo[1] = id_proj;
 		projectInfo[2] = titulo;
 		projectInfo[3] = status;
-
-		this.dataToSend[0] = Integer.toString(this.userID);
+		
+		System.out.println("PROJ_ID ::: " + id_proj);
+		
+		this.dataToSend[0] = this.userID;
 		this.dataToSend[1] = projectInfo;
+		
 		this.postCard = new ClientRequest("", this.dataToSend, "");
 
 		this.postCard = this.connectToRMI.addReward(this.postCard);
@@ -454,9 +458,9 @@ public class ConnectToRMIBean {
 
 		dataToSend[0] = this.userID;
 		
-		array_aux[0] = projectID;
-		array_aux[1] = description;
-		array_aux[2] = value;
+		array_aux[1] = projectID;
+		array_aux[2] = description;
+		array_aux[0] = value;
 		array_aux[3] = "1";
 	
 		
