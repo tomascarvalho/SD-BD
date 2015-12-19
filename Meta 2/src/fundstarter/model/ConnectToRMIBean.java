@@ -27,7 +27,11 @@ public class ConnectToRMIBean {
 	private ArrayList<String> projectRewards;
 	private int newProjectID;
 	private ArrayList<HashMap<String, Object>> myMessages;
+
 	private String blog;
+
+	private ArrayList<HashMap<String, Object>> myMessages1;
+
 	
 	public ConnectToRMIBean() {
 
@@ -403,6 +407,7 @@ public class ConnectToRMIBean {
 		if (this.postCard.getResponse()[0].equals("infosave")) {
 			System.out.println("[ConnectToRMI]New project stored");
 			this.newProjectID = (int) this.postCard.getResponse()[1];
+			
 			return "success";
 		} else {
 			return "error";
@@ -668,7 +673,50 @@ public class ConnectToRMIBean {
 			return "error";
 		}
 	}
+	
+	
+	public void formatMessageAns(Object[] data) {
 
+		ArrayList<ArrayList<String>> listOfMessages = (ArrayList<ArrayList<String>>) data[0];		//id_project, pergunta, resposta
+		ArrayList<HashMap<String, Object>> auxList;
+		HashMap<String, Object> auxMap;
+		
+		this.myMessages1 = new ArrayList<HashMap<String, Object>>();
+
+		for(int i=0; i < listOfMessages.size(); i++){
+			
+			auxMap = new HashMap<String, Object>();
+			
+			auxMap.put("ProjectID", listOfMessages.get(i).get(0));
+			auxMap.put("Pergunta", listOfMessages.get(i).get(1));
+			auxMap.put("Resposta", listOfMessages.get(i).get(2));
+			
+			this.myMessages1.add(auxMap);
+		}
+	}
+	
+
+	public void checkAnswer() throws RemoteException{
+		
+		this.dataToSend = new Object[4];
+		
+		this.dataToSend[1] = this.userID;
+		
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+		
+		this.postCard = this.connectToRMI.veResposta(this.postCard);
+		/*
+		if(this.postCard.getResponse()[1].equals("Checked!")){
+			return "success";
+		}
+		else{
+			return "error";
+		}
+		*/
+		formatMessageAns(this.postCard.getResponse());
+
+	}
+	
 	public ArrayList<HashMap<String, Object>> getProjects() {
 		System.out.println("[ConnectToRMI]Returning Projects");
 		return this.projects;
@@ -676,6 +724,10 @@ public class ConnectToRMIBean {
 
 	public ArrayList<HashMap<String, Object>> getMyMessages() {
 		return this.myMessages;
+	}
+	
+	public ArrayList<HashMap<String, Object>> getMyMessages1() {
+		return this.myMessages1;
 	}
 
 	public HashMap<String, Object> getProjectDetails() {

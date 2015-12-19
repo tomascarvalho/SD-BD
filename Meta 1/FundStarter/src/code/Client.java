@@ -806,7 +806,7 @@ public class Client {
     public void pledgeToProject(int id) {
         int[] how_much__to_who = new int[2];
         System.out.print("Quanto quer doar a este projecto: \n\t\t>>");
-        while (!sc.hasNextInt()){
+        while (!sc.hasNextInt() ||  sc.nextInt() <= 0){
         	System.out.println("\t\t>>");
         	sc.next();
         }

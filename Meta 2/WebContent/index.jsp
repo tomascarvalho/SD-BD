@@ -12,6 +12,9 @@
 	
     <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 	<link href="${pageContext.request.contextPath}/css/shop-homepage.css" rel="stylesheet" type="text/css"/>
+	
+	
+	<script type="text/javascript" src="websockets.js"></script>
 </head>
 <body>
 
@@ -42,6 +45,8 @@
         </div>
         <!-- /.container -->
     </nav>
+    
+    <p id="teste"></p>
     
         <!-- Page Content --
     <div class="container">

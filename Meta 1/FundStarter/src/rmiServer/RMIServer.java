@@ -760,6 +760,8 @@ package rmiServer;
               System.err.println("Erro:" + ex);
 
           }
+          
+          resposta[1] = "Checked!";
 
           resposta[0] = pr;
           clrqst.setResponse(resposta);
@@ -1435,8 +1437,7 @@ package rmiServer;
           try {
               query = "SELECT titulo, descricao, valorpretendido, valoractual, data_limite "
                       + "FROM projecto "
-                      + "WHERE projecto.id =" + id_projecto
-                      + " AND status = TRUE";
+                      + "WHERE projecto.id =" + id_projecto;
 
               request = connection.createStatement();
               rs = request.executeQuery(query);
