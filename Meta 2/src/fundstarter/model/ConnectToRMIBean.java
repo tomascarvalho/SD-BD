@@ -10,13 +10,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.servlet.http.HttpServlet;
 
-
 import rmiServer.RMIServerInterface;
 import rmiServer.ClientRequest;
 
-public class ConnectToRMIBean implements Serializable{
+public class ConnectToRMIBean implements Serializable {
 
-	
 	private static final long serialVersionUID = 1L;
 	private RMIServerInterface connectToRMI;
 	private ClientRequest postCard;
@@ -30,9 +28,11 @@ public class ConnectToRMIBean implements Serializable{
 	private ArrayList<String> projectRewards;
 	private int newProjectID;
 	private ArrayList<HashMap<String, Object>> myMessages;
+
+	private String blog;
+
 	private ArrayList<HashMap<String, Object>> myMessages1;
-	
-	
+
 	public ConnectToRMIBean() {
 
 		try {
@@ -71,8 +71,34 @@ public class ConnectToRMIBean implements Serializable{
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
-		
+
 		return "log_in";
+	}
+
+	public String tumblrSignIn() {
+		System.out.println("[ConnectToRMI] Tumblr Sign/Log In");
+
+		this.dataToSend = new Object[2];
+
+		this.dataToSend[0] = username;
+		this.dataToSend[1] = blog;
+
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+
+		try {
+			this.postCard = this.connectToRMI.tumblrSignIn(this.postCard);
+
+			if (this.postCard.getResponse()[0].equals("Success")) {
+				this.userID = (int) this.postCard.getResponse()[1];
+				return "Done";
+			}
+			System.out.println(this.postCard.getResponse()[0]);
+			System.out.println("Erro..");
+
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		return "Error";
 	}
 
 	public String signIn() {
@@ -159,7 +185,7 @@ public class ConnectToRMIBean implements Serializable{
 
 		this.postCard = this.connectToRMI.getUserProjects(this.postCard);
 		// formatProjects((Object[]) this.postCard.getResponse(), option);
-		
+
 		return this.postCard.getResponse();
 	}
 
@@ -223,7 +249,6 @@ public class ConnectToRMIBean implements Serializable{
 		if (project.equals("no_project_to_show")) {
 
 			this.projectDetails = null;
-			
 
 		} else {
 
@@ -376,10 +401,15 @@ public class ConnectToRMIBean implements Serializable{
 
 		this.postCard = this.connectToRMI.novoProjecto(this.postCard);
 
-	
 		if (this.postCard.getResponse()[0].equals("infosave")) {
+
 			System.out.println("[ConnectToRMI]New project stored");
 			this.newProjectID = (int) this.postCard.getResponse()[1];
+			if (this.postCard.getResponse()[3].equals("1")) {
+				this.blog = (String) this.postCard.getResponse()[4];
+				return "tumblr";
+			}
+
 			return "success";
 		} else {
 			return "error";
@@ -414,17 +444,16 @@ public class ConnectToRMIBean implements Serializable{
 	public String addLevel(String projectID, String description, String value) throws RemoteException {
 
 		this.dataToSend = new Object[2];
-		String[] array_aux= new String[4];
+		String[] array_aux = new String[4];
 		this.newProjectID = Integer.parseInt(projectID);
 
 		dataToSend[0] = this.userID;
-		
+
 		array_aux[0] = projectID;
 		array_aux[1] = description;
 		array_aux[2] = value;
 		array_aux[3] = "1";
-	
-		
+
 		dataToSend[1] = array_aux;
 
 		this.postCard = new ClientRequest("", this.dataToSend, "");
@@ -470,10 +499,11 @@ public class ConnectToRMIBean implements Serializable{
 		}
 	}
 
-	public String pledgeToProject(int projectID, int amount) throws RemoteException {
+	public String[] pledgeToProject(int projectID, int amount) throws RemoteException {
 
 		int[] pledgeInfo = new int[2];
 		this.dataToSend = new Object[2];
+		String[] info = new String[2];
 
 		System.out.println("[ConnectToRMI]Ready to pledge to project with:");
 		System.out.println("\tID -> " + projectID);
@@ -493,15 +523,22 @@ public class ConnectToRMIBean implements Serializable{
 		if (this.postCard.getResponse()[0].equals("pledged")) {
 			System.out.println("[ConnectToRMI]Pledged");
 			System.out.println("\tResult -> " + this.postCard.getResponse()[3]);
-
+			ArrayList<String> nova = (ArrayList<String>) this.postCard.getResponse()[5];
+			if (nova.get(0).equals("tumblr"))
+				info[1] = nova.get(1);
+			else
+				info[1] = "Lixo";
 			if (this.postCard.getResponse()[3].equals("No Reward") == false) {
 				System.out.println("[ConnectToRMIBean<plrdgeToProject>]Got Rewards!");
-				return (String) this.postCard.getResponse()[3];
+				info[0] = (String) this.postCard.getResponse()[3];
+				return info;
 			} else {
-				return "success";
+				info[0] = "Success";
+				return info;
 			}
 		} else {
-			return "error";
+			info[0] = "error";
+			return info;
 		}
 	}
 
@@ -563,13 +600,13 @@ public class ConnectToRMIBean implements Serializable{
 		this.myMessages = new ArrayList<HashMap<String, Object>>();
 
 		for (int i = 0; i < listOfIds.size(); i++) {
-			
+
 			System.out.println("[ConnectToRMI]<formatMessages>: i -> " + i);
 			if (listOfIds.get(i).size() != 0) {
 
 				auxMap = new HashMap<String, Object>();
 				auxList = new ArrayList<HashMap<String, Object>>();
-				
+
 				System.out.println("[ConnectToRMI]<formatMessages>: Project ID -> " + listOfIds.get(i));
 				auxMap.put("ProjectID", listOfIds.get(i).get(0));
 
@@ -577,7 +614,8 @@ public class ConnectToRMIBean implements Serializable{
 
 					auxMessage = new HashMap<String, Object>();
 
-					System.out.println("[ConnectToRMI]<formatMessages>: message " + j + " -> " + listOfMessages.get(i).get(j));
+					System.out.println(
+							"[ConnectToRMI]<formatMessages>: message " + j + " -> " + listOfMessages.get(i).get(j));
 
 					auxMessage.put("MessageID", listOfIds.get(i).get(j));
 					auxMessage.put("Message", listOfMessages.get(i).get(j));
@@ -588,7 +626,7 @@ public class ConnectToRMIBean implements Serializable{
 
 				auxMap.put("ProjectMessages", auxList);
 				this.myMessages.add(auxMap);
-				
+
 			}
 		}
 	}
@@ -625,70 +663,78 @@ public class ConnectToRMIBean implements Serializable{
 			return "success";
 		}
 	}
-	
-	public String replyMessage(int messageId, String message) throws RemoteException{
-		
+
+	public String replyMessage(int messageId, String message) throws RemoteException {
+
 		this.dataToSend = new Object[3];
-		
+
 		this.dataToSend[0] = 0;
 		this.dataToSend[1] = messageId;
 		this.dataToSend[2] = message;
-		
+
 		this.postCard = new ClientRequest("", this.dataToSend, "");
-		
+
 		this.postCard = this.connectToRMI.respMensagem(this.postCard);
-		
-		if(this.postCard.getResponse()[0].equals("Pergunta respondida!")){
+
+		if (this.postCard.getResponse()[0].equals("Pergunta respondida!")) {
 			return "success";
-		}
-		else{
+		} else {
 			return "error";
 		}
 	}
-	
-	
+
 	public void formatMessageAns(Object[] data) {
 
-		ArrayList<ArrayList<String>> listOfMessages = (ArrayList<ArrayList<String>>) data[0];		//id_project, pergunta, resposta
+		ArrayList<ArrayList<String>> listOfMessages = (ArrayList<ArrayList<String>>) data[0]; // id_project,
+																								// pergunta,
+																								// resposta
 		ArrayList<HashMap<String, Object>> auxList;
 		HashMap<String, Object> auxMap;
-		
+
 		this.myMessages1 = new ArrayList<HashMap<String, Object>>();
 
-		for(int i=0; i < listOfMessages.size(); i++){
-			
+		for (int i = 0; i < listOfMessages.size(); i++) {
+
 			auxMap = new HashMap<String, Object>();
-			
+
 			auxMap.put("ProjectID", listOfMessages.get(i).get(0));
 			auxMap.put("Pergunta", listOfMessages.get(i).get(1));
 			auxMap.put("Resposta", listOfMessages.get(i).get(2));
-			
+
 			this.myMessages1.add(auxMap);
 		}
 	}
-	
 
-	public void checkAnswer() throws RemoteException{
-		
+	public void checkAnswer() throws RemoteException {
+
 		this.dataToSend = new Object[4];
-		
+
 		this.dataToSend[1] = this.userID;
-		
+
 		this.postCard = new ClientRequest("", this.dataToSend, "");
-		
+
 		this.postCard = this.connectToRMI.veResposta(this.postCard);
 		/*
-		if(this.postCard.getResponse()[1].equals("Checked!")){
-			return "success";
-		}
-		else{
-			return "error";
-		}
-		*/
+		 * if(this.postCard.getResponse()[1].equals("Checked!")){ return
+		 * "success"; } else{ return "error"; }
+		 */
 		formatMessageAns(this.postCard.getResponse());
 
 	}
-	
+
+	public ArrayList<Integer> getProjectAdmins(int projectID) throws RemoteException{
+
+		this.dataToSend = new Object[1];
+
+		this.dataToSend[0] = projectID;
+
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+		
+		this.postCard = this.connectToRMI.getProjectAdmins(this.postCard);
+		
+		return (ArrayList<Integer>) this.postCard.getResponse()[0];
+	}
+
 	public ArrayList<HashMap<String, Object>> getProjects() {
 		System.out.println("[ConnectToRMI]Returning Projects");
 		return this.projects;
@@ -697,7 +743,7 @@ public class ConnectToRMIBean implements Serializable{
 	public ArrayList<HashMap<String, Object>> getMyMessages() {
 		return this.myMessages;
 	}
-	
+
 	public ArrayList<HashMap<String, Object>> getMyMessages1() {
 		return this.myMessages1;
 	}
@@ -725,9 +771,21 @@ public class ConnectToRMIBean implements Serializable{
 	public int getNewProjectID() {
 		return this.newProjectID;
 	}
-	
-	public int getUserID(){
+
+	public int getUserID() {
 		return this.userID;
 	}
-	
+
+	public void setBlog(String blog) {
+		this.blog = blog;
+	}
+
+	public String getBlog() {
+		return this.blog;
+	}
+
+	public String getUsername() {
+		return this.username;
+	}
+
 }

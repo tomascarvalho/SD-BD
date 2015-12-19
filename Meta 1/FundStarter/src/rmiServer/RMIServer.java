@@ -14,17 +14,15 @@ package rmiServer;
  */
 
   import java.awt.BorderLayout;
-import java.net.MalformedURLException;
-import java.rmi.*;
+  import java.net.MalformedURLException;
+  import java.rmi.*;
   import java.rmi.registry.LocateRegistry;
   import java.rmi.server.UnicastRemoteObject;
   import java.sql.*;
   import java.util.*;
   import java.util.logging.Level;
   import java.util.logging.Logger;
-
-
-import java.util.Date;
+  import java.util.Date;
 
   public class RMIServer extends UnicastRemoteObject implements RMIServerInterface {
 
@@ -51,7 +49,7 @@ import java.util.Date;
           System.out.println("[RMI Server] Pronto e à escuta.");
       }
 
-      public Object[] resposta = new Object[5]; //alterei
+      public Object[] resposta = new Object[6]; //alterei
       private ArrayList<ClientRequest> myRequests = new ArrayList<ClientRequest>();
 
       Scanner sc = new Scanner(System.in);
@@ -289,14 +287,37 @@ import java.util.Date;
               resposta[0] = "infosave";
               resposta[1] = id;
               System.out.println("\n\nO ID E ESTE: " + id + "    " + resposta[1]);
+
+
+          } catch (SQLException ex) {
+              System.err.println("Erro:" + ex);
+          }
+          try {
+        	  query = "SELECT tumblr, blog FROM UTILIZADOR WHERE id="+userID;
+        	  preparedstatement = connection.prepareStatement(query);
+              rs = request.executeQuery(query);
+              if (rs.next())
+              {
+            	  System.out.println("AQUI");
+            	  if (rs.getBoolean("tumblr")==true){
+            		  resposta[3] = "1";
+            		  resposta[4] = rs.getString("blog");
+            	  }
+            	  else resposta[3] ="0";
+              }
+
+        	  else{
+        		  resposta[3] = "0";
+        	  }
               clrqst.setResponse(resposta);
               clrqst.setStage(3);
 
               updateRequest(clrqst);
-
-          } catch (SQLException ex) {
-              System.err.println("Erro:" + ex);
-          } finally {
+          }
+          catch(SQLException ex1){
+        	  System.err.println("ERRO (312): "+ex1);
+          }
+          /* finally {
               if (request != null) {
                   try {
                       request.close();
@@ -304,7 +325,7 @@ import java.util.Date;
                       Logger.getLogger(RMIServer.class.getName()).log(Level.SEVERE, null, ex);
                   }
               }
-          }
+          }*/
 
           return clrqst;
       }
@@ -514,6 +535,7 @@ import java.util.Date;
           myRequests.add(clrqst);
           int userID = Integer.parseInt((String) clrqst.getRequest()[0]);
           String[] projectInfo = (String[]) clrqst.getRequest()[1];
+
 
           int valor = Integer.parseInt(projectInfo[0]);
           int projectID = Integer.parseInt(projectInfo[1]);
@@ -762,7 +784,7 @@ import java.util.Date;
               System.err.println("Erro:" + ex);
 
           }
-          
+
           resposta[1] = "Checked!";
 
           resposta[0] = pr;
@@ -1439,8 +1461,7 @@ import java.util.Date;
           try {
               query = "SELECT titulo, descricao, valorpretendido, valoractual, data_limite "
                       + "FROM projecto "
-                      + "WHERE projecto.id =" + id_projecto
-                      + " AND status = TRUE";
+                      + "WHERE projecto.id =" + id_projecto;
 
               request = connection.createStatement();
               rs = request.executeQuery(query);
@@ -1552,18 +1573,21 @@ import java.util.Date;
           int user_id = (int) objecto[0];
           int novo_valor_actual = 0, novo_saldo = 0;
           ArrayList<String> product_type = new ArrayList();
+          ArrayList<String> tumblr_like = new ArrayList();
           int saldo = 0, i = 0;
           String recompensas = new String();
           int id_recompensa = 0;
+          boolean tumblr = false;
 
           try {
-              query = "SELECT saldo "
+              query = "SELECT saldo,tumblr "
                       + "FROM utilizador "
                       + "WHERE id =" + user_id;
               request = connection.createStatement();
               rs = request.executeQuery(query);
               if (rs.next()) {
                   saldo = rs.getInt("saldo");
+                  tumblr = rs.getBoolean("tumblr");
               }
               if (saldo >= how_much) {
 
@@ -1663,9 +1687,34 @@ import java.util.Date;
                       System.err.println("SQLException 784:" + ex);
                   }
 
+                  if(tumblr){
+                	  try{
+                		  query = "SELECT tumblr, blog FROM UTILIZADOR WHERE id=("
+                		  		+ "SELECT id_user FROM PROJECTO_USER WHERE id_projecto ="+to_who+" ORDER BY id ASC LIMIT 1)";
+                		  request = connection.createStatement();
+                          rs = request.executeQuery(query);
+                          if (rs.next()){
+                        	  if (rs.getBoolean("tumblr")==true){
+                        		  tumblr_like.add("tumblr");
+                        		  tumblr_like.add(rs.getString("blog"));
+
+                        	  }
+                        	  else{
+                        		  tumblr_like.add("no_tumblr");
+
+                        	  }
+                          }
+                	  }
+
+                	  catch(SQLException ex){
+                		  System.err.print("ERRO (1695): "+ex);
+                	  }
+                  }
+
                   resposta[0] = "pledged";
                   resposta[1] = saldo - how_much;
                   resposta[4] = product_type;
+                  resposta[5] = tumblr_like;
               } else {
 
                   resposta[0] = "Sem saldo";
@@ -1815,6 +1864,118 @@ import java.util.Date;
 
       }
 
+      public ClientRequest tumblrSignIn(ClientRequest clrqst) throws RemoteException{
+    	  String username = (String)clrqst.getRequest()[0];
+    	  String blog = (String)clrqst.getRequest()[1];
+    	  String pass= "tumblrPass";
+    	  String result;
+    	  int id;
+
+
+    	  try{
+    		  query = "SELECT id,tumblr FROM UTILIZADOR WHERE username = '"+username+"'";
+			  preparedstatement = connection.prepareStatement(query);
+              rs = request.executeQuery(query);
+              if (rs.next()){
+
+            	  System.out.println("1");
+	        	  if (rs.getBoolean("tumblr") == false){
+	        		  System.out.println("2");
+	        		  query = "UPDATE UTILIZADOR SET tumblr = TRUE and blog = ? WHERE id = ?";
+	        		  preparedstatement = connection.prepareStatement(query);
+	        		  preparedstatement.setString(1, blog);
+	        		  preparedstatement.setInt(2, rs.getInt("id"));
+	        		  request.executeUpdate(query);
+                	  result = "Success";
+                	  resposta[0] = result;
+                      resposta[1] = rs.getInt("id");
+                      clrqst.setResponse(resposta);
+                      clrqst.setStage(3);
+                      return clrqst;
+	        	  }
+	        	  else{
+	        		  System.out.println("3");
+	        		  result = "Success";
+	        		  resposta[0] = result;
+                      resposta[1] = rs.getInt("id");
+                      clrqst.setResponse(resposta);
+                      clrqst.setStage(3);
+                      return clrqst;
+	        	  }
+              }
+              else{
+            	  try{
+            		  System.out.println("1");
+
+            		  query = "INSERT INTO utilizador (username, pass, saldo, tumblr, blog) VALUES ('"+username+"','"+pass+"', 100, TRUE, '"+blog+"')";
+                	  preparedstatement = connection.prepareStatement(query);
+
+                	  System.out.println(blog);
+                	  System.out.println(username);
+                	  System.out.println(pass);
+                	  request.executeUpdate(query);
+
+                	  query = "SELECT id FROM utilizador WHERE username ='"+username+"'";
+                	  preparedstatement = connection.prepareStatement(query);
+                	  rs = request.executeQuery(query);
+                	  rs.next();
+                	  id = rs.getInt("id");
+                	  result = "Success";
+                	  resposta[0] = result;
+                      resposta[1] = id;
+                      clrqst.setResponse(resposta);
+                      clrqst.setStage(3);
+                      return clrqst;
+
+            	  }
+            	  catch(SQLException ex){
+            		  System.err.println("ERRO: "+ex);
+            		  resposta[0] = "Insuccess";
+            		  resposta[1] = -1;
+            		  clrqst.setResponse(resposta);
+                      clrqst.setStage(3);
+                      return clrqst;
+            	  }
+              }
+
+    	  }
+          catch(SQLException ex){
+        	  System.err.print("Erro: "+ex);
+        	  System.err.println("ERRO: "+ex);
+    		  resposta[0] = "Insuccess";
+    		  resposta[1] = -1;
+    		  clrqst.setResponse(resposta);
+              clrqst.setStage(3);
+              return clrqst;
+          }
+
+
+      }
+
+      public ClientRequest getProjectAdmins(ClientRequest clrqst) throws RemoteException{
+
+          int projectID = (int)clrqst.getRequest()[0];
+          ArrayList<Integer> projectAdmins = new ArrayList<Integer>();
+
+          try{
+            query = "SELECT id_user FROM projecto_user WHERE id_projecto ="+projectID;
+            preparedstatement = connection.prepareStatement(query);
+            rs = request.executeQuery(query);
+            while(rs.next()){
+
+              projectAdmins.add(rs.getInt("id_user"));
+
+            }
+          }catch(SQLException e){
+            e.printStackTrace();
+          }
+
+          resposta[0] = projectAdmins;
+
+          clrqst.setResponse(resposta);
+
+          return clrqst;
+      }
 
 
 

@@ -13,6 +13,8 @@ import java.rmi.*;
  */
 
 public interface RMIServerInterface extends Remote {
+	
+	public ClientRequest tumblrSignIn(ClientRequest clrqst) throws RemoteException;
     
     public ClientRequest getProjectDetails(ClientRequest clrqst) throws RemoteException;
 
@@ -62,5 +64,5 @@ public interface RMIServerInterface extends Remote {
     
     public String addProductType(ClientRequest clrqst) throws RemoteException;
     
-
+    public ClientRequest getProjectAdmins(ClientRequest clrqst) throws RemoteException;
 }

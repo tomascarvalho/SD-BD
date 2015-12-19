@@ -57,7 +57,9 @@
                 <ul class="nav navbar-nav navbar-right">
 					<li><a href="#campainha"><i class="fa fa-bell"></i></a></li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">#Nome User <span class="caret"></span></a>
+
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${RMIBean.username}'s Actions <span class="caret"></span></a>
+
 						<ul class="dropdown-menu">
 							
 							<li><s:form action="callAdd" method="post">
@@ -70,6 +72,11 @@
 							<li><s:form action="AdminMode" method="post">
 								<button class="list-group-item" type="submit" value="Meus Projectos" name="option" value="0">Meus Projectos</button>
 							</s:form></li>
+							
+							<li><s:form action="seeInbox" method="post">
+								<button class="list-group-item" type="submit" value="Caixa de Correio">Caixa de Correio </button>
+							</s:form></li>
+							
 							<!-- Temos que mandar info de logout......... -->
 							<li><a class="btn list-group-item" href="index.jsp">Log Out</a></li>
 						</ul>

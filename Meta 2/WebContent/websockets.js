@@ -44,8 +44,11 @@ function doSend() {
 		var projectId = document.getElementById("projID").value;
 	}
 	if (amount != "") {
+		
+		//amount/projectId/userId
 		var dataOfPledge = "" + amount + "/" + projectId;
 		websocket.send(dataOfPledge);
+		
 	}
 
 }

@@ -16,7 +16,7 @@
 	</s:form>
 <h1>${session.RMIBean.newProjectID}</h1>
 	<s:form action="newReward" method="post">
-		<input type="hidden" name="option" value="${session.RMIBean.newProjectID}" />
+		<input type="hidden" name="option" value="${session.newProjectID}" />
 		<s:submit value="Adicionar Recompensa" />
 	</s:form>
 	

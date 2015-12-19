@@ -1,6 +1,8 @@
 package ws;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -43,11 +45,35 @@ public class WSEndPoint {
 
 	@OnMessage
 	public void onMessage(String message) {
+		
+		//amount/projectId
+		String[] data = message.split("/");
+		String newMessage = "Recebeu uma doação de " + data[0] + "euros";
+		
+		int amount = Integer.parseInt(data[0]);
+		int projectID = Integer.parseInt(data[1]);
+		ArrayList<Integer> projectAdmins = null;
+		
+		try {
+			projectAdmins = this.sessionUser.getProjectAdmins(projectID);
+		} catch (RemoteException e1) {
+			e1.printStackTrace();
+		}
+		
+		if(projectAdmins == null)
+			return;
+		
 		for (WSEndPoint person : myConnections) {
-			try {
-				person.session.getBasicRemote().sendText(message);
-			} catch (IOException e) {
-				e.printStackTrace();
+			
+			for(int i = 0; i < projectAdmins.size(); i++){
+				
+				if(person.sessionUser.getUserID() == projectAdmins.get(i)){
+					try {
+						person.session.getBasicRemote().sendText(newMessage);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 	}

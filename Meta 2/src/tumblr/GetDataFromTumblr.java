@@ -1,5 +1,7 @@
 package tumblr;
 import com.opensymphony.xwork2.ActionSupport;
+
+
 import java.util.Map;
 
 import org.apache.struts2.interceptor.SessionAware;
@@ -19,6 +21,9 @@ import com.github.scribejava.core.model.Token;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.model.Verifier;
 import com.github.scribejava.core.oauth.OAuthService;
+import com.google.gson.Gson;
+import org.json.*;
+
 import java.rmi.RemoteException;
 import java.util.Map;
 import fundstarter.model.ConnectToRMIBean;
@@ -37,50 +42,146 @@ public class GetDataFromTumblr extends ActionSupport implements SessionAware{
     private String oauth_verifier;
     private String token;
     private String username;
-    
+    private String blog;
+    private String type;
+    private String title = "Test Title";
+    private String body;
+    private String reblog_key;
+    long id;
+
     
     @Override
     public String execute(){
     	
+    	int i = 0;
     	String userUri = "api.tumblr.com/v2/user/info";
-    	String userUrl="https://";
-    	userUrl = userUrl+userUri;
+    	String postUri = "api.tumblr.com/v2/blog/";
+    	String likeUri= "api.tumblr.com/v2/user/like";
     	
-    	System.out.println(userUrl);
+    	String post = "/post";
+    	String url="https://";
+    	url = url+userUri;
+    	
+    	System.out.println(url);
         Token accessToken = (Token)(session.get("accessToken"));
         OAuthService tumblrService = (OAuthService)session.get("tumblrService");
         
-    	OAuthRequest request = new OAuthRequest(Verb.GET, userUrl, tumblrService);
+    	OAuthRequest request = new OAuthRequest(Verb.GET, url, tumblrService);
     	request.addHeader("Accept", "application/json");
     	tumblrService.signRequest(accessToken, request);
-    	System.out.println(request.getHeaders().keySet());
+
     	Response response = request.send();
-    	System.out.println("Aqui");
-    	System.out.println(response.getBody());
-    	System.out.println("--");
-    	JSONObject obj = (JSONObject)JSONValue.parse(response.getBody());
-    	System.out.println("---");
-    	JSONObject arr = (JSONObject)obj.get("response");
-		for(int i=0; i< arr.size(); i++) {
-			JSONObject item = (JSONObject) arr.get(i);
-			JSONObject user = (JSONObject) item.get("user");
-			System.out.println(user.get("name"));
-		}
-    	System.out.println("Got it! Lets see what we found...");
-    	System.out.println("HTTP RESPONSE: =============");
-    	System.out.println(response.getCode());
-    	System.out.println(response.getBody());
+
+
     	
-    	System.out.println("END RESPONSE ===============");
+    
     	
-		/*this.getConnectToRMIBean().setUsername(this.username);
-		this.getConnectToRMIBean().setPassword(this.password);*/
-    	return SUCCESS;
+    	try{
+    		/* ESTA VAI BUSCAR O USER E O BLOG*/
+    		JSONObject obj = (JSONObject) JSONValue.parse(response.getBody());
+    		JSONObject resp = (JSONObject)obj.get("response");
+        	System.out.println(resp);
+        	
+    		JSONObject user = (JSONObject)resp.get("user");
+    		JSONArray arr = (JSONArray)user.get("blogs");
+    		username = (String)user.get("name");
+    		System.out.println(username);
+    		if (arr.size() > 0){
+    			JSONObject bloginfo = (JSONObject)arr.get(0);
+    			blog = (String)bloginfo.get("name")+".tumblr.com";
+    			
+    		}
+    		System.out.println(blog);
+    		
+    		/* ESTA FAZ POSTS*/
+    		/*url="https://";
+    		url = url+postUri+blog+post;
+			request = new OAuthRequest(Verb.POST, url, tumblrService);
+        	request.addBodyParameter("type", "text");
+        	request.addBodyParameter("title", "Test Title");
+        	request.addBodyParameter("body", "This is the body");
+        	tumblrService.signRequest(accessToken, request);
+
+        	response = request.send();
+        	System.out.println(response);*/
+        	
+    		
+    		/* ESTA METE LIKES */
+    		/*
+        	url="https://";
+        	String getID = "api.tumblr.com/v2/blog/"+
+        			blog
+        			+ "/posts";
+        	url = url+getID;
+        	request = new OAuthRequest(Verb.GET, url, tumblrService);
+			request.addHeader("Accept", "application/json");
+			tumblrService.signRequest(accessToken, request);
+        	response = request.send();
+        	System.out.println(response.getBody());
+        	
+        	obj = (JSONObject) JSONValue.parse(response.getBody());
+    		resp = (JSONObject)obj.get("response");
+    	
+    		JSONArray posts = (JSONArray)(resp.get("posts"));
+    		while ((i<posts.size())&&((String)((JSONObject)posts.get(i)).get("title")).equals(title) ==false){
+    			id = (long)((JSONObject)posts.get(i)).get("id");
+    			i++;
+    		}
+    		id = (long)((JSONObject)posts.get(i)).get("id");
+    		reblog_key = ((JSONObject)posts.get(i)).get("reblog_key").toString();
+    		System.out.println(""+id);
+    		
+
+    		url="https://";
+    		url = url+likeUri;
+    		System.out.println(url);
+        	request = new OAuthRequest(Verb.POST, url, tumblrService);
+        	request.addBodyParameter("id", ""+id);
+        	request.addBodyParameter("reblog_key", reblog_key);
+        	System.out.println(request);
+        	tumblrService.signRequest(accessToken, request);
+
+        	response = request.send();
+        	System.out.println(response);
+        	*/
+    		
+        	
+    		
+    	}
+    	catch(NullPointerException ex){
+    		System.out.println("Algo esta mal");
+    		return ERROR;
+    	}
+
+    	
+		this.getConnectToRMIBean().setUsername(username);
+		this.getConnectToRMIBean().setBlog(blog);
+		String  result = this.getConnectToRMIBean().tumblrSignIn();
+		System.out.println(result);
+		if (result.equals("Done"))
+			return SUCCESS;
+		else
+			return ERROR;
     	
     }
  
 	
 	
+	public ConnectToRMIBean getConnectToRMIBean() {
+
+		if (!session.containsKey("RMIBean")) {
+			this.setConnectToRMIBean(new ConnectToRMIBean());
+		}
+		return (ConnectToRMIBean) session.get("RMIBean");
+	}
+
+	public void setConnectToRMIBean(ConnectToRMIBean RMIBean) {
+		this.session.put("RMIBean", RMIBean);
+	}
+
+
+
+
 	@Override
     public void setSession(Map<String, Object> map) {
         this.session = map;
