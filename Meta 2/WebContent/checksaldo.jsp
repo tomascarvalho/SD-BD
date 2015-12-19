@@ -7,6 +7,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<script type="text/javascript" src="websockets.js"></script>
 <title>FundStarter</title>
 
 <link href="${pageContext.request.contextPath}/css/shop-homepage.css" rel="stylesheet" type="text/css"/>
@@ -94,7 +96,9 @@ h2 {
 
 
 	
+
 	<h1>Saldo: ${RMIBean.balance}</h1>
+
 
 	
 </body>

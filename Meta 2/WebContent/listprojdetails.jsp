@@ -20,7 +20,9 @@
     </script>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
-
+	
+	
+	<script type="text/javascript" src="websockets.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
@@ -105,15 +107,16 @@
 					<h2>Este projecto não tem produtos</h2>
 				</c:otherwise>
 			</c:choose>
-
+				
 			<s:form action="pledge" method="post">
-				<input type="text" name="amount">
-				<input type="hidden" name="projectID"
+				<input type="text" name="amount" id="amt" value="">
+				<input type="hidden" name="projectID" id="projID"
 					value=${session.listedProjectID}>
-				<s:submit value="Pledge to Project" />
+				<!--<s:submit value="Pledge to Project"/>-->
+				<button type="submit" onClick="doSend()">Pledge to Project</button>
 			</s:form>
 
-
+	
 			<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#enviarMensagem">Enviar Mensagem</button>
 			<div class="modal fade" id="enviarMensagem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
             <div class="modal-dialog" role="document">

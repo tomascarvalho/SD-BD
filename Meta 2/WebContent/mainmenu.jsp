@@ -25,6 +25,9 @@
 
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="websockets.js"></script>
+
 </head>
 <body>
 <c:choose>
@@ -125,6 +128,7 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
 
+	 <p id="teste"></p>
 
 <!-- 
 	<s:form action="ListCancel" method="post">

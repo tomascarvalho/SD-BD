@@ -18,7 +18,8 @@
     </script>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
-
+	
+	<script type="text/javascript" src="websockets.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>FundStarter</title>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -87,10 +88,9 @@
         </div>
         <!-- /.container -->
     </nav>
-    
 
 	<c:choose>
-		<c:when test="${Reward != null}">
+		<c:when test="${Reward != 'No reward'}">
 			<h4>Ganhou um Recompensa:</h4>
 			<p>${session.Reward}</p>
 			

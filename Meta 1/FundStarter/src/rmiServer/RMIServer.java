@@ -305,7 +305,7 @@ package rmiServer;
             	  }
             	  else resposta[3] ="0";
               }
-        	  
+
         	  else{
         		  resposta[3] = "0";
         	  }
@@ -537,7 +537,7 @@ package rmiServer;
           System.out.println("sonecas " + userID);
           String[] projectInfo = (String[]) clrqst.getRequest()[1];
 
-          
+
           int valor = Integer.parseInt(projectInfo[0]);
           int projectID = Integer.parseInt(projectInfo[1]);
           String titulo = projectInfo[2];
@@ -582,9 +582,9 @@ package rmiServer;
               }
 
           }
-          
+
           //NIVEIS EXTRA-------------------------------
-          
+
           else{
               try{
                   query = "SELECT id_projecto FROM projecto_user WHERE id_user = "+userID;
@@ -788,7 +788,7 @@ package rmiServer;
               System.err.println("Erro:" + ex);
 
           }
-          
+
           resposta[1] = "Checked!";
 
           resposta[0] = pr;
@@ -1692,7 +1692,7 @@ package rmiServer;
                   } catch (SQLException ex) {
                       System.err.println("SQLException 784:" + ex);
                   }
-                  
+
                   if(tumblr){
                 	  try{
                 		  query = "SELECT tumblr, blog FROM UTILIZADOR WHERE id=("
@@ -1703,20 +1703,20 @@ package rmiServer;
                         	  if (rs.getBoolean("tumblr")==true){
                         		  tumblr_like.add("tumblr");
                         		  tumblr_like.add(rs.getString("blog"));
-                        		  
+
                         	  }
                         	  else{
                         		  tumblr_like.add("no_tumblr");
-                        		 
+
                         	  }
                           }
                 	  }
-                	  
+
                 	  catch(SQLException ex){
                 		  System.err.print("ERRO (1695): "+ex);
                 	  }
                   }
-                  
+
                   resposta[0] = "pledged";
                   resposta[1] = saldo - how_much;
                   resposta[4] = product_type;
@@ -1876,14 +1876,18 @@ package rmiServer;
     	  String pass= "tumblrPass";
     	  String result;
     	  int id;
-    	 
-	  		
+
+
     	  try{
     		  query = "SELECT id,tumblr FROM UTILIZADOR WHERE username = '"+username+"'";
 			  preparedstatement = connection.prepareStatement(query);
               rs = request.executeQuery(query);
               if (rs.next()){
+<<<<<<< HEAD
             	  int id_user = rs.getInt("id");
+=======
+
+>>>>>>> 4276eb624d45198be3ad5bab6b064d16a0bf4358
             	  System.out.println("1");
 	        	  if (rs.getBoolean("tumblr") == false){
 	        		  
@@ -1912,15 +1916,15 @@ package rmiServer;
               else{
             	  try{
             		  System.out.println("1");
-            		  
+
             		  query = "INSERT INTO utilizador (username, pass, saldo, tumblr, blog) VALUES ('"+username+"','"+pass+"', 100, TRUE, '"+blog+"')";
                 	  preparedstatement = connection.prepareStatement(query);
-                	 
+
                 	  System.out.println(blog);
                 	  System.out.println(username);
                 	  System.out.println(pass);
                 	  request.executeUpdate(query);
-                	  
+
                 	  query = "SELECT id FROM utilizador WHERE username ='"+username+"'";
                 	  preparedstatement = connection.prepareStatement(query);
                 	  rs = request.executeQuery(query);
@@ -1932,7 +1936,7 @@ package rmiServer;
                       clrqst.setResponse(resposta);
                       clrqst.setStage(3);
                       return clrqst;
-                	  
+
             	  }
             	  catch(SQLException ex){
             		  System.err.println("ERRO: "+ex);
@@ -1943,7 +1947,7 @@ package rmiServer;
                       return clrqst;
             	  }
               }
-             
+
     	  }
           catch(SQLException ex){
         	  System.err.print("Erro: "+ex);
@@ -1954,8 +1958,33 @@ package rmiServer;
               clrqst.setStage(3);
               return clrqst;
           }
-    	
-    	  
+
+
+      }
+
+      public ClientRequest getProjectAdmins(ClientRequest clrqst) throws RemoteException{
+
+          int projectID = (int) clrqst.getRequest()[0];
+          ArrayList<Integer> projectAdmins = new ArrayList<Integer>();
+
+          try{
+            query = "SELECT id_user FROM projecto_user WHERE id_projecto ="+projectID;
+            preparedstatement = connection.prepareStatement(query);
+            rs = request.executeQuery(query);
+            while(rs.next()){
+
+              projectAdmins.add(rs.getInt("id_user"));
+
+            }
+          }catch(SQLException e){
+            e.printStackTrace();
+          }
+
+          resposta[0] = projectAdmins;
+
+          clrqst.setResponse(resposta);
+
+          return clrqst;
       }
 
 

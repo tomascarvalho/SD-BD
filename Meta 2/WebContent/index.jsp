@@ -1,4 +1,6 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -13,8 +15,7 @@
     <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 	<link href="${pageContext.request.contextPath}/css/shop-homepage.css" rel="stylesheet" type="text/css"/>
 	
-	
-	<script type="text/javascript" src="websockets.js"></script>
+
 </head>
 <body>
 
@@ -38,6 +39,7 @@
                     </li>
                     <li>
                         <a href="signin.jsp">Sign In</a>
+                        
                     </li>
                 </ul>
             </div>
@@ -47,8 +49,8 @@
     </nav>
     
     <p id="teste"></p>
- 
 
+   
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
 

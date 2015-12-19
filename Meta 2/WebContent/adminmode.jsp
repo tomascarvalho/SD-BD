@@ -13,6 +13,7 @@
 <link href="${pageContext.request.contextPath}/css/alterar.css" rel="stylesheet" type="text/css"/>
 <link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
 <link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="websockets.js"></script>
 <style>
 	p.one {
 	    padding-right: 30px;
