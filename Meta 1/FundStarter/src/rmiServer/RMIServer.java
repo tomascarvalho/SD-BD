@@ -1883,11 +1883,9 @@ package rmiServer;
 			  preparedstatement = connection.prepareStatement(query);
               rs = request.executeQuery(query);
               if (rs.next()){
-<<<<<<< HEAD
-            	  int id_user = rs.getInt("id");
-=======
 
->>>>>>> 4276eb624d45198be3ad5bab6b064d16a0bf4358
+            	  int id_user = rs.getInt("id");
+
             	  System.out.println("1");
 	        	  if (rs.getBoolean("tumblr") == false){
 	        		  
