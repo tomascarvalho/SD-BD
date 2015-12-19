@@ -286,6 +286,7 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
 
+	 <p id="teste"></p>
 
 <!-- 
 	<s:form action="ListCancel" method="post">

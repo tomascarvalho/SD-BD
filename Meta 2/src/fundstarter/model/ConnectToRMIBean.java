@@ -2,19 +2,22 @@ package fundstarter.model;
 
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 
-//import com.sun.javafx.collections.HashMaopingChange.HashMao;
+import java.util.HashMap;
+import javax.servlet.http.HttpServlet;
+
 
 import rmiServer.RMIServerInterface;
 import rmiServer.ClientRequest;
 
-public class ConnectToRMIBean {
+public class ConnectToRMIBean implements Serializable{
 
+	
+	private static final long serialVersionUID = 1L;
 	private RMIServerInterface connectToRMI;
 	private ClientRequest postCard;
 	private Object[] dataToSend;
@@ -28,6 +31,7 @@ public class ConnectToRMIBean {
 	private int newProjectID;
 	private ArrayList<HashMap<String, Object>> myMessages;
 	private ArrayList<HashMap<String, Object>> myMessages1;
+	
 	
 	public ConnectToRMIBean() {
 
@@ -67,7 +71,7 @@ public class ConnectToRMIBean {
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
-
+		
 		return "log_in";
 	}
 
@@ -720,6 +724,10 @@ public class ConnectToRMIBean {
 
 	public int getNewProjectID() {
 		return this.newProjectID;
+	}
+	
+	public int getUserID(){
+		return this.userID;
 	}
 	
 }

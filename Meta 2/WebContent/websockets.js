@@ -1,17 +1,16 @@
 var websocket = null;
 
-window.onload = function() { // URI = ws://localhost:8080/FundStarterWeb/websockets
+window.onload = function() {
 	connect('ws://' + window.location.host + '/FundStarterWeb/ws');
-	document.getElementById("teste").focus();
 }
 
-function connect(host) { // connect to the host websocket
+function connect(host) {
 	if ('WebSocket' in window)
 		websocket = new WebSocket(host);
 	else if ('MozWebSocket' in window)
 		websocket = new MozWebSocket(host);
 	else {
-		alert('Get a real browser which supports WebSocket.')
+		alert('Get a real browser which supports WebSocket.');
 		return;
 	}
 
@@ -19,27 +18,34 @@ function connect(host) { // connect to the host websocket
 	websocket.onclose = onClose;
 	websocket.onmessage = onMessage;
 	websocket.onerror = onError;
-	
-	console.log("Cheguei ao fim da função");
+
+	console.log("End of connection function");
 }
 
 function onOpen(event) {
-	document.getElementById("teste").innerHTML = "CARALHO";
+	console.log("New WebSocket Connection");
 }
 
 function onClose(event) {
-	
+
 }
 
-function onMessage(message) { 
-	
+function onMessage(message) { // print the received message
+	alert(message.data);
 }
 
 function onError(event) {
-	console.log("isto está a dar um erro e eu não percebo porque");
+
 }
 
 function doSend() {
-	
-}
+	if (document.getElementById("amt").value != null  & document.getElementById("projID").value != null) {
+		var amount = document.getElementById("amt").value;
+		var projectId = document.getElementById("projID").value;
+	}
+	if (amount != "") {
+		var dataOfPledge = "" + amount + "/" + projectId;
+		websocket.send(dataOfPledge);
+	}
 
+}

@@ -7,12 +7,19 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<script type="text/javascript" src="websockets.js"></script>
 <title>FundStarter</title>
 </head>
 <body>
 	
 	<h1>Balance</h1>
 	<h2>${RMIBean.balance}</h2>
+		
+	<p id="teste"></p>
+	<input type="hidden" id="escondido" value="${RMIBean.userID}"/>
+	
+	<p id="newField"></p>
 	
 </body>
 </html>
