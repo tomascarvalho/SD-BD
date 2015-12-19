@@ -108,10 +108,17 @@
 		<input type="text" name="user">
 		<br>
 
-		<input type="text" name="option" value="${session.newProjectID}" >
+		<input type="hidden" name="option" value="${session.newProjectID}" >
 		
 		
 		<s:submit value="Associar" />
 	</s:form>
+	
+	    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+	
 </body>
 </html>

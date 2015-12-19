@@ -152,8 +152,5 @@
 	</c:choose>
 
 
-
-	<h1>Fim da pagina</h1>
-
 </body>
 </html>

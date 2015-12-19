@@ -111,7 +111,7 @@
 		<br>
 		<h1>O que vai ser inserido:</h1>
 		
-		<input type="text" name="option" value="${session.newProjectID}" >
+		<input type="hidden" name="option" value="${session.newProjectID}" >
 		
 		Recompensa:
 		<input type="text" name="titulo">

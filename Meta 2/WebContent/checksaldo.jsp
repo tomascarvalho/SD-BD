@@ -99,7 +99,11 @@ h2 {
 
 	<h1>Saldo: ${RMIBean.balance}</h1>
 
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
 
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
 	
 </body>
 </html>

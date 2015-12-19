@@ -1101,9 +1101,7 @@ package rmiServer;
 
           requestCheck = checkRequest(clrqst);
 
-          if (requestCheck != null) {
-              return requestCheck;
-          }
+       
 
           int userID = (int) clrqst.getRequest()[1];
           clrqst.setStage(2);
@@ -1928,19 +1926,21 @@ package rmiServer;
     	  String blog = (String)clrqst.getRequest()[1];
     	  String pass= "tumblrPass";
     	  String result;
+    	  boolean tumblr;
     	  int id;
 
 
     	  try{
     		  query = "SELECT id,tumblr FROM UTILIZADOR WHERE username = '"+username+"'";
 			  preparedstatement = connection.prepareStatement(query);
-              rs = request.executeQuery(query);
-              if (rs.next()){
+              ResultSet res = request.executeQuery(query);
+              if (res.next()){
 
-            	  int id_user = rs.getInt("id");
+            	  int id_user = res.getInt("id");
+            	  tumblr = res.getBoolean("tumblr");
 
             	  System.out.println("1");
-	        	  if (rs.getBoolean("tumblr") == false){
+	        	  if (tumblr == false){
 
 	        		  System.out.println("2");
 	        		  query = "UPDATE UTILIZADOR SET tumblr = TRUE, blog = '"+blog+"' WHERE id ="+id_user;
