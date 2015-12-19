@@ -15,7 +15,7 @@
 <link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
 
 
-
+<script type="text/javascript" src="websockets.js"></script>
 </head>
 <body>
 
@@ -82,7 +82,7 @@
 		<input type= "hidden" name="option" value="${newProjectID}">
 		
 	</s:form>
-
+<h1>${newProjectID}</h1>
 	<s:form action="newReward" method="post">
 		<s:submit value="Adicionar Recompensa" />
 		<input type= "hidden" name="option" value="${newProjectID}">
@@ -91,6 +91,11 @@
 	<s:form action="showRewards" method="post">
 		<s:submit value="Remover Recompensa" />
 		<input type= "hidden" name="option" value="${ProjectID}">
+	</s:form>
+	
+	<s:form action="addNewAdmin" method="post">
+		<s:submit value="Adicionar Novo Admin" />
+		<input type= "hidden" name="option" value="${newProjectID}">
 	</s:form>
 	
 	<s:form action="cancelarProj" method="post">

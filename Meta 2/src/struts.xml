@@ -170,6 +170,14 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
     	<result name="success">/mainmenu.jsp</result>
     </action>
     
+    <action name="addNewAdmin" class="fundstarter.action.addNewAdminAction">
+    	<result name="success">/addNewAdmin.jsp</result>
+    </action>
+    
+    <action name="listUsers" class="fundstarter.action.ReplyMessageAction">
+    	<result name="success">/listUsers.jsp</result>
+    </action>
+    
   </package> 
 
 </struts>

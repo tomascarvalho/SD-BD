@@ -11,7 +11,7 @@
 	<link href="${pageContext.request.contextPath}/css/alterar.css" rel="stylesheet" type="text/css"/>
 	<link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
 	<link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
-
+<script type="text/javascript" src="websockets.js"></script>
 <style>
 	h1 {
 		padding-left:50px;
@@ -89,19 +89,22 @@
 	
 	<h1>Inserir dados da Recompensa:</h1>
 	
-	<s:form action="createReward" method="post">
-		<p class = "one"> 
+<s:form action="createReward" method="post">
+	
 		Valor:
 		<input type="text" name="valor">
 		<br>
+		<h1>O que vai ser inserido:</h1>
+		
+		<input type="text" name="option" value="${session.newProjectID}" >
+		
 		Recompensa:
 		<input type="text" name="titulo">
-		
 		<br>
-		
 		<s:submit value="Adicionar" />
-		</p>
 	</s:form>
+
+
 
 
 </body>

@@ -13,18 +13,6 @@
 <link href="${pageContext.request.contextPath}/css/alterar.css" rel="stylesheet" type="text/css"/>
 <link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
 <link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
-<style>
-	p.one {
-	    padding-right: 30px;
-	    padding-left: 50px;
-	}
-	
-	h1{
-		padding-left: 20px;
-		padding-bottom: 30px;
-	}
-
-</style>
 <script type="text/javascript" src="websockets.js"></script>
 </head>
 <body>
@@ -93,7 +81,7 @@
 
 	<c:choose>
 		<c:when test="${RMIBean.storedProjects == 'actual' }">
-			<h1>Projectos Actuais</h1>
+			<h1>Lista de Users</h1>
 
 			<c:choose>
 				<c:when test="${RMIBean.projects == null}">

@@ -8,6 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="websockets.js"></script>
 <title>FundStarter</title>
 </head>
 <body>

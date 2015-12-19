@@ -419,14 +419,18 @@ public class ConnectToRMIBean implements Serializable {
 	public String addReward(String valor, String id_proj, String titulo, String status) throws RemoteException {
 		String[] projectInfo = new String[4];
 		this.dataToSend = new Object[2];
+		// this.newProjectID = Integer.parseInt(id_proj);
 
 		projectInfo[0] = valor;
 		projectInfo[1] = id_proj;
 		projectInfo[2] = titulo;
 		projectInfo[3] = status;
 
-		this.dataToSend[0] = Integer.toString(this.userID);
+		System.out.println("PROJ_ID ::: " + id_proj);
+
+		this.dataToSend[0] = this.userID;
 		this.dataToSend[1] = projectInfo;
+
 		this.postCard = new ClientRequest("", this.dataToSend, "");
 
 		this.postCard = this.connectToRMI.addReward(this.postCard);
@@ -449,9 +453,9 @@ public class ConnectToRMIBean implements Serializable {
 
 		dataToSend[0] = this.userID;
 
-		array_aux[0] = projectID;
-		array_aux[1] = description;
-		array_aux[2] = value;
+		array_aux[1] = projectID;
+		array_aux[2] = description;
+		array_aux[0] = value;
 		array_aux[3] = "1";
 
 		dataToSend[1] = array_aux;
@@ -722,17 +726,35 @@ public class ConnectToRMIBean implements Serializable {
 
 	}
 
-	public ArrayList<Integer> getProjectAdmins(int projectID) throws RemoteException{
+	public ArrayList<Integer> getProjectAdmins(int projectID) throws RemoteException {
 
 		this.dataToSend = new Object[1];
 
 		this.dataToSend[0] = projectID;
 
 		this.postCard = new ClientRequest("", this.dataToSend, "");
-		
+
 		this.postCard = this.connectToRMI.getProjectAdmins(this.postCard);
-		
+
 		return (ArrayList<Integer>) this.postCard.getResponse()[0];
+	}
+
+	public String addNewAdmin(String user, String option) throws RemoteException {
+
+		this.dataToSend = new Object[2];
+
+		this.dataToSend[1] = user;
+		this.dataToSend[2] = option;
+
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+
+		this.postCard = this.connectToRMI.addAdminToProject(this.postCard);
+		if (this.postCard.getResponse()[2].equals("done")) {
+			return "success";
+		} else {
+			return "error";
+		}
+
 	}
 
 	public ArrayList<HashMap<String, Object>> getProjects() {
