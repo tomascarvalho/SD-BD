@@ -38,17 +38,26 @@ function onError(event) {
 
 }
 
-function doSend() {
-	if (document.getElementById("amt").value != null  & document.getElementById("projID").value != null) {
+function sendPledge() {
+
+	
+	if (document.getElementById("amt").value != null) {
 		var amount = document.getElementById("amt").value;
 		var projectId = document.getElementById("projID").value;
-	}
-	if (amount != "") {
 		
-		//amount/projectId/userId
-		var dataOfPledge = "" + amount + "/" + projectId;
-		websocket.send(dataOfPledge);
-		
+		if (amount != "") {
+
+			var dataToSend = "" + amount + "/" + projectId;
+			websocket.send(dataToSend);
+		}
 	}
+
+}
+
+function sendMsgNot() {
+	
+	var projectId = document.getElementById("IDproject").value;
+	var dataToSend = "gotMessage/" + projectId;
+	websocket.send(dataToSend);
 
 }

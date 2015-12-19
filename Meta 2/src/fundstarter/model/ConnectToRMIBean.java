@@ -735,7 +735,7 @@ public class ConnectToRMIBean implements Serializable {
 	}
 
 	public ArrayList<Integer> getProjectAdmins(int projectID) throws RemoteException {
-
+		System.out.println("[ConnectToRMI] ganda cena");
 		this.dataToSend = new Object[1];
 
 		this.dataToSend[0] = projectID;
@@ -743,7 +743,7 @@ public class ConnectToRMIBean implements Serializable {
 		this.postCard = new ClientRequest("", this.dataToSend, "");
 
 		this.postCard = this.connectToRMI.getProjectAdmins(this.postCard);
-
+		System.out.println("[ConnectToRMI] ganda cena " + ((ArrayList<Integer>) this.postCard.getResponse()[0]).size());
 		return (ArrayList<Integer>) this.postCard.getResponse()[0];
 	}
 
