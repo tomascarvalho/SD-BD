@@ -9,6 +9,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="websockets.js"></script>
 <title>FundStarter</title>
+<<<<<<< HEAD
+=======
+
 <link href="${pageContext.request.contextPath}/css/shop-homepage.css"
 	rel="stylesheet" type="text/css" />
 <link href="${pageContext.request.contextPath}/css/alterar.css"
@@ -17,6 +20,21 @@
 	rel="stylesheet" type="text/css" />
 <link href="${pageContext.request.contextPath}/css/mudancas.css"
 	rel="stylesheet" type="text/css" />
+
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+	
+</script>
+
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+	integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ=="
+	crossorigin="anonymous"></script>
+
+
+<script type="text/javascript" src="websockets.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
@@ -158,45 +176,54 @@
 					<h2>Este projecto não tem produtos</h2>
 				</c:otherwise>
 			</c:choose>
-				
+
 			<s:form action="pledge" method="post">
-				<input type="text" name="amount" id="amt" value="">
+				<input type="text" name="amount" id="amt"/>
 				<input type="hidden" name="projectID" id="projID"
-					value=${session.listedProjectID}>
+					value=${session.listedProjectID}/>
 				<!--<s:submit value="Pledge to Project"/>-->
-				<button type="submit" onClick="doSend()">Pledge to Project</button>
+				<button type="submit" onClick="sendPledge()">Pledge to Project</button>
 			</s:form>
 
-	
-			<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#enviarMensagem">Enviar Mensagem</button>
-			<div class="modal fade" id="enviarMensagem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="enviarMensagem">Enviar Mensagem</h4>
-                    </div>
-                    <div class="modal-body">
-                        <s:form class = "input-group" action="sendMessage" method="post">
-                            <div class="input-group">
-                                <span class="input-group-addon yellow1 alinhar" id="basic-addon1">Mensagem:</span>
-                                <input type="text" class="form-control" placeholder="Mensagem" aria-describedby="basic-addon1" name= "message">
-                                <input type="hidden" name="projectID" value=${session.listedProjectID}>
-                            </div>
-                            <br>
-                            
-                            <div class="row">
-                                <div class="col-md-0 col-md-offset-9 btn">
-                                    <div class="btn-group" role="group">
-                                        <input type="submit" value="Doar">
-                                    </div>
-                                </div>
-                            </div>
-                        </s:form>
-                        </div>
-                        </div>
-                    </div>
-                </div>
+
+			<button type="button" class="btn btn-warning" data-toggle="modal"
+				data-target="#enviarMensagem">Enviar Mensagem</button>
+			<div class="modal fade" id="enviarMensagem" tabindex="-1"
+				role="dialog" aria-labelledby="exampleModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="enviarMensagem">Enviar Mensagem</h4>
+						</div>
+						<div class="modal-body">
+							<s:form class="input-group" action="sendMessage" method="post">
+								<div class="input-group">
+									<span class="input-group-addon yellow1 alinhar"
+										id="basic-addon1">Mensagem:</span> <input type="text"
+										class="form-control" placeholder="Mensagem"
+										aria-describedby="basic-addon1" name="message"> <input
+										type="hidden" name="projectID" id="IDproject"
+										value=${session.listedProjectID}>
+								</div>
+								<br>
+
+								<div class="row">
+									<div class="col-md-0 col-md-offset-9 btn">
+										<div class="btn-group" role="group">
+											<button type="submit" onClick="sendMsgNot()">Enviar
+												Mensagem</button>
+										</div>
+									</div>
+								</div>
+							</s:form>
+						</div>
+					</div>
+				</div>
+			</div>
 		</c:otherwise>
 	</c:choose>
 </body>
