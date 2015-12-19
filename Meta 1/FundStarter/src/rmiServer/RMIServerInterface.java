@@ -17,6 +17,8 @@ package rmiServer;
 import java.rmi.*;
 
 public interface RMIServerInterface extends Remote {
+	
+	public ClientRequest tumblrSignIn(ClientRequest clrqst) throws RemoteException;
 
     public ClientRequest getProjectDetails(ClientRequest clrqst) throws RemoteException;
 

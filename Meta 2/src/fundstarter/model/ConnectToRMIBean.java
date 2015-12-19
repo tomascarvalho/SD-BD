@@ -27,6 +27,7 @@ public class ConnectToRMIBean {
 	private ArrayList<String> projectRewards;
 	private int newProjectID;
 	private ArrayList<HashMap<String, Object>> myMessages;
+	private String blog;
 	
 	public ConnectToRMIBean() {
 
@@ -70,6 +71,33 @@ public class ConnectToRMIBean {
 		return "log_in";
 	}
 
+	public String tumblrSignIn() {
+		System.out.println("[ConnectToRMI] Tumblr Sign/Log In");
+		
+		this.dataToSend = new Object[2];
+		
+		this.dataToSend[0] = username;
+		this.dataToSend[1] = blog;
+		
+		this.postCard = new ClientRequest("", this.dataToSend, "");
+		
+		try{
+			this.postCard = this.connectToRMI.tumblrSignIn(this.postCard);
+
+			if (this.postCard.getResponse()[0].equals("Success")) {
+				this.userID = (int) this.postCard.getResponse()[1];
+				return "Done";
+			}
+			System.out.println(this.postCard.getResponse()[0]);
+			System.out.println("Erro..");
+
+		}
+		catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		return "Error";
+	}
+	
 	public String signIn() {
 
 		System.out.println("[ConnectToRMI]Sign In");
@@ -674,4 +702,11 @@ public class ConnectToRMIBean {
 		return this.newProjectID;
 	}
 	
+	public void setBlog(String blog) {
+		this.blog = blog;
+	}
+	
+	public String getUsername(){
+		return this.username;
+	}
 }
