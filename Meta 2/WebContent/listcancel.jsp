@@ -9,8 +9,21 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>FundStarter</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
 <body>
+<c:choose>
+		<c:when test="${session.logged !=true}">
+			<s:form id ="cena" action='redirectLogIn' method='post'> 
+				
+				<button type = "submit" class="btn btn-block btn-social btn-tumblr">
+							</button>
+			</s:form>
+			<script>$(document).ready(function() {
+					    $("#cena").submit();
+					});</script>
+		</c:when>
+</c:choose>
 
 <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">

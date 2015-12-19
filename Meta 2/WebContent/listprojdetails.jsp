@@ -22,8 +22,21 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
 <body>
+<c:choose>
+		<c:when test="${session.logged !=true}">
+			<s:form id ="cena" action='redirectLogIn' method='post'> 
+				
+				<button type = "submit" class="btn btn-block btn-social btn-tumblr">
+							</button>
+			</s:form>
+			<script>$(document).ready(function() {
+					    $("#cena").submit();
+					});</script>
+		</c:when>
+</c:choose>
 
 	<h1>${RMIBean.projectDetails.get("Titulo") }</h1>
 

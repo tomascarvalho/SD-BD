@@ -24,8 +24,21 @@
     
 
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
 <body>
+<c:choose>
+		<c:when test="${session.logged !=true}">
+			<s:form id ="cena" action='redirectLogIn' method='post'> 
+				
+				<button type = "submit" class="btn btn-block btn-social btn-tumblr">
+							</button>
+			</s:form>
+			<script>$(document).ready(function() {
+					    $("#cena").submit();
+					});</script>
+		</c:when>
+</c:choose>
 	
 	<!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -67,8 +80,9 @@
 								<button class="list-group-item" type="submit" value="Caixa de Correio">Caixa de Correio </button>
 							</s:form></li>
 							
-							<!-- Temos que mandar info de logout......... -->
-							<li><a class="btn list-group-item" href="index.jsp">Log Out</a></li>
+							<li><s:form action="logOut" method="post">
+								<button class="list-group-item" type="submit" value="Log Out">Log Out </button>
+							</s:form></li>
 						</ul>
 					</li>
 				</ul>
