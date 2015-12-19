@@ -13,7 +13,7 @@
 	<body>
 		<c:choose> 
 			<c:when test = "${session.tumblr_logged == true}">
-				<p> WAIT </p>
+				<p> Processing...</p>
 						
 					<s:form id="cena" action="tumblrRedirect" method="post" style="visibility:hidden;">
 						<input type = "hidden" id="token" name="token" value = "" />
