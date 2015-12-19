@@ -66,5 +66,5 @@ public interface RMIServerInterface extends Remote {
 
 	public ClientRequest deleteAdmin(ClientRequest postCard) throws RemoteException;
     
-
+    public ClientRequest getProjectAdmins(ClientRequest clrqst) throws RemoteException;
 }

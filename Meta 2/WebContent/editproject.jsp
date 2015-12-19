@@ -16,8 +16,24 @@
 
 
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="websockets.js"></script>
+
 </head>
 <body>
+<c:choose>
+		<c:when test="${session.logged !=true}">
+			<s:form id ="cena" action='redirectLogIn' method='post'> 
+				
+				<button type = "submit" class="btn btn-block btn-social btn-tumblr">
+							</button>
+			</s:form>
+			<script>$(document).ready(function() {
+					    $("#cena").submit();
+					});</script>
+		</c:when>
+</c:choose>
 
 <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -35,21 +51,13 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">A Minha Conta</a>
-                    </li>
-                    <li>
-                        <a href="#">Os Meus Projectos</a>
-                    </li>
-                    <li>
-                        <a href="#">Mensagens</a>
-                    </li>
-                </ul>
+                
                 <ul class="nav navbar-nav navbar-right">
 					<li><a href="#campainha"><i class="fa fa-bell"></i></a></li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${Username}'s Actions <span class="caret"></span></a>
+
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${RMIBean.username}'s Actions <span class="caret"></span></a>
+
 						<ul class="dropdown-menu">
 							
 							<li><s:form action="callAdd" method="post">
@@ -62,6 +70,11 @@
 							<li><s:form action="AdminMode" method="post">
 								<button class="list-group-item" type="submit" value="Meus Projectos" name="option" value="0">Meus Projectos</button>
 							</s:form></li>
+							
+							<li><s:form action="seeInbox" method="post">
+								<button class="list-group-item" type="submit" value="Caixa de Correio">Caixa de Correio </button>
+							</s:form></li>
+							
 							<!-- Temos que mandar info de logout......... -->
 							<li><a class="btn list-group-item" href="index.jsp">Log Out</a></li>
 						</ul>
@@ -87,10 +100,13 @@
 		<s:submit value="Adicionar Recompensa" />
 		<input type= "hidden" name="option" value="${newProjectID}">
 	</s:form>
-	
+	<s:form action="newLevel" method="post">
+		<input type="hidden" name="option" value="${session.RMIBean.newProjectID}" />
+		<s:submit value="Adicionar Nível Extra" />
+	</s:form>
 	<s:form action="showRewards" method="post">
 		<s:submit value="Remover Recompensa" />
-		<input type= "hidden" name="option" value="${ProjectID}">
+		<input type= "hidden" name="option" value= "${newProjectID}">
 	</s:form>
 	
 	<s:form action="newAdmin" method="post">

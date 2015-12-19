@@ -1,17 +1,16 @@
 var websocket = null;
 
-window.onload = function() { // URI = ws://localhost:8080/FundStarterWeb/websockets
+window.onload = function() {
 	connect('ws://' + window.location.host + '/FundStarterWeb/ws');
-	document.getElementById("teste").focus();
 }
 
-function connect(host) { // connect to the host websocket
+function connect(host) {
 	if ('WebSocket' in window)
 		websocket = new WebSocket(host);
 	else if ('MozWebSocket' in window)
 		websocket = new MozWebSocket(host);
 	else {
-		alert('Get a real browser which supports WebSocket.')
+		alert('Get a real browser which supports WebSocket.');
 		return;
 	}
 
@@ -19,27 +18,47 @@ function connect(host) { // connect to the host websocket
 	websocket.onclose = onClose;
 	websocket.onmessage = onMessage;
 	websocket.onerror = onError;
-	
-	console.log("Cheguei ao fim da função");
+
+	console.log("End of connection function");
 }
 
 function onOpen(event) {
-	document.getElementById("teste").innerHTML = "CARALHO";
+	console.log("New WebSocket Connection");
+	if(window.location.href == "http://localhost:8080/FundStarterWeb/pledge.action"){
+		sendPledgeNot()
+	}
 }
 
 function onClose(event) {
-	
+
 }
 
-function onMessage(message) { 
-	
+function onMessage(message) { // print the received message
+	alert(message.data);
 }
 
 function onError(event) {
-	console.log("isto está a dar um erro e eu não percebo porque");
+
 }
 
-function doSend() {
-	
+function sendPledgeNot() {
+
+		var amount = document.getElementById("amt").value;
+		var projID = document.getElementById("projID").value;
+		
+		var dataToSend = amount + "/" + projID;
+		sendMessage(dataToSend);
+
 }
 
+function sendMsgNot() {
+
+	var projectId = document.getElementById("IDproject").value;
+	var dataToSend = "gotMessage/" + projectId;
+	sendMessage(dataToSend);
+
+}
+
+function sendMessage(message){
+	websocket.send(message);
+}

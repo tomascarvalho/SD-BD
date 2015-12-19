@@ -58,10 +58,13 @@
         	<input name = "password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>	
 			<br>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button> 
-			<a class="btn btn-block btn-social btn-tumblr">
-   			 <span class="fa fa-tumblr"></span> Log in with Tumblr
-			</a>
+			
 		</form>
+		<s:form action="tumblrSignIn" method="post">
+			<button type = "submit" class="btn btn-block btn-social btn-tumblr">
+   			 	<span class="fa fa-tumblr"></span> Sign in with Tumblr
+			</button>
+		</s:form>
 		 
 	</div>
 </body>

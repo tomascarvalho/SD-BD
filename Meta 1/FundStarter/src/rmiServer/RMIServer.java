@@ -305,7 +305,7 @@ package rmiServer;
             	  }
             	  else resposta[3] ="0";
               }
-        	  
+
         	  else{
         		  resposta[3] = "0";
         	  }
@@ -422,37 +422,31 @@ package rmiServer;
           ArrayList<String> projecto = new ArrayList();
           int flag = (int) clrqst.getRequest()[2];
 
+
           if(clrqst.getRequest()[0].equals("listar_recompensas")){
             myProject=0;
           }
           else{
             myProject = (int) clrqst.getRequest()[0];
+            System.out.println("Projecto: "+myProject);
           }
 
           if (flag == 1) {
               try {
-                  if(myProject != 0){
-                    query = "SELECT id_projecto FROM projecto_user WHERE id_projecto = " + myProject;
-                  }
-                  else{
-                    query = "SELECT id_projecto FROM projecto_user WHERE id_user = " + userID;
-                  }
+
+
+                  query = "SELECT titulo, id, valor FROM recompensas WHERE id_projecto = " + myProject;
                   preparedstatement = connection.prepareStatement(query);
-                  rs = preparedstatement.executeQuery();
-                  while (rs.next()) {
-                      projectID = rs.getInt("id_projecto");
-                      query = "SELECT titulo, id, valor FROM recompensas WHERE id_projecto = " + projectID;
-                      preparedstatement = connection.prepareStatement(query);
-                      ResultSet result = preparedstatement.executeQuery();
-                      while (result.next()) {
-                          projecto.add("ID: "+result.getInt("id")+ "  Titulo: " + result.getString("titulo") + "  Montante a doar: "+result.getInt("valor") +"\nPertencente ao Projecto ID: " + projectID);
-                      }
-
+                  ResultSet result = preparedstatement.executeQuery();
+                  while (result.next()) {
+                      projecto.add("ID: "+result.getInt("id")+ "  Titulo: " + result.getString("titulo") + "  Montante a doar: "+result.getInt("valor") +"\n<br>Pertencente ao Projecto ID: " + myProject);
                   }
 
-              } catch (SQLException ex) {
-                  System.err.print("SQLException 383: " + ex);
               }
+
+           catch (SQLException ex) {
+              System.err.print("SQLException 383: " + ex);
+          }
           } else if (flag == 0) {
 
               try {
@@ -537,7 +531,7 @@ package rmiServer;
           System.out.println("sonecas " + userID);
           String[] projectInfo = (String[]) clrqst.getRequest()[1];
 
-          
+
           int valor = Integer.parseInt(projectInfo[0]);
           int projectID = Integer.parseInt(projectInfo[1]);
           String titulo = projectInfo[2];
@@ -582,9 +576,9 @@ package rmiServer;
               }
 
           }
-          
+
           //NIVEIS EXTRA-------------------------------
-          
+
           else{
               try{
                   query = "SELECT id_projecto FROM projecto_user WHERE id_user = "+userID;
@@ -788,7 +782,7 @@ package rmiServer;
               System.err.println("Erro:" + ex);
 
           }
-          
+
           resposta[1] = "Checked!";
 
           resposta[0] = pr;
@@ -972,9 +966,9 @@ package rmiServer;
 
           requestCheck = checkRequest(clrqst);
 
-          if (requestCheck != null) {
+          /*if (requestCheck != null) {
               return requestCheck;
-          }
+          }*/
 
           int valor_a_devolver = 0;
           int userID = 0;
@@ -982,6 +976,8 @@ package rmiServer;
           int rewardID = 0;
           clrqst.setStage(2);
           myRequests.add(clrqst);
+
+
 
           try {
               query = "SELECT valor, id_user from pledge_user WHERE id_projecto = " + projectID;
@@ -1745,7 +1741,7 @@ package rmiServer;
                   } catch (SQLException ex) {
                       System.err.println("SQLException 784:" + ex);
                   }
-                  
+
                   if(tumblr){
                 	  try{
                 		  query = "SELECT tumblr, blog FROM UTILIZADOR WHERE id=("
@@ -1756,20 +1752,24 @@ package rmiServer;
                         	  if (rs.getBoolean("tumblr")==true){
                         		  tumblr_like.add("tumblr");
                         		  tumblr_like.add(rs.getString("blog"));
-                        		  
+
                         	  }
                         	  else{
                         		  tumblr_like.add("no_tumblr");
-                        		 
+
                         	  }
                           }
                 	  }
-                	  
+
+
                 	  catch(SQLException ex){
                 		  System.err.print("ERRO (1695): "+ex);
                 	  }
                   }
-                  
+                  else{
+                    tumblr_like.add("no_tumblr");
+
+                  }
                   resposta[0] = "pledged";
                   resposta[1] = saldo - how_much;
                   resposta[4] = product_type;
@@ -1929,25 +1929,27 @@ package rmiServer;
     	  String pass= "tumblrPass";
     	  String result;
     	  int id;
-    	 
-	  		
+
+
     	  try{
     		  query = "SELECT id,tumblr FROM UTILIZADOR WHERE username = '"+username+"'";
 			  preparedstatement = connection.prepareStatement(query);
               rs = request.executeQuery(query);
               if (rs.next()){
- 
+
+            	  int id_user = rs.getInt("id");
+
             	  System.out.println("1");
 	        	  if (rs.getBoolean("tumblr") == false){
+
 	        		  System.out.println("2");
-	        		  query = "UPDATE UTILIZADOR SET tumblr = TRUE and blog = ? WHERE id = ?";
+	        		  query = "UPDATE UTILIZADOR SET tumblr = TRUE, blog = '"+blog+"' WHERE id ="+id_user;
 	        		  preparedstatement = connection.prepareStatement(query);
-	        		  preparedstatement.setString(1, blog);
-	        		  preparedstatement.setInt(2, rs.getInt("id"));
+
 	        		  request.executeUpdate(query);
                 	  result = "Success";
                 	  resposta[0] = result;
-                      resposta[1] = rs.getInt("id");
+                      resposta[1] = id_user;
                       clrqst.setResponse(resposta);
                       clrqst.setStage(3);
                       return clrqst;
@@ -1956,7 +1958,7 @@ package rmiServer;
 	        		  System.out.println("3");
 	        		  result = "Success";
 	        		  resposta[0] = result;
-                      resposta[1] = rs.getInt("id");
+                      resposta[1] = id_user;
                       clrqst.setResponse(resposta);
                       clrqst.setStage(3);
                       return clrqst;
@@ -1965,15 +1967,15 @@ package rmiServer;
               else{
             	  try{
             		  System.out.println("1");
-            		  
+
             		  query = "INSERT INTO utilizador (username, pass, saldo, tumblr, blog) VALUES ('"+username+"','"+pass+"', 100, TRUE, '"+blog+"')";
                 	  preparedstatement = connection.prepareStatement(query);
-                	 
+
                 	  System.out.println(blog);
                 	  System.out.println(username);
                 	  System.out.println(pass);
                 	  request.executeUpdate(query);
-                	  
+
                 	  query = "SELECT id FROM utilizador WHERE username ='"+username+"'";
                 	  preparedstatement = connection.prepareStatement(query);
                 	  rs = request.executeQuery(query);
@@ -1985,7 +1987,7 @@ package rmiServer;
                       clrqst.setResponse(resposta);
                       clrqst.setStage(3);
                       return clrqst;
-                	  
+
             	  }
             	  catch(SQLException ex){
             		  System.err.println("ERRO: "+ex);
@@ -1996,7 +1998,7 @@ package rmiServer;
                       return clrqst;
             	  }
               }
-             
+
     	  }
           catch(SQLException ex){
         	  System.err.print("Erro: "+ex);
@@ -2007,8 +2009,33 @@ package rmiServer;
               clrqst.setStage(3);
               return clrqst;
           }
-    	
-    	  
+
+
+      }
+
+      public ClientRequest getProjectAdmins(ClientRequest clrqst) throws RemoteException{
+
+          int projectID = (int) clrqst.getRequest()[0];
+          ArrayList<Integer> projectAdmins = new ArrayList<Integer>();
+
+          try{
+            query = "SELECT id_user FROM projecto_user WHERE id_projecto ="+projectID;
+            preparedstatement = connection.prepareStatement(query);
+            rs = request.executeQuery(query);
+            while(rs.next()){
+
+              projectAdmins.add(rs.getInt("id_user"));
+
+            }
+          }catch(SQLException e){
+            e.printStackTrace();
+          }
+
+          resposta[0] = projectAdmins;
+
+          clrqst.setResponse(resposta);
+
+          return clrqst;
       }
 
 

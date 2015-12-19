@@ -1,3 +1,5 @@
+<%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -10,10 +12,25 @@
 	<link href="${pageContext.request.contextPath}/css/alterar.css" rel="stylesheet" type="text/css"/>
 	<link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
 	<link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
-    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="websockets.js"></script>
 
 </head>
 <body>
+<c:choose>
+		<c:when test="${session.logged !=true}">
+			<s:form id ="cena" action='redirectLogIn' method='post'> 
+				
+				<button type = "submit" class="btn btn-block btn-social btn-tumblr">
+							</button>
+			</s:form>
+			<script>$(document).ready(function() {
+					    $("#cena").submit();
+					});</script>
+		</c:when>
+</c:choose>
 	
 	<!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -31,21 +48,13 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">A Minha Conta</a>
-                    </li>
-                    <li>
-                        <a href="#">Os Meus Projectos</a>
-                    </li>
-                    <li>
-                        <a href="#">Mensagens</a>
-                    </li>
-                </ul>
+                
                 <ul class="nav navbar-nav navbar-right">
 					<li><a href="#campainha"><i class="fa fa-bell"></i></a></li>
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${Username}'s Actions <span class="caret"></span></a>
+
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> ${RMIBean.username}'s Actions <span class="caret"></span></a>
+
 						<ul class="dropdown-menu">
 							
 							<li><s:form action="callAdd" method="post">
@@ -73,6 +82,7 @@
         </div>
         <!-- /.container -->
     </nav>
+    
 
 
 	<h1>Recompensa Criada!</h1>

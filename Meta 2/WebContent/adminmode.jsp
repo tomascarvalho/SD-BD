@@ -13,6 +13,7 @@
 <link href="${pageContext.request.contextPath}/css/alterar.css" rel="stylesheet" type="text/css"/>
 <link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
 <link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="websockets.js"></script>
 <style>
 	p.one {
 	    padding-right: 30px;
@@ -26,8 +27,21 @@
 
 </style>
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
 <body>
+<c:choose>
+		<c:when test="${session.logged !=true}">
+			<s:form id ="cena" action='redirectLogIn' method='post'> 
+				
+				<button type = "submit" class="btn btn-block btn-social btn-tumblr">
+							</button>
+			</s:form>
+			<script>$(document).ready(function() {
+					    $("#cena").submit();
+					});</script>
+		</c:when>
+</c:choose>
 
 <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -45,17 +59,7 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">A Minha Conta</a>
-                    </li>
-                    <li>
-                        <a href="#">Os Meus Projectos</a>
-                    </li>
-                    <li>
-                        <a href="#">Mensagens</a>
-                    </li>
-                </ul>
+                
                 <ul class="nav navbar-nav navbar-right">
 					<li><a href="#campainha"><i class="fa fa-bell"></i></a></li>
 					<li class="dropdown">
