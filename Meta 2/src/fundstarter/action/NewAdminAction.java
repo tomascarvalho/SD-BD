@@ -18,8 +18,6 @@ public class NewAdminAction extends ActionSupport implements SessionAware {
 	@Override
 	public String execute() throws RemoteException{
 		this.session.put("newProjectID", option);
-		System.out.println("entro no newadminaction e a option e ::: " + option);
-
 		return SUCCESS;
 	}
 	

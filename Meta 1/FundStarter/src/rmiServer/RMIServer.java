@@ -1445,7 +1445,62 @@ package rmiServer;
 
           return null;
       }
+      
+      public ClientRequest deleteAdmin(ClientRequest clrqst) throws RemoteException {
+    	  int userID = 0;
+    	  System.out.println("Funcao <deleteAdmin> chamada!");
+          requestCheck = checkRequest(clrqst);
 
+          if (requestCheck != null) {
+              return requestCheck;
+          }
+
+          clrqst.setStage(2);
+          myRequests.add(clrqst);
+
+          String user = (String)clrqst.getRequest()[1];
+          int projectID = Integer.parseInt((String) clrqst.getRequest()[2]);
+
+          //vai retirar o id que corresponde a utilizador seleccionado
+          try{
+        	  query = "SELECT id FROM utilizador WHERE username = '"+user+"'";
+        	  preparedstatement = connection.prepareStatement(query);
+              rs = preparedstatement.executeQuery();
+              
+              if (rs.next()){
+            	  userID= rs.getInt("id");
+            	  System.out.println("User existe");
+            	  try{
+            		  query = "DELETE FROM projecto_user WHERE id_user = "+userID+" AND id_projecto = "+projectID;
+                	  System.out.println(query);
+            		  preparedstatement= connection.prepareStatement(query);
+                	  preparedstatement.executeUpdate();
+                	  resposta[1] = "success";
+            	  }
+            	  catch(SQLException ex){
+            		  System.err.println("Erro (1478): "+ex);
+            		  resposta[1] = "error";
+            	  }
+            	  
+              }
+              else{
+            	  resposta[1] = "error";
+              }
+        	  
+          
+          }catch(SQLException ex){
+              System.err.print("SQLException 598: "+ex);
+              resposta[1] = "error";
+          }
+          
+          resposta[0] = userID;
+          clrqst.setResponse(resposta);
+          clrqst.setStage(3);
+
+          updateRequest(clrqst);
+          return clrqst;
+      }
+      
       public ClientRequest getProjectDetails(ClientRequest clrqst) throws RemoteException {
           System.out.println("[RMI Server] Função <getProjectDetails> chamada!");
 

@@ -6,7 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>FundStarter</title>
 
 <link href="${pageContext.request.contextPath}/css/shop-homepage.css" rel="stylesheet" type="text/css"/>
@@ -14,8 +14,17 @@
 <link href="${pageContext.request.contextPath}/css/bootstrap.css" rel="stylesheet" type="text/css"/>
 <link href="${pageContext.request.contextPath}/css/mudancas.css" rel="stylesheet" type="text/css"/>
 
+<style>
+h1 {
+	padding-left:100px;
+}
 
+h2 {
+	padding-left:100px;
+    padding-bottom:50px;
+}
 
+</style>
 </head>
 <body>
 
@@ -62,6 +71,11 @@
 							<li><s:form action="AdminMode" method="post">
 								<button class="list-group-item" type="submit" value="Meus Projectos" name="option" value="0">Meus Projectos</button>
 							</s:form></li>
+							
+							<li><s:form action="seeInbox" method="post">
+								<button class="list-group-item" type="submit" value="Caixa de Correio">Caixa de Correio </button>
+							</s:form></li>
+							
 							<!-- Temos que mandar info de logout......... -->
 							<li><a class="btn list-group-item" href="index.jsp">Log Out</a></li>
 						</ul>
@@ -74,39 +88,9 @@
     </nav>
 
 
+	
+	<h2>Administrador desassociado!</h2>
 
-<p>Modo Admin</p>
-
-	<s:form action="listDetails" method="post">
-		<s:submit value="Ver Detalhes" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-		
-	</s:form>
-<h1>${newProjectID}</h1>
-	<s:form action="newReward" method="post">
-		<s:submit value="Adicionar Recompensa" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
 	
-	<s:form action="showRewards" method="post">
-		<s:submit value="Remover Recompensa" />
-		<input type= "hidden" name="option" value="${ProjectID}">
-	</s:form>
-	
-	<s:form action="newAdmin" method="post">
-		<s:submit value="Adicionar Novo Admin" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
-	
-	<s:form action="deleteAdmin" method="post">
-		<s:submit value="Remover Admin" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
-	
-	<s:form action="cancelarProj" method="post">
-		<s:submit value="Cancelar Projecto" />
-		<input type= "hidden" name="option" value="${newProjectID}">
-	</s:form>
-
 </body>
 </html>
